@@ -9,4 +9,9 @@ HEADERS += \
     SynchronousComponent.h \
     Gate.h \
     UnitTest.h \
-    ANDGate.h
+    ANDGate.h \
+    ORGate.h \
+    NORGate.h \
+    NANDGate.h \
+    NOTGate.h \
+    XORGate.h

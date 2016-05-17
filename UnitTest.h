@@ -89,7 +89,7 @@ void testLogic_AND_const(void) {
 	g2_3.tick();
 	assert(g2_3.output()			== 1);	// Output changed to 1 after tick()
 
-	//AND Gate with width 2 (2 inputs)
+	//AND Gate with width 3 (3 inputs)
 	assert(g3_0.output()			== 0);
 	g3_0.tick();
 	assert(g3_0.output()			== 0);
@@ -124,7 +124,7 @@ void testLogic_AND_const(void) {
 }
 
 /*
- *	AND Gate : Test basic logic.
+ *	AND Gate : Test dynamic logic.
  */
 void testLogic_AND_dynamic(void) {
 	int i;
@@ -156,13 +156,92 @@ void testLogic_AND_dynamic(void) {
 }
 
 /*
+ *	NAND Gate : Test basic logic.
+ */
+void testLogic_NAND_const(void) {
+	//TO-DO
+}
+
+/*
+ *	NAND Gate : Test dynamic logic.
+ */
+void testLogic_NAND_dynamic(void) {
+	//TO-DO
+}
+
+/*
+ *	OR Gate : Test basic logic.
+ */
+void testLogic_OR_const(void) {
+	//TO-DO
+}
+
+/*
+ *	OR Gate : Test dynamic logic.
+ */
+void testLogic_OR_dynamic(void) {
+	//TO-DO
+}
+
+/*
+ *	NOR Gate : Test basic logic.
+ */
+void testLogic_NOR_const(void) {
+	//TO-DO
+}
+
+/*
+ *	NOR Gate : Test dynamic logic.
+ */
+void testLogic_NOR_dynamic(void) {
+	//TO-DO
+}
+
+/*
+ *	XOR Gate : Test basic logic.
+ */
+void testLogic_XOR_const(void) {
+	//TO-DO
+}
+
+/*
+ *	XOR Gate : Test dynamic logic.
+ */
+void testLogic_XOR_dynamic(void) {
+	//TO-DO
+}
+
+/*
+ *	NOT Gate : Test basic logic.
+ */
+void testLogic_NOT_const(void) {
+	//TO-DO
+}
+
+/*
+ *	NOT Gate : Test dynamic logic.
+ */
+void testLogic_NOT_dynamic(void) {
+	//TO-DO
+}
+
+/*
  *	Run all tests.
  */
 void runTests(void) {
 	testGate();
 	testLogic_AND_const();
 	testLogic_AND_dynamic();
-
+	testLogic_NAND_const();
+	testLogic_NAND_dynamic();
+	testLogic_OR_const();
+	testLogic_OR_dynamic();
+	testLogic_NOR_const();
+	testLogic_NOR_dynamic();
+	testLogic_XOR_const();
+	testLogic_XOR_dynamic();
+	testLogic_NOT_const();
+	testLogic_NOT_dynamic();
 }
 
 
