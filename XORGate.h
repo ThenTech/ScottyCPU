@@ -16,7 +16,13 @@ namespace CPUComponents {
 			void tick() {
 				// Mathematical definition : only true if only ONE bit is set (first part)
 				// Practical : also true if all bits are set (whole)
-				this->out = (this->in->count() == 1) | this->in->all();
+				// Implemented (for multi-input gates):
+				// If not divisable by 2, xor == true else false
+				//this->out = (this->in->count() % 2 != 0);
+				// or
+				// Count 1 bits from input: odd		:	XOR==true
+				//							even	:	XOR==false
+				this->out = (this->in->count() & 1);
 			}
 	};
 

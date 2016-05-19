@@ -13,7 +13,11 @@ namespace CPUComponents {
 
 			// SynchronousComponent interface
 			void tick() {
-				this->out = !this->in[0]; // !this->in->test(0) or this->in->flip()
+				// Or
+				//	!this->in->test(0)
+				//	NOR:  !this->in->any() or this->in->none()
+				//	NAND: !this->in->all()
+				this->out =  this->in->none();
 			}
 	};
 

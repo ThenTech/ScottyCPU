@@ -17,15 +17,18 @@ namespace CPUComponents {
 			}
 
 			virtual ~Gate() {
-				//this->in->reset();
-				//this->out.reset();
-				delete this->in;	// Delete input bitset pointer? Throws error in MSVC
+				// Don't delete this->in:
+				// Pointer space not managed by this class, but by class providing input.
 			}
 
 			//virtual void tick();
 
 			std::bitset<1u> output() {
 				return this->out;
+			}
+
+			std::bitset<1u>* outRef() {
+				return &this->out;
 			}
 	};
 

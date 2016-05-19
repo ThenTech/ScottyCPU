@@ -8,10 +8,10 @@ SOURCES += main.cpp
 HEADERS += \
     SynchronousComponent.h \
     Gate.h \
-    UnitTest.h \
     ANDGate.h \
     ORGate.h \
     NORGate.h \
     NANDGate.h \
     NOTGate.h \
-    XORGate.h
+    XORGate.h \
+    UnitTest.h
