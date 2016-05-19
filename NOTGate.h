@@ -15,6 +15,7 @@ namespace CPUComponents {
 			void tick() {
 				// Or
 				//	!this->in->test(0)
+				// Or other Gate<2>s with same bit on both inputs
 				//	NOR:  !this->in->any() or this->in->none()
 				//	NAND: !this->in->all()
 				this->out =  this->in->none();
