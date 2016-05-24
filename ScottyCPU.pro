@@ -14,4 +14,7 @@ HEADERS += \
     NANDGate.h \
     NOTGate.h \
     XORGate.h \
-    UnitTest.h
+    UnitTest.h \
+    MultiGate.h \
+    Exceptions.h \
+    MultiANDGate.h
