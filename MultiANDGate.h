@@ -8,7 +8,7 @@ namespace CPUComponents {
 	template<size_t sets, size_t width>
 	class MultiANDGate : public MultiGate<sets, width> {
 		private:
-			size_t it;
+
 		public:
 			MultiANDGate(std::bitset<width> *const input) : MultiGate<sets, width>(input) {
 				// Empty
@@ -23,9 +23,11 @@ namespace CPUComponents {
 				if (sets == 1)
 					this->out = this->in->all();
 				else {
-					this->multi_out = *this->multi_in.at(0);
-					for (it = 1; it < sets; it++)
-						this->multi_out &= *this->multi_in.at(it);
+					this->multi_out = *this->multi_in.front();
+
+					for (auto& inbit : this->multi_in) {
+						this->multi_out &= *inbit;
+					}
 
 					if (width == 1)
 						this->out = this->multi_out.test(0);

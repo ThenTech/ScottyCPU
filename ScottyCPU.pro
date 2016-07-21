@@ -17,4 +17,5 @@ HEADERS += \
     UnitTest.h \
     MultiGate.h \
     Exceptions.h \
-    MultiANDGate.h
+    MultiANDGate.h \
+    utils.h

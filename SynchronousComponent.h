@@ -11,7 +11,6 @@ namespace CPUComponents {
 
 			virtual void tick() {}
 	};
-
 }
 
 #endif // SYNCHRONOUSCOMPONENT_H
