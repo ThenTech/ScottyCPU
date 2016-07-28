@@ -3,6 +3,8 @@
 
 #include <stdexcept>
 
+//#define	THROW_EXCEPTIONS
+
 using namespace std;
 
 namespace Exceptions {

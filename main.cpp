@@ -3,21 +3,19 @@
  */
 
 //#define	NDEBUG			// "No Debug" : comment to enable debugging
+#define	THROW_EXCEPTIONS	// Uncomment to enable Exception checking and throwing.
 
 #include <iostream>
-#include <sstream>
 
-#include "utils.h"
-#include "Gate.h"
+#include "utils.hpp"
 
 #ifndef NDEBUG
-#include "UnitTest.h"
+#include "UnitTest.hpp"
 #endif
 
 using namespace std;
-using namespace CPUComponents;
 
-static float scottyVersion = 0.1;
+static float scottyVersion = 0.2;
 
 /*
  *	Run main program.

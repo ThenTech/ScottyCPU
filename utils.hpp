@@ -1,10 +1,12 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
 #include <iostream>
 #include <sstream>
 #include <typeinfo>
-#include <cxxabi.h>
+#ifndef _MSC_VER
+	#include <cxxabi.h>
+#endif
 #include <limits>
 #include <windows.h>
 
@@ -23,7 +25,12 @@ namespace std {
 
 	template <class T>
 	static inline const string type2name(T o) {
-		string s = string(abi::__cxa_demangle(typeid(o).name(),nullptr,nullptr,nullptr));
+		#ifdef _CXXABI_H
+				string s = string(abi::__cxa_demangle(typeid(o).name(),nullptr,nullptr,nullptr));
+		#else
+				string s = string(typeid(o).name());
+		#endif
+
 		std::strReplaceAll(s, string("std::"), string(""));			// Remove std:: from output
 		std::strReplaceAll(s, string("CPUComponents::"), string("")); // Remove CPUComponents:: from output
 		return s;
@@ -38,12 +45,18 @@ namespace SysUtils {
 		return WSTRbuff;
 	}
 
+	inline void callSystemCmd(std::string command) {
+		system(command.c_str());
+	}
+
 	inline void setWindowTitle(std::string text) {
-		#ifdef _INC_WINDOWS
-			SetConsoleTitle(convert2WSTR(text.c_str()));
+		#ifdef _MSC_VER
+			std::stringstream s;
+			s << "TITLE " << text;
+			callSystemCmd(s.str());
 		#else
-			system(text.c_str());
-		#endif
+			SetConsoleTitle(convert2WSTR(text.c_str()));
+		#endif // _MSC_VER
 	}
 
 	inline void setTitle(float version, bool debug) {
@@ -80,4 +93,4 @@ namespace SysUtils {
 	}
 }
 
-#endif // UTILS_H
+#endif // UTILS_HPP
