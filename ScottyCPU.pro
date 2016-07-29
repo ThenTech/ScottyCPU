@@ -10,4 +10,9 @@ HEADERS += \
     Exceptions.hpp \
     SynchrotronComponent.hpp \
     UnitTest.hpp \
-    utils.hpp
+    utils.hpp \
+    NANDGate.hpp \
+    ORGate.hpp \
+    NORGate.hpp \
+    XORGate.hpp \
+    NOTGate.hpp

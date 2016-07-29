@@ -1,5 +1,5 @@
-/*
- *	Main file for executable.
+/**
+ *	Main file for ScottyCPU executable.
  */
 
 //#define	NDEBUG			// "No Debug" : comment to enable debugging
@@ -15,9 +15,12 @@
 
 using namespace std;
 
-static float scottyVersion = 0.2;
+/**
+ *	\brief	The current version of this program.
+ */
+static float scottyVersion = 0.3;
 
-/*
+/**
  *	Run main program.
  */
 int main(int argc, char *argv[]) {

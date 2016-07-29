@@ -13,6 +13,12 @@ namespace Exceptions {
 	// length_error	out_of_range	runtime_error
 	// range_error	overflow_error	underflow_error
 
+	/**
+	 *	\brief
+	 *		Generic exception with message.
+	 *	\param	msg
+	 *		The message to be shown when encountering this exception.
+	 */
 	class Exception : public exception {
 	private:
 	   string _msg;
@@ -25,6 +31,12 @@ namespace Exceptions {
 		}
 	};
 
+	/**
+	 *	\brief
+	 *		Out of bounds exception with message and index.
+	 *	\param	idx
+	 *		The index that caused the out of bounds.
+	 */
 	class OutOfBoundsException : public Exception  {
 	public:
 		OutOfBoundsException(int idx)
@@ -35,6 +47,12 @@ namespace Exceptions {
 		}
 	};
 
+	/**
+	 *	\brief
+	 *		Nullpointer exception with message.
+	 *	\param	msg
+	 *		The index that caused the out of bounds.
+	 */
 	class NullPointerException : public Exception  {
 	public:
 		NullPointerException(string msg)
@@ -45,6 +63,10 @@ namespace Exceptions {
 		}
 	};
 
+	/**
+	 *	\brief
+	 *		File read exception.
+	 */
 	class FileReadException : public Exception  {
 	public:
 		FileReadException()
@@ -55,6 +77,10 @@ namespace Exceptions {
 		}
 	};
 
+	/**
+	 *	\brief
+	 *		File write exception.
+	 */
 	class FileWriteException : public Exception  {
 	public:
 		FileWriteException()
