@@ -6,16 +6,13 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 HEADERS += \
-    SynchronousComponent.h \
-    Gate.h \
-    ANDGate.h \
-    ORGate.h \
-    NORGate.h \
-    NANDGate.h \
-    NOTGate.h \
-    XORGate.h \
-    UnitTest.h \
-    MultiGate.h \
-    Exceptions.h \
-    MultiANDGate.h \
-    utils.h
+    ANDGate.hpp \
+    Exceptions.hpp \
+    SynchrotronComponent.hpp \
+    UnitTest.hpp \
+    utils.hpp \
+    NANDGate.hpp \
+    ORGate.hpp \
+    NORGate.hpp \
+    XORGate.hpp \
+    NOTGate.hpp

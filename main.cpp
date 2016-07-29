@@ -1,25 +1,26 @@
-/*
- *	Main file for executable.
+/**
+ *	Main file for ScottyCPU executable.
  */
 
 //#define	NDEBUG			// "No Debug" : comment to enable debugging
+#define	THROW_EXCEPTIONS	// Uncomment to enable Exception checking and throwing.
 
 #include <iostream>
-#include <sstream>
 
-#include "utils.h"
-#include "Gate.h"
+#include "utils.hpp"
 
 #ifndef NDEBUG
-#include "UnitTest.h"
+#include "UnitTest.hpp"
 #endif
 
 using namespace std;
-using namespace CPUComponents;
 
-static float scottyVersion = 0.1;
+/**
+ *	\brief	The current version of this program.
+ */
+static float scottyVersion = 0.3;
 
-/*
+/**
  *	Run main program.
  */
 int main(int argc, char *argv[]) {
