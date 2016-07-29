@@ -21,4 +21,4 @@ By using C++ and eventually the Qt framework for a GUI.
    - Operations are performed on each bit in the bitset (e.g. OR all bits in the bitset).
  2. Start of `MultiGate` implementation.
    - MultiGates have a list of `std::bitset<n>*` pointers so they can iterate every input a perform an operation on each input (e.g. OR entire bitset with the others).
- 3. **Coming next:** By using the [SynchrotronComponent class](https://github.com/Wosser1sProductions/Synchrotron) every `Gate` will be able to connects its output to inputs of other `Gates` (*Signals & Slots* paradigm).
+ 3. By using the [SynchrotronComponent class](https://github.com/Wosser1sProductions/Synchrotron) every `Gate` is now able to connects its output to inputs of other `Gates` and vica versa (*Signals & Slots* paradigm).
