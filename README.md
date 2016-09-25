@@ -22,3 +22,8 @@ By using C++ and eventually the Qt framework for a GUI.
  2. Start of `MultiGate` implementation.
    - MultiGates have a list of `std::bitset<n>*` pointers so they can iterate every input a perform an operation on each input (e.g. OR entire bitset with the others).
  3. By using the [SynchrotronComponent class](https://github.com/Wosser1sProductions/Synchrotron) every `Gate` is now able to connects its output to inputs of other `Gates` and vica versa (*Signals & Slots* paradigm).
+ 
+#### Next
+Adding additional implementations of `SynchrotronComponent` for extra functionality:
+ - A `SynchrotronComponent` with a fixed/minimum amount of inputs (e.g. `NOTGate` must have at most 1 input, `ANDGate` cannot take less than 2 inputs...)
+ - A `SynchrotronComponent` with an extra enable input (which can only be connected once)
