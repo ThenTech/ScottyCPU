@@ -12,7 +12,7 @@ For an upcomig school project, we will try to create this CPU model for educatio
  
 By using C++ and eventually the Qt framework for a GUI.
 
-
+Documentation has been generated with [Doxygen](http://www.doxygen.org/index.html) and can temporarily be found [here](http://11401710.pxl-ea-ict.be/ScottyCPU/index.html) or as an archive found in the `release` section.
 
 ## Version history
 #### 0.
