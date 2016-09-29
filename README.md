@@ -14,6 +14,8 @@ By using C++ and eventually the Qt framework for a GUI.
 
 Documentation has been generated with [Doxygen](http://www.doxygen.org/index.html) and can temporarily be found [here](http://11401710.pxl-ea-ict.be/ScottyCPU/index.html) or as an archive in the `release` section.
 
+This batchfile can be used to copy files from working dir to GitHub dir for committing: [gitCPTY.bat](https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d)
+
 ## Version history
 #### 0.
  1. First release with basic Gate classes, all with their respective unittests. 
