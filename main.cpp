@@ -18,6 +18,7 @@ using namespace std;
 /**
  *	\brief	The current version of this program.
  */
+static string scottyVersion = "0.4";
 
 /**
  *	Run main program.
