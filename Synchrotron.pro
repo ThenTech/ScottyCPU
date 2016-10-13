@@ -18,4 +18,6 @@ HEADERS += \
     NOTGate.hpp \
     MemoryCell.hpp \
     SynchrotronComponentFixedInput.hpp \
-    SynchrotronComponentEnable.hpp
+    SynchrotronComponentEnable.hpp \
+    SHIFTRight.hpp \
+    SHIFTLeft.hpp
