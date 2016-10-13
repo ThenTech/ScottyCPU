@@ -1,0 +1,6 @@
+#ifndef SHIFTRIGHT_HPP
+#define SHIFTRIGHT_HPP
+
+//TO-DO
+
+#endif // SHIFTRIGHT_HPP
