@@ -16,6 +16,7 @@
 #include "NORGate.hpp"
 #include "XORGate.hpp"
 #include "NOTGate.hpp"
+#include "MemoryCell.hpp"
 
 using namespace CPUComponents;
 
@@ -149,31 +150,31 @@ void testSynchrotronComponent(void) {
 
 	assert(s_with_null.getState()				== for_bit_0);
 	assert(s_with_null.getBitWidth()			== 4);
-	assert(s_with_null.getIputs().size()		== 0);
+	assert(s_with_null.getInputs().size()		== 0);
 	assert(s_with_null.getOutputs().size()		== 0);
 	assert(s_with_1.getState()					== for_bit_1);
 	assert(s_with_1.getBitWidth()				== 4);
-	assert(s_with_1.getIputs().size()			== 0);
+	assert(s_with_1.getInputs().size()			== 0);
 	assert(s_with_1.getOutputs().size()			== 0);
 	assert(s_pointed->getState()				== for_bit_2);
 	assert(s_pointed->getBitWidth()				== 4);
-	assert(s_pointed->getIputs().size()			== 0);
+	assert(s_pointed->getInputs().size()		== 0);
 	assert(s_pointed->getOutputs().size()		== 0);
 
 	s_with_null.addOutput( {&s_with_1, &s_with_2} );
 	assert(s_with_null.getOutputs().size()		== 2);
 	s_with_null.addOutput(s_with_1); // Add again to see if size() increases, it should not.
 	assert(s_with_null.getOutputs().size()		== 2);
-	assert(s_with_1.getIputs().size()			== 1);
+	assert(s_with_1.getInputs().size()			== 1);
 	s_with_1.addInput(s_with_null); // Add again to see if size() increases, it should not.
-	assert(s_with_1.getIputs().size()			== 1);
-	assert(s_with_2.getIputs().size()			== 1);
+	assert(s_with_1.getInputs().size()			== 1);
+	assert(s_with_2.getInputs().size()			== 1);
 
 	s_with_null.emit();	// Internal State is 0x0, gets ORed to subscribers
 	assert(s_with_1.getState()					== for_bit_1);
 
 	s_with_null.addInput(*s_pointed);
-	assert(s_with_null.getIputs().size()		== 1);
+	assert(s_with_null.getInputs().size()		== 1);
 	assert(s_pointed->getOutputs().size()		== 1);
 	s_pointed->emit(); // Internal State is 0x2, gets ORed to subscribers
 	assert(s_with_null.getState()				== for_bit_2); // tick()ed by s_pointed
@@ -181,13 +182,13 @@ void testSynchrotronComponent(void) {
 	assert(s_with_2.getState()					== for_bit_2);
 
 	s_with_1.removeInput(s_with_null);
-	assert(s_with_1.getIputs().size()			== 0);
+	assert(s_with_1.getInputs().size()			== 0);
 	assert(s_with_null.getOutputs().size()		== 1);
 	s_with_null.removeOutput(s_with_1); // Remove again to see if size() decreases, it should not.
 	assert(s_with_null.getOutputs().size()		== 1);
 
 	s_sign_1.addOutput(s_with_null);
-	assert(s_with_null.getIputs().size()		== 2);
+	assert(s_with_null.getInputs().size()		== 2);
 	assert(s_sign_1.getOutputs().size()			== 1);
 	s_with_null.tick();	// Should update from 0x2 to 0x3 (==> s_sign_1(1) | s_pointed(2) == 3)
 	assert(s_with_null.getState()				== for_bit_3);
@@ -198,7 +199,7 @@ void testSynchrotronComponent(void) {
 	SynchrotronComponent<4>	s_copy_sign(s_with_2);
 	// flow: {s_pointed, s_sign_1} -> s_with_null -> {s_with_2, s_copy_sign}
 
-	assert(s_copy_sign.getIputs().size()		== 1);
+	assert(s_copy_sign.getInputs().size()		== 1);
 	assert(s_copy_sign.getOutputs().size()		== 0);
 	assert(s_with_null.getOutputs().size()		== 2);
 	assert(s_copy_sign.getState()				== for_bit_0);
@@ -212,12 +213,12 @@ void testSynchrotronComponent(void) {
 		s_copy_both.addInput(s_with_8);
 		// flow:              s_with_8 -> s_copy_both
 
-		assert(s_with_8.getIputs().size()		== 0);
+		assert(s_with_8.getInputs().size()		== 0);
 		assert(s_with_8.getOutputs().size()		== 1);
-		assert(s_copy_both.getIputs().size()	== 3);
+		assert(s_copy_both.getInputs().size()	== 3);
 		assert(s_copy_both.getOutputs().size()	== 2);
-		assert(s_copy_sign.getIputs().size()	== 2);
-		assert(s_with_2.getIputs().size()		== 2);
+		assert(s_copy_sign.getInputs().size()	== 2);
+		assert(s_with_2.getInputs().size()		== 2);
 		assert(s_pointed->getOutputs().size()	== 2);
 		assert(s_sign_1.getOutputs().size()		== 2);
 		s_with_8.emit();
@@ -229,8 +230,8 @@ void testSynchrotronComponent(void) {
 	// flow: {s_pointed, s_sign_1} -> s_with_null -> {s_with_2, s_copy_sign}
 	assert(s_pointed->getOutputs().size()		== 1);
 	assert(s_sign_1.getOutputs().size()			== 1);
-	assert(s_copy_sign.getIputs().size()		== 1);
-	assert(s_with_2.getIputs().size()			== 1);
+	assert(s_copy_sign.getInputs().size()		== 1);
+	assert(s_with_2.getInputs().size()			== 1);
 
 	delete s_pointed;
 }
@@ -310,27 +311,27 @@ void testLogic_AND_dynamic(void) {
 	ANDGate<2> g2;
 
 	g2.addInput( {&signal2_0, &signal2_0_} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_0);
 	g2.removeInput(signal2_0_);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput( {&signal2_1, &signal2_2} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_2);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 
 	g2.addInput(signal2_3);
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_1);
 	g2.removeInput(signal2_1);
 	g2.removeInput(signal2_3);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 }
 
 /*
@@ -408,27 +409,27 @@ void testLogic_NAND_dynamic(void) {
 	NANDGate<2> g2;
 
 	g2.addInput( {&signal2_0, &signal2_0_} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_0);
 	g2.removeInput(signal2_0_);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput( {&signal2_1, &signal2_2} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_2);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 
 	g2.addInput(signal2_3);
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_2);
 	g2.removeInput(signal2_1);
 	g2.removeInput(signal2_3);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 }
 
 /*
@@ -506,27 +507,27 @@ void testLogic_OR_dynamic(void) {
 	ORGate<2> g2;
 
 	g2.addInput( {&signal2_0, &signal2_0_} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_0);
 	g2.removeInput(signal2_0_);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput( {&signal2_1, &signal2_2} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_2);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 
 	g2.addInput(signal2_3);
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_1);
 	g2.removeInput(signal2_3);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 }
 
 /*
@@ -604,27 +605,27 @@ void testLogic_NOR_dynamic(void) {
 	NORGate<2> g2;
 
 	g2.addInput( {&signal2_0, &signal2_0_} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_0);
 	g2.removeInput(signal2_0_);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput( {&signal2_1, &signal2_2} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_2);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 
 	g2.addInput(signal2_3);
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_1);
 	g2.removeInput(signal2_3);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 }
 
 /*
@@ -695,7 +696,7 @@ void testLogic_XOR_const(void) {
 	assert(g2_1_3.getState()			== two_bit_2);	// Output changed to 1 after tick()
 
 	g2_1_3.addInput(signal2_1_);	// Test case: 1^1^1 == 1
-	assert(g2_1_3.getIputs().size()		== 3);
+	assert(g2_1_3.getInputs().size()	== 3);
 	g2_1_3.tick();
 	assert(g2_1_3.getState()			== two_bit_3);	// 01^11^01 = 11
 }
@@ -707,27 +708,27 @@ void testLogic_XOR_dynamic(void) {
 	XORGate<2> g2;
 
 	g2.addInput( {&signal2_0, &signal2_0_} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_0);
 	g2.removeInput(signal2_0_);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput( {&signal2_1, &signal2_2} );
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_2);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 
 	g2.addInput(signal2_3);
-	assert(g2.getIputs().size()			== 2);
+	assert(g2.getInputs().size()		== 2);
 	g2.tick();
 	assert(g2.getState()				== two_bit_2);
 	g2.removeInput(signal2_1);
 	g2.removeInput(signal2_3);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 }
 
 /*
@@ -775,25 +776,25 @@ void testLogic_NOT_dynamic(void) {
 	NOTGate<2> g2;
 
 	g2.addInput(signal2_0);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 	g2.tick();
 	assert(g2.getState()				== two_bit_3);
 	g2.removeInput(signal2_0);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput(signal2_1);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 	g2.tick();
 	assert(g2.getState()				== two_bit_2);
 	g2.removeInput(signal2_1);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 
 	g2.addInput(signal2_3);
-	assert(g2.getIputs().size()			== 1);
+	assert(g2.getInputs().size()		== 1);
 	g2.tick();
 	assert(g2.getState()				== two_bit_0);
 	g2.removeInput(signal2_3);
-	assert(g2.getIputs().size()			== 0);
+	assert(g2.getInputs().size()		== 0);
 }
 
 /*
@@ -812,18 +813,18 @@ void testLogic_Combinations(void) {
 	NOTGate<2>	not_or_1( { &or_2 } );
 	NORGate<2>	nor_2(signalProvider2_1_3);
 
-	assert(and_2.getIputs().size()		== 2);
+	assert(and_2.getInputs().size()		== 2);
 	assert(and_2.getOutputs().size()	== 1);
-	assert(not_and_1.getIputs().size()	== 1);
+	assert(not_and_1.getInputs().size()	== 1);
 	assert(not_and_1.getOutputs().size()== 0);
-	assert(nand_2.getIputs().size()		== 2);
+	assert(nand_2.getInputs().size()	== 2);
 	assert(nand_2.getOutputs().size()	== 0);
 
-	assert(or_2.getIputs().size()		== 2);
+	assert(or_2.getInputs().size()		== 2);
 	assert(or_2.getOutputs().size()		== 1);
-	assert(not_or_1.getIputs().size()	== 1);
+	assert(not_or_1.getInputs().size()	== 1);
 	assert(not_or_1.getOutputs().size()	== 0);
-	assert(nor_2.getIputs().size()		== 2);
+	assert(nor_2.getInputs().size()		== 2);
 	assert(nor_2.getOutputs().size()	== 0);
 
 	signal2_1.emit();
@@ -834,6 +835,35 @@ void testLogic_Combinations(void) {
 	assert(not_and_1.getState()			== nand_2.getState());
 	assert(not_or_1.getState()			== nor_2.getState());
 }
+
+void testLogic_MemoryCell(void) {
+	SynchrotronComponent<1> signal_i(one_bit_0.to_ulong()),
+							signal_s(one_bit_1.to_ulong());
+	NANDGate<1>				nand_1( {&signal_i, &signal_s} ),
+							nand_2( {&nand_1, &signal_s} ),
+							nand_3(one_bit_1.to_ulong()),
+							nand_4(one_bit_1.to_ulong());
+							nand_3.addInput( {&nand_1, &nand_4} );
+							nand_4.addInput( {&nand_2, &nand_3} );
+
+	std::cout << "States: " << nand_1.getState() << ", "
+							<< nand_2.getState() << ", "
+							<< nand_3.getState() << ", "
+							<< nand_4.getState() << ", "
+							<< "Mem bit: " << nand_3.getState() << std::endl;
+	signal_i.emit();
+	std::cout << "States: " << nand_1.getState() << ", "
+							<< nand_2.getState() << ", "
+							<< nand_3.getState() << ", "
+							<< nand_4.getState() << ", "
+							<< "Mem bit: " << nand_3.getState() << std::endl;
+
+	MemoryCell<1> m({&nand_1});
+	std::cout << " State: " << nand_1.getState() << " :: " << &nand_1 << std::endl;
+
+	std::cout << "Memory: " << m.getInput().getState() << " :: " << &m.getInput() << std::endl;
+}
+
 
 /*
  *	Run all tests.
@@ -857,6 +887,7 @@ void runTests(void) {
 		testLogic_NOT_const();
 		testLogic_NOT_dynamic();
 		testLogic_Combinations();
+		testLogic_MemoryCell();
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;
 		errorlevel++;

@@ -118,17 +118,17 @@ namespace Synchrotron {
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
 			 */
 			SynchrotronComponent(const SynchrotronComponent& sc, bool duplicateAll_IO = false) : SynchrotronComponent() {
-				LockBlock lock(this);
+				//LockBlock lock(this);
 
 				// Copy subscriptions
 				for(auto& sender : sc.signalInput) {
-					sender->connectSlot(this);
+					this->addInput(*sender);
 				}
 
 				if (duplicateAll_IO) {
 					// Copy subscribers
 					for(auto& connection : sc.slotOutput) {
-						this->connectSlot(connection);
+						this->addOutput(*connection);
 					}
 				}
 			}
@@ -209,7 +209,7 @@ namespace Synchrotron {
              *	\return	std::set<SynchrotronComponent*>&
              *      Returns a reference set to this SynchrotronComponent's inputs.
              */
-			const std::set<SynchrotronComponent*>& getIputs() {
+			const std::set<SynchrotronComponent*>& getInputs() const {
 				return this->signalInput;
 			}
 
@@ -218,7 +218,7 @@ namespace Synchrotron {
              *	\return	std::set<SynchrotronComponent*>&
              *      Returns a reference set to this SynchrotronComponent's outputs.
              */
-			const std::set<SynchrotronComponent*>& getOutputs() {
+			const std::set<SynchrotronComponent*>& getOutputs() const {
 				return this->slotOutput;
 			}
 
@@ -230,7 +230,7 @@ namespace Synchrotron {
              *	\param	input
              *		The SynchrotronComponent to connect as input.
              */
-			void addInput(SynchrotronComponent& input) {
+			virtual void addInput(SynchrotronComponent& input) {
 				LockBlock lock(this);
 
 				// deprecated? //if (!this->hasSameWidth(input)) return false;

@@ -15,4 +15,7 @@ HEADERS += \
     ORGate.hpp \
     NORGate.hpp \
     XORGate.hpp \
-    NOTGate.hpp
+    NOTGate.hpp \
+    MemoryCell.hpp \
+    SynchrotronComponentFixedInput.hpp \
+    SynchrotronComponentEnable.hpp
