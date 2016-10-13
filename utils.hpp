@@ -109,7 +109,7 @@ namespace SysUtils {
 	 *	\param	debug
 	 *		Whether this is a debug build.
 	 */
-	inline void setTitle(float version, bool debug) {
+	inline void setTitle(std::string version, bool debug) {
 		std::stringstream s;
 		s << "ScottyCPU  ::  v" << version << (debug ? "d" : "") << "  ::  built on " << __DATE__ << " at " << __TIME__;
 		SysUtils::setWindowTitle(s.str());
