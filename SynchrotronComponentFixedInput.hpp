@@ -57,7 +57,7 @@ namespace Synchrotron {
 			 *	\param	inputList
 			 *		The list of SynchrotronComponents to connect as input.
 			 *	\param	outputList
-			 *		The list of SynchrotronComponents to connect as output..
+			 *		The list of SynchrotronComponents to connect as output.
 			 */
 			SynchrotronComponentFixedInput(	std::initializer_list<SynchrotronComponent<bit_width>*> inputList,
 											std::initializer_list<SynchrotronComponent<bit_width>*> outputList = {} )

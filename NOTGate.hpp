@@ -37,7 +37,7 @@ namespace CPUComponents {
 			 *	\param	inputList
 			 *		The list of SynchrotronComponents to connect as input.
 			 *	\param	outputList
-			 *		The list of SynchrotronComponents to connect as output..
+			 *		The list of SynchrotronComponents to connect as output.
 			 */
 			NOTGate(std::initializer_list<SynchrotronComponent<bit_width>*> inputList,
 					std::initializer_list<SynchrotronComponent<bit_width>*> outputList = {} )
@@ -52,6 +52,10 @@ namespace CPUComponents {
 			 *		The tick() method will be called when this Gate's input issues an emit().
 			 */
 			inline void tick() {
+				#ifdef THROW_EXCEPTIONS
+					if (this->getInputs().size() == 0)
+						throw Exceptions::Exception("[ERROR] NOTGate requires 1 input!");
+				#endif
 				std::bitset<bit_width> prevState = this->state;
 
 				this->state = this->getInput().getState().flip();

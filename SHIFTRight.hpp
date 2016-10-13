@@ -1,5 +1,5 @@
-#ifndef SHIFTRight_HPP
-#define SHIFTRight_HPP
+#ifndef SHIFTRIGHT_HPP
+#define SHIFTRIGHT_HPP
 
 #include "SynchrotronComponentFixedInput.hpp"
 #include "Exceptions.hpp"
@@ -7,7 +7,7 @@ using namespace Synchrotron;
 
 namespace CPUComponents {
 
-	/** \brief	**NOTGate** : NOT all bits of it's input together.
+	/** \brief	**SHIFTRight** : SHIFT all bits of it's input 1 place to the right.
 	 *
 	 *	\param	bit_width
 	 *		This template argument specifies the width of the in and output connections.
@@ -37,7 +37,7 @@ namespace CPUComponents {
 			 *	\param	inputList
 			 *		The list of SynchrotronComponents to connect as input.
 			 *	\param	outputList
-			 *		The list of SynchrotronComponents to connect as output..
+			 *		The list of SynchrotronComponents to connect as output.
 			 */
 			SHIFTRight(std::initializer_list<SynchrotronComponent<bit_width>*> inputList,
 					std::initializer_list<SynchrotronComponent<bit_width>*> outputList = {} )
@@ -52,13 +52,19 @@ namespace CPUComponents {
 			 *		The tick() method will be called when this Gate's input issues an emit().
 			 */
 			inline void tick() {
+				#ifdef THROW_EXCEPTIONS
+					if (this->getInputs().size() == 0)
+						throw Exceptions::Exception("[ERROR] SHIFTRight requires 1 input!");
+				#endif
 				std::bitset<bit_width> prevState = this->state;
 
 				this->state = this->getInput().getState() >> 1;
+
+				// TO-DO : Set underflow flag ?
 
 				if (prevState != this->state) this->emit();
 			}
 	};
 }
 
-#endif // SHIFTRight_HPP
+#endif // SHIFTRIGHT_HPP

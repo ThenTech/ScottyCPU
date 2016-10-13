@@ -17,6 +17,8 @@
 #include "XORGate.hpp"
 #include "NOTGate.hpp"
 #include "MemoryCell.hpp"
+#include "SHIFTLeft.hpp"
+#include "SHIFTRight.hpp"
 
 using namespace CPUComponents;
 
@@ -42,6 +44,7 @@ static std::bitset<4>	for_bit_0 = 0,	// 0000
 						for_bit_2 = 2,	// 0010
 						for_bit_3 = 3,	// 0011
 						for_bit_4 = 4,	// 0100
+						for_bit_5 = 5,	// 0101
 						for_bit_8 = 8,	// 1000
 						for_bit_A = 10,	// 1010
 						for_bit_B = 11,	// 1011
@@ -60,6 +63,8 @@ static SynchrotronComponent<2>	signal2_0(two_bit_0.to_ulong()),					// 00
 								signal2_1_(two_bit_1.to_ulong()),					// 01 other unique
 								signal2_2(two_bit_2.to_ulong()),					// 10
 								signal2_3(two_bit_3.to_ulong());					// 11
+static SynchrotronComponent<4>	signal4_8( for_bit_8.to_ulong() ),					// 1000
+								signal4_A( for_bit_A.to_ulong() );					// 1010
 static SynchrotronComponent<1>	signalProvider1_0_0( {&signal1_0, &signal1_0_} ),	// 0 0
 								signalProvider1_0_1( {&signal1_0, &signal1_1} ),	// 0 1
 								signalProvider1_1_0( {&signal1_1, &signal1_0} ),	// 1 0
@@ -864,6 +869,131 @@ void testLogic_MemoryCell(void) {
 	std::cout << "Memory: " << m.getInput().getState() << " :: " << &m.getInput() << std::endl;
 }
 
+void testLogic_ShiftRight_const(void) {
+	SHIFTRight<1>	g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
+					g1_1( { &signal1_1 } );
+	SHIFTRight<2>	g2_0( { &signal2_0 } ),
+					g2_1( { &signal2_1 } ),
+					g2_2( { &signal2_2 } ),
+					g2_3( { &signal2_3 } );
+	SHIFTRight<4>	g4_8( { &signal4_8 } ),	// 1000
+					g4_A( { &signal4_A } );	// 1010
+
+	assert(g1_0.getInputs().size()		== 1);
+	assert(g1_0.getState()				== one_bit_0);
+	g1_0.tick();
+	assert(g1_0.getState()				== one_bit_0);	//  0 >> 1 ==  0
+
+	assert(g1_1.getInputs().size()		== 1);
+	assert(g1_1.getState()				== one_bit_0);
+	g1_1.tick();
+	assert(g1_1.getState()				== one_bit_0);	//  1 >> 1 ==  0
+
+	assert(g2_0.getState()				== two_bit_0);
+	g2_0.tick();
+	assert(g2_0.getState()				== two_bit_0);	// 00 >> 1 == 00
+
+	assert(g2_1.getState()				== two_bit_0);
+	g2_1.tick();
+	assert(g2_1.getState()				== two_bit_0);	// 01 >> 1 == 00
+
+	assert(g2_2.getState()				== two_bit_0);
+	g2_2.tick();
+	assert(g2_2.getState()				== two_bit_1);	// 10 >> 1 == 01
+
+	assert(g2_3.getState()				== two_bit_0);
+	g2_3.tick();
+	assert(g2_3.getState()				== two_bit_1);	// 11 >> 1 == 01
+
+	assert(g4_8.getInputs().size()		== 1);
+	assert(g4_A.getInputs().size()		== 1);
+
+	assert(g4_8.getState()				== for_bit_0);
+	g4_8.tick();
+	assert(g4_8.getState()				== for_bit_4);	// 1000 >> 1 == 0100
+	g4_8.tick();
+	assert(g4_8.getState()				== for_bit_4);	// No change : input is still 0x8
+
+	assert(g4_A.getState()				== for_bit_0);
+	g4_A.tick();
+	assert(g4_A.getState()				== for_bit_5);	// 1010 >> 1 == 0101
+	g4_A.tick();
+	assert(g4_A.getState()				== for_bit_5);	// No change : input is still 0xA
+}
+
+void testLogic_ShiftRight_dynamic(void) {
+	SHIFTRight<4>	gCycle( signal4_A.getState().to_ulong() );
+
+	// Create emit loop : will shift value continiously until all zero
+	// Note: This has been verified to operate correctly.
+	gCycle.addInput(gCycle);
+	assert(gCycle.getState()			== for_bit_A);
+	gCycle.tick();	// Start emit chain
+	assert(gCycle.getState()			== for_bit_0);
+}
+
+void testLogic_ShiftLeft_const(void) {
+	SHIFTLeft<1>	g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
+					g1_1( { &signal1_1 } );
+	SHIFTLeft<2>	g2_0( { &signal2_0 } ),
+					g2_1( { &signal2_1 } ),
+					g2_2( { &signal2_2 } ),
+					g2_3( { &signal2_3 } );
+	SHIFTLeft<4>	g4_8( { &signal4_8 } ),	// 1000
+					g4_A( { &signal4_A } );	// 1010
+
+	assert(g1_0.getInputs().size()		== 1);
+	assert(g1_0.getState()				== one_bit_0);
+	g1_0.tick();
+	assert(g1_0.getState()				== one_bit_0);	//  0 << 1 ==  0
+
+	assert(g1_1.getInputs().size()		== 1);
+	assert(g1_1.getState()				== one_bit_0);
+	g1_1.tick();
+	assert(g1_1.getState()				== one_bit_0);	//  1 << 1 ==  0
+
+	assert(g2_0.getState()				== two_bit_0);
+	g2_0.tick();
+	assert(g2_0.getState()				== two_bit_0);	// 00 << 1 == 00
+
+	assert(g2_1.getState()				== two_bit_0);
+	g2_1.tick();
+	assert(g2_1.getState()				== two_bit_2);	// 01 << 1 == 10
+
+	assert(g2_2.getState()				== two_bit_0);
+	g2_2.tick();
+	assert(g2_2.getState()				== two_bit_0);	// 10 << 1 == 00
+
+	assert(g2_3.getState()				== two_bit_0);
+	g2_3.tick();
+	assert(g2_3.getState()				== two_bit_2);	// 11 << 1 == 10
+
+	assert(g4_8.getInputs().size()		== 1);
+	assert(g4_A.getInputs().size()		== 1);
+
+	assert(g4_8.getState()				== for_bit_0);
+	g4_8.tick();
+	assert(g4_8.getState()				== for_bit_0);	// 1000 << 1 == 0000
+	g4_8.tick();
+	assert(g4_8.getState()				== for_bit_0);	// No change : input is still 0x8
+
+	assert(g4_A.getState()				== for_bit_0);
+	g4_A.tick();
+	assert(g4_A.getState()				== for_bit_4);	// 1010 << 1 == 0100
+	g4_A.tick();
+	assert(g4_A.getState()				== for_bit_4);	// No change : input is still 0xA
+}
+
+void testLogic_ShiftLeft_dynamic(void) {
+	SHIFTLeft<4>	gCycle( signal4_A.getState().to_ulong() );
+
+	// Create emit loop : will shift value continiously until all zero
+	// Note: This has been verified to operate correctly.
+	gCycle.addInput(gCycle);
+	assert(gCycle.getState()			== for_bit_A);
+	gCycle.tick();	// Start emit chain
+	assert(gCycle.getState()			== for_bit_0);
+}
 
 /*
  *	Run all tests.
@@ -887,7 +1017,11 @@ void runTests(void) {
 		testLogic_NOT_const();
 		testLogic_NOT_dynamic();
 		testLogic_Combinations();
-		testLogic_MemoryCell();
+		testLogic_MemoryCell();			// WIP
+		testLogic_ShiftRight_const();
+		testLogic_ShiftRight_dynamic();
+		testLogic_ShiftLeft_const();
+		testLogic_ShiftLeft_dynamic();
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;
 		errorlevel++;
@@ -897,7 +1031,7 @@ void runTests(void) {
 	}
 
 	std::cout << (errorlevel ? "There were errors running tests. See message(s) above." :
-							  "All tests passed.") << std::endl;
+							   "All tests passed.") << std::endl;
 }
 
 
