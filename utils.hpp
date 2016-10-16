@@ -1,6 +1,10 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#ifndef UNICODE
+#define UNICODE
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <typeinfo>
