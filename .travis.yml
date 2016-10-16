@@ -2,6 +2,10 @@ language: cpp
 
 compiler: g++
 
+addons:
+    code_climate:
+        repo_token: 98692c4e6d7907024ddb029dfb1909706696aee862e20b3727219bdfbaf56b86
+
 before_script:
   - mkdir build
   - cd build
