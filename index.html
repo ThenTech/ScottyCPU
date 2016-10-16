@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>ScottyCPU by Wosser1sProductions</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>ScottyCPU</h1>
+        <h2>Base for Scotty Processor</h2>
+        <a href="https://github.com/Wosser1sProductions/ScottyCPU" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="scottycpu" class="anchor" href="#scottycpu" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ScottyCPU</h1>
+
+<p>The base code for a "Scotty Processor" as described by <em>J. Clark Scott</em> in his book <a href="http://www.buthowdoitknow.com/">But How Do It Know?</a>.</p>
+
+<blockquote>
+<p>But How Do It Know? is the breakthrough book that distills Computer Science down to the simple basic principles that 
+all computers have in common, and presents the big picture step by step in plain English so that anyone can understand 
+this ingenious, yet basically simple invention called a computer.</p>
+</blockquote>
+
+<p>For an upcomig school project, we will try to create this CPU model for educational purposes with:</p>
+
+<ul>
+<li>Complete functionality regarding a simple processor system</li>
+<li>Providing visual information when running assembly programs on the CPU (e.g. memory dumps, step-by-step execution...)</li>
+</ul>
+
+<p>By using C++ and eventually the Qt framework for a GUI.</p>
+
+<p>Documentation has been generated with <a href="http://www.doxygen.org/index.html">Doxygen</a> and can temporarily be found <a href="http://11401710.pxl-ea-ict.be/ScottyCPU/index.html">here</a> or as an archive in the <code>release</code> section.</p>
+
+<p>This batchfile can be used to copy files from working dir to GitHub dir for committing: <a href="https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d">gitCPTY.bat</a></p>
+
+<h2>
+<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Version history</h2>
+
+<h4>
+<a id="0" class="anchor" href="#0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.</h4>
+
+<ol>
+<li>First release with basic Gate classes, all with their respective unittests. 
+
+<ul>
+<li>Gates have a <code>std::bitset&lt;n&gt;</code> as input and a <code>std::bitset&lt;1&gt;</code> as output.</li>
+<li>Operations are performed on each bit in the bitset (e.g. OR all bits in the bitset).</li>
+</ul>
+</li>
+<li>Start of <code>MultiGate</code> implementation.
+
+<ul>
+<li>MultiGates have a list of <code>std::bitset&lt;n&gt;*</code> pointers so they can iterate every input a perform an operation on each input (e.g. OR entire bitset with the others).</li>
+</ul>
+</li>
+<li>By using the <a href="https://github.com/Wosser1sProductions/Synchrotron">SynchrotronComponent class</a> every <code>Gate</code> is now able to connects its output to inputs of other <code>Gates</code> and vica versa (<em>Signals &amp; Slots</em> paradigm).</li>
+<li>Creating more components:
+
+<ul>
+<li>Added <code>SynchrotronComponentFixedInput</code>: with a fixed/minimum amount of inputs (e.g. <code>NOTGate</code> must have at most 1 input, <code>ANDGate</code> cannot take less than 2 inputs...)</li>
+<li>Added SHIFTLeft and SHIFTRight to shift the connected signal by one to the left or right respectively.</li>
+<li>Added UML diagram</li>
+</ul>
+</li>
+</ol>
+
+<h4>
+<a id="next" class="anchor" href="#next" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next</h4>
+
+<p>Adding additional implementations of <code>SynchrotronComponent</code> for extra functionality:</p>
+
+<ul>
+<li>A <code>SynchrotronComponent</code> with an extra enable input (which can only be connected once)</li>
+<li>Other <code>CPUComponents</code>
+</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/Wosser1sProductions/ScottyCPU/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/Wosser1sProductions/ScottyCPU/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/Wosser1sProductions/ScottyCPU"></a> is maintained by <a href="https://github.com/Wosser1sProductions">Wosser1sProductions</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
