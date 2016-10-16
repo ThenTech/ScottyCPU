@@ -7,7 +7,7 @@ using namespace Synchrotron;
 
 namespace CPUComponents {
 
-	/** \brief	**SHIFTLeft* : SHIFT all bits of it's input 1 place to the left.
+	/** \brief	**SHIFTLeft** : SHIFT all bits of it's input 1 place to the left.
 	 *
 	 *	\param	bit_width
 	 *		This template argument specifies the width of the in and output connections.
