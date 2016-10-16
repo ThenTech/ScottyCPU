@@ -33,5 +33,6 @@ int main(int argc, char *argv[]) {
 	SysUtils::setTitle(scottyVersion, false);
 #endif
 
+	SysUtils::callSystemCmd("PAUSE");
 	return 0;
 }

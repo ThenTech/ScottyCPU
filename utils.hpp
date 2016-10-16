@@ -77,7 +77,7 @@ namespace SysUtils {
 	 */
 	inline wchar_t* convert2WSTR(const char* buffer) {
 		wchar_t* WSTRbuff = new wchar_t[strlen(buffer) * 2 + 2];
-		swprintf(WSTRbuff, L"%s", buffer);
+		swprintf(WSTRbuff, (strlen(buffer) * 2 + 2), L"%s", buffer);
 		return WSTRbuff;
 	}
 
