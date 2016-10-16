@@ -2,13 +2,13 @@ language: cpp
 
 compiler: g++
 
-before_install:
- - sudo add-apt-repository ppa:tobydox/mingw-x-trusty
- - sudo apt-get update -qq
-
 addons:
     code_climate:
         repo_token: 98692c4e6d7907024ddb029dfb1909706696aee862e20b3727219bdfbaf56b86
+
+before_install:
+ - sudo add-apt-repository ppa:tobydox/mingw-x-precise
+ - sudo apt-get update -qq
 
 before_script:
   - mkdir build
