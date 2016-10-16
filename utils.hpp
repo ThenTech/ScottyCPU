@@ -10,9 +10,9 @@
 #include <typeinfo>
 #ifndef _MSC_VER
 	#include <cxxabi.h>
+	#include <windows.h>
 #endif
 #include <limits>
-#include <windows.h>
 
 #ifndef __cplusplus
 #error A C++ compiler is required!
