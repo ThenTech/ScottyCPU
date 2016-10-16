@@ -9,6 +9,26 @@ addons:
 before_install:
  - sudo add-apt-repository -y ppa:tobydox/mingw-x-precise
  - sudo apt-get update -qq
+ 
+matrix:
+  include:
+    - env: FEATURE=1 CXXFLAGS=-m32
+      compiler: gcc
+      addons: &gcc5
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+    - env: FEATURE=1 CXXFLAGS=-m32
+      compiler: clang
+    - env: FEATURE=1 CXXFLAGS=-m64
+      compiler: gcc
+      addons: &gcc5
+    - env: FEATURE=2 CC=i586-mingw32msvc-gcc CXX=i586-mingw32msvc-g++ LD=i586-mingw32msvc-ld
+      compiler: gcc
+    - env: FEATURE=3 SOCI_TRAVIS_BACKEND=oracle
+      compiler: gcc
 
 before_script:
   - mkdir build
