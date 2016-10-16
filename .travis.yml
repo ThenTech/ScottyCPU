@@ -2,10 +2,19 @@ language: cpp
 
 compiler: g++
 
+before_install:
+ - sudo add-apt-repository ppa:tobydox/mingw-x-trusty
+ - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+ - sudo apt-get update -qq
+ 
+install:
+ - sudo apt-get install -qq g++-4.8
+ - export CXX="g++-4.8"
+
 addons:
     code_climate:
         repo_token: 98692c4e6d7907024ddb029dfb1909706696aee862e20b3727219bdfbaf56b86
-
+		
 before_script:
   - mkdir build
   - cd build
