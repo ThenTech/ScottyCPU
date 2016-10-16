@@ -1,4 +1,4 @@
 BIN=./bin/
 
 all:
-	$(CXX) -pthread -std=c++11 -Wall -Wextra main.cpp -o $(BIN)ScottyCPU
+	$(CXX) -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)ScottyCPU
