@@ -1,6 +1,4 @@
-# ScottyCPU [![Build status](https://ci.appveyor.com/api/projects/status/0exw7bal3h8n53cp?svg=true)](https://ci.appveyor.com/project/Wosser1sProductions/scottycpu) [![Issue Count](https://codeclimate.com/github/Wosser1sProductions/ScottyCPU/badges/issue_count.svg)](https://codeclimate.com/github/Wosser1sProductions/ScottyCPU) [![GitHub issues](https://img.shields.io/github/issues/Wosser1sProductions/ScottyCPU.svg)](https://github.com/Wosser1sProductions/ScottyCPU/issues) [![HitCount](https://hitt.herokuapp.com/Wosser1sProductions/ScottyCPU.svg)](https://github.com/Wosser1sProductions/ScottyCPU)
-
-<!---[comment] # ([![Build Status](https://travis-ci.org/Wosser1sProductions/ScottyCPU.png?branch=master)](https://travis-ci.org/Wosser1sProductions/ScottyCPU))--->
+# [ScottyCPU](http://scottycpufor.me/) [![Build status](https://ci.appveyor.com/api/projects/status/0exw7bal3h8n53cp?svg=true)](https://ci.appveyor.com/project/Wosser1sProductions/scottycpu) [![Issue Count](https://codeclimate.com/github/Wosser1sProductions/ScottyCPU/badges/issue_count.svg)](https://codeclimate.com/github/Wosser1sProductions/ScottyCPU) [![GitHub issues](https://img.shields.io/github/issues/Wosser1sProductions/ScottyCPU.svg)](https://github.com/Wosser1sProductions/ScottyCPU/issues) [![HitCount](https://hitt.herokuapp.com/Wosser1sProductions/ScottyCPU.svg)](http://code.scottycpufor.me) [![progress](https://img.shields.io/badge/total%20progress-34%25-orange.svg)](http://doc.scottycpufor.me)
 
 The base code for a "Scotty Processor" as described by *J. Clark Scott* in his book [But How Do It Know?](http://www.buthowdoitknow.com/).
 
@@ -15,7 +13,7 @@ For an upcomig school project, we will try to create this CPU model for educatio
  
 By using C++ and eventually the Qt framework for a GUI.
 
-Documentation has been generated with [Doxygen](http://www.doxygen.org/index.html) and can temporarily be found [here](http://11401710.pxl-ea-ict.be/ScottyCPU/index.html) or as an archive in the `release` section.
+Documentation has been generated with [Doxygen](http://www.doxygen.org/index.html) and can be found [here](http://doc.scottycpufor.me/) or as an archive in the `release` section.
 
 This batchfile can be used to copy files from working dir to GitHub dir for committing: [gitCPTY.bat](https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d)
 
