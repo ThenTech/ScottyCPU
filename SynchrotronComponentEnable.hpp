@@ -46,13 +46,10 @@ namespace Synchrotron {
 				this->enable = &input;
 			}
 
-			void setEnable(SynchrotronComponent& input) {
-				this->enable = &input;
-			}
-
-
+//			void setEnable(SynchrotronComponent& input) {
+//				this->enable = &input;
+//			}
 	};
-
 }
 
 #endif // SYNCHROTRONCOMPONENTENABLE_HPP

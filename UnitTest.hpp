@@ -19,6 +19,7 @@
 #include "MemoryCell.hpp"
 #include "SHIFTLeft.hpp"
 #include "SHIFTRight.hpp"
+#include "Memory.hpp"
 
 using namespace CPUComponents;
 
@@ -995,6 +996,10 @@ void testLogic_ShiftLeft_dynamic(void) {
 	assert(gCycle.getState()			== for_bit_0);
 }
 
+void testLogic_Memory(void) {
+	// TO-DO
+}
+
 /*
  *	Run all tests.
  */
@@ -1022,6 +1027,7 @@ void runTests(void) {
 		testLogic_ShiftRight_dynamic();
 		testLogic_ShiftLeft_const();
 		testLogic_ShiftLeft_dynamic();
+		testLogic_Memory();				// WIP
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;
 		errorlevel++;

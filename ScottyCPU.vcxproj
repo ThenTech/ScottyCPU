@@ -130,6 +130,7 @@
     <ClInclude Include="UnitTest.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="XORGate.hpp" />
+	<ClInclude Include="Memory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -20,4 +20,5 @@ HEADERS += \
     SynchrotronComponentFixedInput.hpp \
     SynchrotronComponentEnable.hpp \
     SHIFTRight.hpp \
-    SHIFTLeft.hpp
+    SHIFTLeft.hpp \
+    Memory.hpp
