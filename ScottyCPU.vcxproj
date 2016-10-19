@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="ANDGate.hpp" />
     <ClInclude Include="Exceptions.hpp" />
+    <ClInclude Include="Memory.hpp" />
     <ClInclude Include="MemoryCell.hpp" />
     <ClInclude Include="NANDGate.hpp" />
     <ClInclude Include="NORGate.hpp" />
@@ -130,7 +131,6 @@
     <ClInclude Include="UnitTest.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="XORGate.hpp" />
-	<ClInclude Include="Memory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

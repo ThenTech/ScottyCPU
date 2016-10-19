@@ -9,6 +9,20 @@ using namespace Synchrotron;
 
 namespace CPUComponents {
 
+	/**	\brief
+	*		TO-DO
+	*/
+	enum class MemoryUnits : size_t { BITS = 0, BYTES, KILOBYTES, MEGABYTES };
+
+	/**	\brief
+	*		TO-DO
+	*/
+	inline std::string memoryUnitToString(MemoryUnits u, bool longStr = false) {
+		static std::string shortString[] = { "bits", "B", "kB", "MB" };
+		static std::string longString[]  = { "bits", "Bytes", "Kilobytes", "Megabytes" };
+		return (longStr ? longString : shortString)[(size_t) u];
+	}
+
 	/** \brief	**Memory** : Save the state of a SynchrotronComponent on an adress.
 	 *
 	 *	\param	bit_width
@@ -18,12 +32,6 @@ namespace CPUComponents {
 	 */
 	template <size_t bit_width, size_t mem_size>
 	class Memory : public Mutex {
-		public:
-			/**	\brief
-			 *		TO-DO
-			 */
-			enum class Units : size_t { BITS, BYTES, KILOBYTES, MEGABYTES };
-
 		private:
 			/**
 			 *	\brief	Array of std::bitset containing the memory data.
@@ -33,19 +41,20 @@ namespace CPUComponents {
 			/**	\brief
 			 *		TO-DO
 			 */
-			Memory::Units defaultUnit;
+			MemoryUnits defaultUnit;
 
 		public:
 			/**
 			 *	Default constructor
 			 */
-			Memory(Memory::Units defaultUnit = Memory::Units::KILOBYTES) : defaultUnit(defaultUnit){
+			Memory(MemoryUnits defaultUnit = MemoryUnits::KILOBYTES) : defaultUnit(defaultUnit) {
 				#ifdef THROW_EXCEPTIONS
 					if (!mem_size)
 						throw Exceptions::Exception("[ERROR] Memory size is zero!");
-					if (mem_size > this->MAX_SIZE.to_ulong())
+					if (mem_size > this->getMaxSize())
 						throw Exceptions::Exception("[ERROR] Memory size is to big: Insufficient adresses!");
 				#endif
+				LockBlock lock(this);
 
 				_memory = SysUtils::allocArray<std::bitset<bit_width>>(mem_size);
 			}
@@ -60,22 +69,29 @@ namespace CPUComponents {
 			/**	\brief
 			 *		TO-DO
 			 */
-			float getSize(Memory::Units unit) {
+			float getSize(MemoryUnits unit) {
 				float size = bit_width * mem_size;
 
 				switch (unit) {
-					case Memory::Units::BYTES:		return size / 8;
-					case Memory::Units::KILOBYTES:	return size / 8192;
-					case Memory::Units::MEGABYTES:	return size / 8388608;
-					case Memory::Units::BITS:
+					case MemoryUnits::BYTES:		return size / 8;
+					case MemoryUnits::KILOBYTES:	return size / 8192;
+					case MemoryUnits::MEGABYTES:	return size / 8388608;
+					case MemoryUnits::BITS:
 					default:						return size;
 				}
 			}
 
 			/**	\brief
+			*		TO-DO
+			*/
+			size_t getMaxSize(void) {
+				return (1 << bit_width) - 1;
+			}
+
+			/**	\brief
 			 *		TO-DO
 			 */
-			Memory::Units getSizeUnit(void) {
+			MemoryUnits getSizeUnit(void) {
 				return this->defaultUnit;
 			}
 
@@ -87,7 +103,7 @@ namespace CPUComponents {
 					if (address.to_ulong() > mem_size)
 						throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 				#endif
-
+				LockBlock lock(this);
 				return this->_memory[address.to_ulong()];
 			}
 
@@ -99,7 +115,7 @@ namespace CPUComponents {
 					if (address.to_ulong() > mem_size)
 						throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 				#endif
-
+				LockBlock lock(this);
 				this->_memory[address.to_ulong()] = data;
 			}
 
@@ -107,16 +123,7 @@ namespace CPUComponents {
 			 *		TO-DO
 			 */
 			friend std::ostream& operator<<(std::ostream &os, Memory& m) {
-				os << m.getSize(m.getSizeUnit());
-
-				switch (m.getSizeUnit()) {
-					case Memory::Units::BITS:		os << " bits";	break;
-					case Memory::Units::BYTES:		os << " B";		break;
-					case Memory::Units::KILOBYTES:	os << " kB";	break;
-					case Memory::Units::MEGABYTES:	os << " MB";	break;
-					default:						os << " ?";		break;
-				}
-
+				os << m.getSize(m.getSizeUnit()) << " " << memoryUnitToString(m.getSizeUnit() /*, true */);
 				return os;
 			}
 
@@ -126,11 +133,6 @@ namespace CPUComponents {
 			friend std::ostream& operator<<(std::ostream &os, Memory *m) {
 				return os << *m;
 			}
-
-			/**	\brief
-			 *		TO-DO
-			 */
-			static std::bitset<bit_width> MAX_SIZE = std::bitset<bit_width>((1 << bit_width) - 1);
 	};
 }
 
