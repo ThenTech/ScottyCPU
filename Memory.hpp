@@ -134,6 +134,7 @@ namespace CPUComponents {
 				#ifdef THROW_EXCEPTIONS
 					if (address.to_ullong() > this->getMaxAddress().to_ullong())
 						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
+						throw Exceptions::OutOfBoundsException(address.to_ulong());
 				#endif
 				LockBlock lock(this);
 				return this->_memory[address.to_ullong()];
@@ -155,10 +156,15 @@ namespace CPUComponents {
 			std::bitset<bit_width>* getDataRange(std::bitset<bit_width> from, std::bitset<bit_width> to) {
 				#ifdef THROW_EXCEPTIONS
 					if (to.to_ullong() > this->getMaxAddress().to_ullong())
+						throw Exceptions::OutOfBoundsException(to.to_ulong());
 					if (from.to_ullong() > to.to_ullong())
+						throw Exceptions::OutOfBoundsException(from.to_ulong());
 				#endif
 				LockBlock lock(this);
+				std::bitset<bit_width>* range = SysUtils::allocArray<std::bitset<bit_width>>(to.to_ulong() - from.to_ulong());
 
+				for (size_t i = from.to_ulong(); i <= to.to_ulong(); ++i)
+					range[i - from.to_ulong()] = this->_memory[i];
 
 				return range;
 			}
@@ -176,6 +182,7 @@ namespace CPUComponents {
 				#ifdef THROW_EXCEPTIONS
 					if (address.to_ullong() > this->getMaxAddress().to_ullong())
 						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
+						throw Exceptions::OutOfBoundsException(address.to_ulong());
 				#endif
 				LockBlock lock(this);
 				this->_memory[address.to_ulong()] = data;
@@ -191,6 +198,7 @@ namespace CPUComponents {
 				#ifdef THROW_EXCEPTIONS
 					if (address.to_ullong() > this->getMaxAddress().to_ullong())
 						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
+						throw Exceptions::OutOfBoundsException(address.to_ulong());
 				#endif
 				LockBlock lock(this);
 				this->_memory[address.to_ulong()].reset();

@@ -74,6 +74,7 @@ namespace CPUComponents {
 			 */
 			void setFrequency(float frequency) {
 				this->freq = frequency;
+				this->period = (long long int) (1e9 / frequency);
 			}
 
 			/**
@@ -88,6 +89,7 @@ namespace CPUComponents {
 			 */
 			void setPeriod(float period) {
 				this->freq = 1.0F / period;
+				this->period = (long long int) (period * 1e9);
 			}
 
 			/**
