@@ -20,6 +20,7 @@
 #include "SHIFTLeft.hpp"
 #include "SHIFTRight.hpp"
 #include "Memory.hpp"
+#include "Clock.hpp"
 
 using namespace CPUComponents;
 
@@ -46,6 +47,7 @@ static std::bitset<4>	for_bit_0 = 0,	// 0000
 						for_bit_3 = 3,	// 0011
 						for_bit_4 = 4,	// 0100
 						for_bit_5 = 5,	// 0101
+						for_bit_7 = 7,	// 0111
 						for_bit_8 = 8,	// 1000
 						for_bit_A = 10,	// 1010
 						for_bit_B = 11,	// 1011
@@ -997,7 +999,62 @@ void testLogic_ShiftLeft_dynamic(void) {
 }
 
 void testLogic_Memory(void) {
-	// TO-DO
+	int i;
+	Memory<2, 1>	m_2_1(MemoryUnits::BITS);
+	Memory<4, 8>	m_4_8(MemoryUnits::BYTES);
+	std::bitset<4> *range;
+
+	assert(m_2_1.getSize()				== 2);
+	assert(m_2_1.getSizeUnit()			== MemoryUnits::BITS);
+	assert(m_2_1.getMaxSize()			== 3);
+	assert(m_2_1.getMaxAddress()		== two_bit_0);
+	assert(m_2_1.getData(two_bit_0)		== two_bit_0);
+	m_2_1.setData(two_bit_0, two_bit_1);
+	assert(m_2_1.getData(two_bit_0)		== two_bit_1);
+	m_2_1.setData(two_bit_0, two_bit_3);
+	assert(m_2_1.getData(two_bit_0)		== two_bit_3);
+	m_2_1.resetData(two_bit_0);
+	assert(m_2_1.getData(two_bit_0)		== two_bit_0);
+
+
+	assert(m_4_8.getSize()				== 4);
+	assert(m_4_8.getSizeUnit()			== MemoryUnits::BYTES);
+	assert(m_4_8.getMaxSize()			== 15);
+	assert(m_4_8.getMaxAddress()		== for_bit_7);
+	assert(m_4_8.getData(for_bit_0)		== for_bit_0);
+	m_4_8.setData(for_bit_0, for_bit_1);
+	assert(m_4_8.getData(for_bit_0)		== for_bit_1);
+	m_4_8.setData(for_bit_7, for_bit_5);
+	assert(m_4_8.getData(for_bit_7)		== for_bit_5);
+	m_4_8.resetData(for_bit_7);
+	assert(m_4_8.getData(for_bit_7)		== for_bit_0);
+	m_4_8.setData(for_bit_7, for_bit_7);
+	assert(m_4_8.getData(for_bit_7)		== for_bit_7);
+
+	range = m_4_8.getDataRange(for_bit_0, for_bit_7);
+	for (i = 0; i < 8; ++i)
+		assert(range[i]					== (!i ? for_bit_1 : i == 7 ? for_bit_7 : for_bit_0));
+	delete range;
+
+	range = m_4_8.getDataRange(for_bit_7, for_bit_7);
+	assert(range[0]						== for_bit_7);
+	delete range;
+}
+
+void testClock(void) {
+	Clock c(1.0F);
+
+	assert(c.getBitWidth()				== 1);
+	assert(c.getFrequency()				== 1.0F);
+	assert(c.getPeriod()				== 1.0F);
+
+	c.setFrequency(4.0);
+	assert(c.getFrequency()				== 4.0F);
+	assert(c.getPeriod()				== 0.25F);
+
+	//assert(c.startThread()				== true);
+
+	// TO-DO: Test emit cycle
 }
 
 /*
@@ -1027,7 +1084,8 @@ void runTests(void) {
 		testLogic_ShiftRight_dynamic();
 		testLogic_ShiftLeft_const();
 		testLogic_ShiftLeft_dynamic();
-		testLogic_Memory();				// WIP
+		testLogic_Memory();
+		testClock();					// WIP
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;
 		errorlevel++;

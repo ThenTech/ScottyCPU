@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ANDGate.hpp" />
+	<ClInclude Include="Clock.hpp" />
     <ClInclude Include="Exceptions.hpp" />
     <ClInclude Include="Memory.hpp" />
     <ClInclude Include="MemoryCell.hpp" />

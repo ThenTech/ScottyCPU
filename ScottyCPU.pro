@@ -21,4 +21,5 @@ HEADERS += \
     SynchrotronComponentEnable.hpp \
     SHIFTRight.hpp \
     SHIFTLeft.hpp \
-    Memory.hpp
+    Memory.hpp \
+    Clock.hpp

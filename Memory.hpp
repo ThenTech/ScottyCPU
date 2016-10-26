@@ -1,7 +1,6 @@
 #ifndef MEMORY_HPP
 #define MEMORY_HPP
 
-#include <array>
 #include "SynchrotronComponent.hpp"
 #include "Exceptions.hpp"
 #include "utils.hpp"
@@ -9,14 +8,17 @@ using namespace Synchrotron;
 
 namespace CPUComponents {
 
-	/**	\brief
-	*		TO-DO
-	*/
+	/**	\brief	Enum containing different units to express memory sizes.
+	 */
 	enum class MemoryUnits : size_t { BITS = 0, BYTES, KILOBYTES, MEGABYTES };
 
-	/**	\brief
-	*		TO-DO
-	*/
+	/**	\brief	Return the string representation for the memory units.
+	 *
+	 *	\param	u
+	 *		The given memory unit.
+	 *	\param	longStr
+	 *		Specifies whether to return a shortend or the full name of the unit.
+	 */
 	inline std::string memoryUnitToString(MemoryUnits u, bool longStr = false) {
 		static std::string shortString[] = { "bits", "B", "kB", "MB" };
 		static std::string longString[]  = { "bits", "Bytes", "Kilobytes", "Megabytes" };
@@ -34,24 +36,38 @@ namespace CPUComponents {
 	class Memory : public Mutex {
 		private:
 			/**
-			 *	\brief	Array of std::bitset containing the memory data.
+			 *	\brief	Array of `std::bitset` containing the memory data.
 			 */
 			std::bitset<bit_width> *_memory;
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	The default unit to display data in.
 			 */
 			MemoryUnits defaultUnit;
 
-		public:
-			/**
-			 *	Default constructor
+			/**	\brief	The maximum available size of the memory.
+			 *
+			 *			Given by: `(1 << bit_width) - 1`
 			 */
-			Memory(MemoryUnits defaultUnit = MemoryUnits::KILOBYTES) : defaultUnit(defaultUnit) {
+			size_t max_size;
+
+			/**	\brief	The maximum usable address in the memory.
+			 *
+			 *			Given by `mem_size - 1`
+			 */
+			std::bitset<bit_width> max_address;
+
+		public:
+			/**	\brief	Default constructor
+			 *
+			 *	\param	defaultUnit
+			 *		The default unit to display data in ( `MemoryUnits::KILOBYTES` ).
+			 */
+			Memory(MemoryUnits defaultUnit = MemoryUnits::KILOBYTES)
+				: defaultUnit(defaultUnit), max_size((1 << bit_width) - 1), max_address(std::bitset<bit_width>(mem_size - 1)) {
 				#ifdef THROW_EXCEPTIONS
 					if (!mem_size)
 						throw Exceptions::Exception("[ERROR] Memory size is zero!");
-					if (mem_size > this->getMaxSize())
+					if (mem_size - 1 > this->getMaxSize())
 						throw Exceptions::Exception("[ERROR] Memory size is to big: Insufficient adresses!");
 				#endif
 				LockBlock lock(this);
@@ -59,76 +75,135 @@ namespace CPUComponents {
 				_memory = SysUtils::allocArray<std::bitset<bit_width>>(mem_size);
 			}
 
-			/**
-			 *	Default destructor
+			/**	\brief	Default destructor
+			 *
+			 *			Deletes internal memory array.
 			 */
 			~Memory() {
 				delete this->_memory;
 			}
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	Return the size of the memory expressed in a given MemoryUnit.
 			 */
 			float getSize(MemoryUnits unit) {
 				float size = bit_width * mem_size;
 
 				switch (unit) {
-					case MemoryUnits::BYTES:		return size / 8;
-					case MemoryUnits::KILOBYTES:	return size / 8192;
-					case MemoryUnits::MEGABYTES:	return size / 8388608;
+					case MemoryUnits::BYTES:		return size / 8;		// size >> 3
+					case MemoryUnits::KILOBYTES:	return size / 8192;		// size >> 13
+					case MemoryUnits::MEGABYTES:	return size / 8388608;	// size >> 23
 					case MemoryUnits::BITS:
 					default:						return size;
 				}
 			}
 
-			/**	\brief
-			*		TO-DO
-			*/
-			size_t getMaxSize(void) {
-				return (1 << bit_width) - 1;
+			/**	\brief	Return the size of the memory expressed in the defautlt MemoryUnit.
+			 */
+			float getSize(void) {
+				return this->getSize(this->defaultUnit);
 			}
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	Returns the maximum memory size.
+			*/
+			size_t getMaxSize(void) {
+				return this->max_size;
+			}
+
+			/**	\brief	Returns the maximum usable memory address.
+			*/
+			std::bitset<bit_width> getMaxAddress(void) {
+				return this->max_address;
+			}
+
+			/**	\brief	Returns the default MemoryUnuit.
 			 */
 			MemoryUnits getSizeUnit(void) {
 				return this->defaultUnit;
 			}
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	Get data from memory.
+			 *
+			 *	\param	address
+			 *		The address from which to return the data.
+			 *		Must be smaller than the maximum address.
+			 *
+			 *	\return	std::bitset<bit_width>
+			 *		Returns the bitset data on the given address
 			 */
 			std::bitset<bit_width>& getData(std::bitset<bit_width> address) {
 				#ifdef THROW_EXCEPTIONS
-					if (address.to_ulong() > mem_size)
-						throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
+					if (address.to_ullong() > this->getMaxAddress().to_ullong())
+						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 				#endif
 				LockBlock lock(this);
-				return this->_memory[address.to_ulong()];
+				return this->_memory[address.to_ullong()];
 			}
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	Get data range from memory.
+			 *
+			 *	\param	from
+			 *		The address from which to start.
+			 *		Must be smaller than the maximum address and `to`.
+			 *
+			 *	\param	to
+			 *		The address where to stop.
+			 *		Must be smaller than the maximum address and bigger or equal to `from`.
+			 *
+			 *	\return	std::bitset<bit_width>*
+			 *		Returns an array with the bitset data from `from` to `to`.
+			 */
+			std::bitset<bit_width>* getDataRange(std::bitset<bit_width> from, std::bitset<bit_width> to) {
+				#ifdef THROW_EXCEPTIONS
+					if (to.to_ullong() > this->getMaxAddress().to_ullong())
+					if (from.to_ullong() > to.to_ullong())
+				#endif
+				LockBlock lock(this);
+
+
+				return range;
+			}
+
+			/**	\brief	Set data on a given address in the memory.
+			 *
+			 *	\param	address
+			 *		The address where to put data.
+			 *		Must be smaller than the maximum address.
+			 *
+			 *	\param	data
+			 *		The bitset data to add.
 			 */
 			void setData(std::bitset<bit_width> address, std::bitset<bit_width> data) {
 				#ifdef THROW_EXCEPTIONS
-					if (address.to_ulong() > mem_size)
-						throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
+					if (address.to_ullong() > this->getMaxAddress().to_ullong())
+						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 				#endif
 				LockBlock lock(this);
 				this->_memory[address.to_ulong()] = data;
 			}
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	Reset data on a given address in the memory (nullify).
+			 *
+			 *	\param	address
+			 *		The address where to put data.
+			 *		Must be smaller than the maximum address.
+			 */
+			void resetData(std::bitset<bit_width> address) {
+				#ifdef THROW_EXCEPTIONS
+					if (address.to_ullong() > this->getMaxAddress().to_ullong())
+						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
+				#endif
+				LockBlock lock(this);
+				this->_memory[address.to_ulong()].reset();
+			}
+
+			/**	\brief	Add the memory size and unit to a given stream (`os << Memory`).
 			 */
 			friend std::ostream& operator<<(std::ostream &os, Memory& m) {
 				os << m.getSize(m.getSizeUnit()) << " " << memoryUnitToString(m.getSizeUnit() /*, true */);
 				return os;
 			}
 
-			/**	\brief
-			 *		TO-DO
+			/**	\brief	Add the memory size and unit to a given stream (`os << Memory`).
 			 */
 			friend std::ostream& operator<<(std::ostream &os, Memory *m) {
 				return os << *m;
