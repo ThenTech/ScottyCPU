@@ -72,7 +72,7 @@ namespace CPUComponents {
 				#endif
 				LockBlock lock(this);
 
-				_memory = SysUtils::allocArray<std::bitset<bit_width>>(mem_size);
+				this->_memory = SysUtils::allocArray<std::bitset<bit_width>>(mem_size);
 			}
 
 			/**	\brief	Default destructor
@@ -85,7 +85,7 @@ namespace CPUComponents {
 
 			/**	\brief	Return the size of the memory expressed in a given MemoryUnit.
 			 */
-			float getSize(MemoryUnits unit) {
+			float getSize(MemoryUnits unit) const {
 				float size = bit_width * mem_size;
 
 				switch (unit) {
@@ -99,25 +99,25 @@ namespace CPUComponents {
 
 			/**	\brief	Return the size of the memory expressed in the defautlt MemoryUnit.
 			 */
-			float getSize(void) {
+			float getSize(void) const {
 				return this->getSize(this->defaultUnit);
 			}
 
 			/**	\brief	Returns the maximum memory size.
 			*/
-			size_t getMaxSize(void) {
+			size_t getMaxSize(void) const {
 				return this->max_size;
 			}
 
 			/**	\brief	Returns the maximum usable memory address.
 			*/
-			std::bitset<bit_width> getMaxAddress(void) {
+			std::bitset<bit_width> getMaxAddress(void) const {
 				return this->max_address;
 			}
 
 			/**	\brief	Returns the default MemoryUnuit.
 			 */
-			MemoryUnits getSizeUnit(void) {
+			MemoryUnits getSizeUnit(void) const {
 				return this->defaultUnit;
 			}
 

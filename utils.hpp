@@ -16,6 +16,8 @@
 	#include <windows.h>
 #endif
 
+#include "Exceptions.hpp"
+
 #ifndef __cplusplus
 #error A C++ compiler is required!
 #endif
@@ -53,17 +55,18 @@ namespace std {
 	 *		Returns the class name of o.
 	 */
 	template <class T>
-	static inline const string type2name(T o) {
+	static inline const string type2name(T& o) {
 		#ifdef _CXXABI_H
 				string s = string(abi::__cxa_demangle(typeid(o).name(),nullptr,nullptr,nullptr));
 		#else
 				string s = string(typeid(o).name());
 		#endif
 
-		std::strReplaceAll(s, string("std::"), string(""));			// Remove std:: from output
+		std::strReplaceAll(s, string("std::"), string(""));           // Remove std:: from output
 		std::strReplaceAll(s, string("CPUComponents::"), string("")); // Remove CPUComponents:: from output
 		return s;
 	}
+
 }
 
 namespace SysUtils {
@@ -79,6 +82,24 @@ namespace SysUtils {
 		wchar_t* WSTRbuff = new wchar_t[strlen(buffer) * 2 + 2];
 		swprintf(WSTRbuff, (strlen(buffer) * 2 + 2), L"%s", buffer);
 		return WSTRbuff;
+	}
+
+	/**	\brief
+	 *	Convert the given char* to a variable of type T.
+	 *	Use this method instead of the raw C functions: atoi, atof, atol, atoll.
+	 *
+	 *	\param	buffer
+	 *		The character buffer to convert.
+	 *	\return
+	 *		Returns a variable of type T with the value as given in buffer.
+	 */
+	template <class T>
+	inline T lexical_cast(const char* buffer) {
+		T out;
+		std::istringstream cast(buffer);
+		if (!(cast >> out))
+			throw Exceptions::CastingException(buffer, std::type2name(out));
+		return out;
 	}
 
 	/**	\brief	Call a system() cmd command.
@@ -117,7 +138,8 @@ namespace SysUtils {
 	 */
 	inline void setTitle(std::string version, bool debug) {
 		std::stringstream s;
-		s << "ScottyCPU  ::  v" << version << (debug ? "d" : "") << "  ::  built on " << __DATE__ << " at " << __TIME__;
+		s << "ScottyCPU  ::  v" << version << (debug ? "d" : "")
+								<< "  ::  built on " << __DATE__ << " at " << __TIME__;
 		SysUtils::setWindowTitle(s.str());
 	}
 

@@ -27,7 +27,7 @@ namespace Exceptions {
 		virtual ~Exception() /*_GLIBCXX_USE_NOEXCEPT*/ {}
 
 		virtual const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return _msg;
+			return "Exception: " + _msg;
 		}
 	};
 
@@ -60,6 +60,24 @@ namespace Exceptions {
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
 			return "NullPointerException: " + Exception::getMessage();
+		}
+	};
+
+	/**
+	 *	\brief
+	 *		Casting exception with message.
+	 *	\param	src
+	 *		The object to be casted.
+	 *	\param	dest
+	 *		The object to cast to.
+	 */
+	class CastingException : public Exception  {
+	public:
+		CastingException(string src, string dest)
+			: Exception("Cannot cast \"" + src + "\" to object of type \"" + dest + "\"!") {}
+
+		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
+			return "CastingException: " + Exception::getMessage();
 		}
 	};
 

@@ -33,7 +33,7 @@ namespace Synchrotron {
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
 			 */
-			SynchrotronComponentFixedInput(const SynchrotronComponent<bit_width>& sc, bool duplicateAll_IO = false) : SynchrotronComponentFixedInput<bit_width, 1u>() {
+			SynchrotronComponentFixedInput(const SynchrotronComponent<bit_width>& sc, bool duplicateAll_IO = false) : SynchrotronComponentFixedInput<bit_width, max_inputs>() {
 				//LockBlock lock(this);
 
 				// Copy subscriptions
@@ -61,7 +61,7 @@ namespace Synchrotron {
 			 */
 			SynchrotronComponentFixedInput(	std::initializer_list<SynchrotronComponent<bit_width>*> inputList,
 											std::initializer_list<SynchrotronComponent<bit_width>*> outputList = {} )
-									: SynchrotronComponentFixedInput<bit_width, 1u>() {
+									: SynchrotronComponentFixedInput<bit_width, max_inputs>() {
 				this->addInput(inputList);
 				this->addOutput(outputList);
 			}
@@ -76,7 +76,7 @@ namespace Synchrotron {
 			 *	\return	size_t
 			 *      Returns the maximum amounts of inputs.
 			 */
-			inline size_t getMaxInputs() {
+			inline size_t getMaxInputs() const {
 				return max_inputs;
 			}
 
@@ -85,7 +85,7 @@ namespace Synchrotron {
 			 *	\return	SynchrotronComponent&
 			 *      Returns a reference set to this SynchrotronComponent's input.
 			 */
-			const SynchrotronComponent<bit_width>& getInput() {
+			const SynchrotronComponent<bit_width>& getInput() const {
 				return **this->getInputs().begin();
 			}
 

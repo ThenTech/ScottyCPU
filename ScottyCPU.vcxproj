@@ -115,17 +115,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ALUnit.hpp" />
     <ClInclude Include="ANDGate.hpp" />
-	<ClInclude Include="Clock.hpp" />
+    <ClInclude Include="Clock.hpp" />
+    <ClInclude Include="ControlUnit.hpp" />
+    <ClInclude Include="CPUComponentFactory.hpp" />
     <ClInclude Include="Exceptions.hpp" />
+    <ClInclude Include="Instructions\BinaryInstruction.hpp" />
+    <ClInclude Include="Instructions\Instruction.hpp" />
+    <ClInclude Include="Instructions\UnaryInstruction.hpp" />
     <ClInclude Include="Memory.hpp" />
     <ClInclude Include="MemoryCell.hpp" />
     <ClInclude Include="NANDGate.hpp" />
     <ClInclude Include="NORGate.hpp" />
     <ClInclude Include="NOTGate.hpp" />
     <ClInclude Include="ORGate.hpp" />
+    <ClInclude Include="ScottyCPU.hpp" />
     <ClInclude Include="SHIFTLeft.hpp" />
     <ClInclude Include="SHIFTRight.hpp" />
+    <ClInclude Include="SignedBitset.hpp" />
     <ClInclude Include="SynchrotronComponent.hpp" />
     <ClInclude Include="SynchrotronComponentEnable.hpp" />
     <ClInclude Include="SynchrotronComponentFixedInput.hpp" />

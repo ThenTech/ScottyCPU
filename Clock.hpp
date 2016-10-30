@@ -4,15 +4,19 @@
 #include <chrono>
 #include <thread>
 #include "SynchrotronComponentFixedInput.hpp"
+#include "Exceptions.hpp"
 
 using namespace std::chrono;
 
 namespace CPUComponents {
 
-	/**
-	 *	\brief	TO-DO
+	/** \brief
+	 *		**Clock** : Generate a pulse on a certain frequency.
+	 *
+	 *
 	 */
-	class Clock : public SynchrotronComponentFixedInput<1u, 1u>{
+	template <size_t bit_width>
+	class Clock : public SynchrotronComponentFixedInput<bit_width, 0u>{
 		private:
 			/**
 			 *	\brief	TO-DO
@@ -36,33 +40,10 @@ namespace CPUComponents {
 			 *			Frequency in Hz.
 			 */
 			Clock(float frequency)
-				: SynchrotronComponentFixedInput<1u, 1u>(0) {
+				: SynchrotronComponentFixedInput<bit_width, 0u>(0) {
 				this->setFrequency(frequency);
 				this->reset();
 			}
-
-			/**	Copy constructor
-			 *	\param	Other
-			 *		SynchrotronComponent to copy from
-			 *	\param	duplicateAll_IO
-			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
-			 */
-			Clock(const SynchrotronComponent<1u>& other, bool duplicateAll_IO = false)
-				: SynchrotronComponentFixedInput<1u, 1u>(other, duplicateAll_IO) {}
-
-			/**	\brief
-			 *	Connection constructor
-			 *	*	Adds signal subscriptions from inputList
-			 *	*	Optionally adds slot subscribers from outputList
-			 *
-			 *	\param	inputList
-			 *		The list of SynchrotronComponents to connect as input.
-			 *	\param	outputList
-			 *		The list of SynchrotronComponents to connect as output.
-			 */
-			Clock(std::initializer_list<SynchrotronComponent<1u>*> inputList,
-					std::initializer_list<SynchrotronComponent<1u>*> outputList = {} )
-									: SynchrotronComponentFixedInput<1u, 1u>(inputList, outputList) {}
 
 			/**
 			 *	\brief	TO-DO
@@ -73,6 +54,8 @@ namespace CPUComponents {
 			 *	\brief	TO-DO
 			 */
 			void setFrequency(float frequency) {
+				if (!frequency || frequency < 0.0F)
+					throw Exceptions::Exception("Clock frequency cannot be equal or smaller than zero!");
 				this->freq = frequency;
 				this->period = (long long int) (1e9 / frequency);
 			}
@@ -80,7 +63,7 @@ namespace CPUComponents {
 			/**
 			 *	\brief	TO-DO
 			 */
-			float getFrequency(void) {
+			float getFrequency(void) const {
 				return this->freq;
 			}
 
@@ -88,6 +71,8 @@ namespace CPUComponents {
 			 *	\brief	TO-DO
 			 */
 			void setPeriod(float period) {
+				if (!period || period < 0.0F)
+					throw Exceptions::Exception("Clock period cannot be equal or smaller than zero!");
 				this->freq = 1.0F / period;
 				this->period = (long long int) (period * 1e9);
 			}
@@ -95,7 +80,7 @@ namespace CPUComponents {
 			/**
 			 *	\brief	TO-DO
 			 */
-			float getPeriod(void) {
+			float getPeriod(void) const {
 				return this->period / 1e9F;
 			}
 
@@ -109,7 +94,7 @@ namespace CPUComponents {
 			/**
 			 *	\brief	TO-DO
 			 */
-			bool startThread() {
+			bool startThread(void) {
 				std::thread clk(*this);
 				clk.detach();
 				return !clk.joinable();
@@ -125,11 +110,11 @@ namespace CPUComponents {
 					std::this_thread::sleep_until(this->startTime + nanoseconds(this->period));
 
 					/**********************************************************************/
-//					printf("Elapsed: %.7f s  ::  waited for: %.7f s\n",
-//								(duration_cast<nanoseconds>(
-//									high_resolution_clock::now() - this->startTime).count()
-//								/ 1e9F),
-//								(this->period - difference) / 1e9F);
+					printf("Elapsed: %.7f s  ::  waited for: %.7f s\n",
+								(duration_cast<nanoseconds>(
+									high_resolution_clock::now() - this->startTime).count()
+								/ 1e9F),
+								(this->period - difference) / 1e9F);
 					/**********************************************************************/
 
 					this->reset();
@@ -148,11 +133,6 @@ namespace CPUComponents {
 			 *		The tick() method will be called when this Gate's input issues an emit().
 			 */
 			inline void tick() {
-//				#ifdef THROW_EXCEPTIONS
-//					if (this->getInputs().size() != 0)
-//						throw Exceptions::Exception("[ERROR] Clock cannot have inputs!");
-//				#endif
-
 				this->state = 1;
 				this->emit();
 				this->state = 0;

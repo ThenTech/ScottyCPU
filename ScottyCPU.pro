@@ -22,4 +22,12 @@ HEADERS += \
     SHIFTRight.hpp \
     SHIFTLeft.hpp \
     Memory.hpp \
-    Clock.hpp
+    Clock.hpp \
+    SignedBitset.hpp \
+    CPUComponentFactory.hpp \
+    Instructions/BinaryInstruction.hpp \
+    Instructions/Instruction.hpp \
+    Instructions/UnaryInstruction.hpp \
+    ScottyCPU.hpp \
+    ControlUnit.hpp \
+    ALUnit.hpp

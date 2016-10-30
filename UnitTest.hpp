@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cassert>	// Debug assertion
 #include <bitset>
+#include "SignedBitset.hpp"
 #include "Exceptions.hpp"
 
 #include "SynchrotronComponent.hpp"
@@ -142,6 +143,11 @@ void testBitset(void) {
 	y = for_bit_A;		// 1010
 	assert((x & y) == 0x2);
 }
+
+// TO-DO
+//void testSignedBitset(void) {
+//	SignedBitset<4> x(-1);
+//}
 
 
 /*
@@ -1034,15 +1040,15 @@ void testLogic_Memory(void) {
 	range = m_4_8.getDataRange(for_bit_0, for_bit_7);
 	for (i = 0; i < 8; ++i)
 		assert(range[i]					== (!i ? for_bit_1 : i == 7 ? for_bit_7 : for_bit_0));
-	delete range;
+//	delete range;	// Invalid vor MSVC?
 
 	range = m_4_8.getDataRange(for_bit_7, for_bit_7);
 	assert(range[0]						== for_bit_7);
-	delete range;
+//	delete range;	// Invalid vor MSVC?
 }
 
 void testClock(void) {
-	Clock c(1.0F);
+	Clock<1u> c(1.0F);
 
 	assert(c.getBitWidth()				== 1);
 	assert(c.getFrequency()				== 1.0F);
@@ -1051,6 +1057,10 @@ void testClock(void) {
 	c.setFrequency(4.0);
 	assert(c.getFrequency()				== 4.0F);
 	assert(c.getPeriod()				== 0.25F);
+
+	c.setPeriod(0.5);
+	assert(c.getFrequency()				== 2.0F);
+	assert(c.getPeriod()				== 0.5F);
 
 	//assert(c.startThread()				== true);
 

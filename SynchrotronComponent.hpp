@@ -177,7 +177,7 @@ namespace Synchrotron {
              *	\return	size_t
              *      Returns the bit width of the internal bitset.
              */
-			inline size_t getBitWidth() {
+			inline size_t getBitWidth() const {
 				return bit_width;
 			}
 
