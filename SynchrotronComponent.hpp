@@ -21,7 +21,7 @@ namespace Synchrotron {
 			std::mutex m_mutex;
 		public:
 			Mutex() 				{}
-			Mutex(const Mutex&) 	{}
+			//Mutex(const Mutex&) 	{}
 			virtual ~Mutex() 		{}
 			virtual void lock()		{ m_mutex.lock();		}
 			virtual void unlock()	{ m_mutex.unlock();		}

@@ -132,7 +132,7 @@ namespace CPUComponents {
 			 */
 			std::bitset<bit_width>& getData(std::bitset<bit_width> address) {
 				#ifdef THROW_EXCEPTIONS
-					if (address.to_ullong() > this->getMaxAddress().to_ullong())
+					if (address.to_ulong() > this->getMaxAddress().to_ulong())
 						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 						throw Exceptions::OutOfBoundsException(address.to_ulong());
 				#endif
@@ -155,9 +155,9 @@ namespace CPUComponents {
 			 */
 			std::bitset<bit_width>* getDataRange(std::bitset<bit_width> from, std::bitset<bit_width> to) {
 				#ifdef THROW_EXCEPTIONS
-					if (to.to_ullong() > this->getMaxAddress().to_ullong())
+					if (to.to_ulong() > this->getMaxAddress().to_ulong())
 						throw Exceptions::OutOfBoundsException(to.to_ulong());
-					if (from.to_ullong() > to.to_ullong())
+					if (from.to_ulong() > to.to_ulong())
 						throw Exceptions::OutOfBoundsException(from.to_ulong());
 				#endif
 				LockBlock lock(this);
@@ -180,7 +180,7 @@ namespace CPUComponents {
 			 */
 			void setData(std::bitset<bit_width> address, std::bitset<bit_width> data) {
 				#ifdef THROW_EXCEPTIONS
-					if (address.to_ullong() > this->getMaxAddress().to_ullong())
+					if (address.to_ulong() > this->getMaxAddress().to_ulong())
 						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 						throw Exceptions::OutOfBoundsException(address.to_ulong());
 				#endif
@@ -196,7 +196,7 @@ namespace CPUComponents {
 			 */
 			void resetData(std::bitset<bit_width> address) {
 				#ifdef THROW_EXCEPTIONS
-					if (address.to_ullong() > this->getMaxAddress().to_ullong())
+					if (address.to_ulong() > this->getMaxAddress().to_ulong())
 						//throw Exceptions::OutOfBoundsException("[ERROR] Memory address out of bounds!");
 						throw Exceptions::OutOfBoundsException(address.to_ulong());
 				#endif
