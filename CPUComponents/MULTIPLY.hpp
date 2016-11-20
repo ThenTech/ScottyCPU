@@ -1,24 +1,25 @@
-#ifndef ANDGATE_HPP
-#define ANDGATE_HPP
+#ifndef MULTIPLY_HPP
+#define MULTIPLY_HPP
 
-#include "SynchrotronComponent.hpp"
-#include "Exceptions.hpp"
+#include "../SynchrotronComponent.hpp"
+#include "../SignedBitset.hpp"
+#include "../Exceptions.hpp"
 using namespace Synchrotron;
 
 namespace CPUComponents {
 
-	/** \brief	**ANDGate** : AND all inputs together.
+	/** \brief	**MULTIPLY** : MULTIPLY all inputs together.
 	 *
 	 *	\param	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
-	class ANDGate : public SynchrotronComponent<bit_width> {
+	class MULTIPLY : public SynchrotronComponent<bit_width> {
 		public:
 			/**
 			 *	Default constructor
 			 */
-			ANDGate(size_t initial_value = 0) : SynchrotronComponent<bit_width>(initial_value) {}
+			MULTIPLY(size_t initial_value = 0) : SynchrotronComponent<bit_width>(initial_value) {}
 
 			/**	Copy constructor
 			 *	\param	Other
@@ -26,7 +27,7 @@ namespace CPUComponents {
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
 			 */
-			ANDGate(const SynchrotronComponent<bit_width>& other, bool duplicateAll_IO = false)
+			MULTIPLY(const SynchrotronComponent<bit_width>& other, bool duplicateAll_IO = false)
 				: SynchrotronComponent<bit_width>(other, duplicateAll_IO) {}
 
 			/**	\brief
@@ -39,36 +40,39 @@ namespace CPUComponents {
 			 *	\param	outputList
 			 *		The list of SynchrotronComponents to connect as output.
 			 */
-			ANDGate(std::initializer_list<SynchrotronComponent<bit_width>*> inputList,
-					std::initializer_list<SynchrotronComponent<bit_width>*> outputList = {} )
+			MULTIPLY(std::initializer_list<SynchrotronComponent<bit_width>*> inputList,
+					 std::initializer_list<SynchrotronComponent<bit_width>*> outputList = {} )
 									: SynchrotronComponent<bit_width>(inputList, outputList) {}
 
 			/**
 			 *	Default destructor
 			 */
-			~ANDGate() {}
+			~MULTIPLY() {}
 
 			/**	\brief	The tick() method will be called when one of this Gate's inputs issues an emit().
 			 *
 			 *	\exception	Exceptions::Exception
 			 *		Throws exception if less than 2 inputs are connected (undefined behaviour).
 			 */
-			inline void tick() {
+			virtual void tick(void) {
 				#ifdef THROW_EXCEPTIONS
 					if (this->getInputs().size() < 2)
-						throw Exceptions::Exception("[ERROR] ANDGate requires at least 2 inputs!");
+						throw Exceptions::Exception("[ERROR] MULTIPLY requires at least 2 inputs!");
 				#endif
 				std::bitset<bit_width> prevState = this->state;
 
-				this->state.set();	// Default non-destructive state for AND-operation
+				//this->state.reset();	// Default non-destructive state for MULTIPLY-operation
+				std::SignedBitset<bit_width * 2 + 1> current(1);
 
 				for(auto& connection : this->getInputs()) {
-					this->state &= connection->getState();
+					current *= std::SignedBitset<bit_width * 2 + 1>(connection->getState().to_ullong());
 				}
+
+				this->state = current.to_ullong();
 
 				if (prevState != this->state) this->emit();
 			}
 	};
 }
 
-#endif // ANDGATE_HPP
+#endif // MULTIPLY_HPP

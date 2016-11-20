@@ -1,8 +1,8 @@
 #ifndef MEMORYCELL_HPP
 #define MEMORYCELL_HPP
 
-#include "SynchrotronComponentFixedInput.hpp"
-#include "Exceptions.hpp"
+#include "../SynchrotronComponentFixedInput.hpp"
+#include "../Exceptions.hpp"
 using namespace Synchrotron;
 
 namespace CPUComponents {
@@ -51,7 +51,7 @@ namespace CPUComponents {
 			/**	\brief
 			 *		The tick() method will be called when one of this Gate's inputs issues an emit().
 			 */
-			inline void tick() {
+			void tick(void) {
 				//if (enabled) {
 					std::bitset<bit_width> prevState = this->state;
 

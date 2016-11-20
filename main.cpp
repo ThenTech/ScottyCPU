@@ -28,7 +28,7 @@ using namespace std;
 static struct SETTINGS {
 	float clk_freq		= 1.0F;
 	bool debug			= false;
-	string version		= "0.4.13";
+	string version		= "0.4.18";
 } ScottySettings;
 
 /**

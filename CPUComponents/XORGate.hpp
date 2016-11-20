@@ -1,8 +1,8 @@
 #ifndef XORGATE_HPP
 #define XORGATE_HPP
 
-#include "SynchrotronComponent.hpp"
-#include "Exceptions.hpp"
+#include "../SynchrotronComponent.hpp"
+#include "../Exceptions.hpp"
 using namespace Synchrotron;
 
 namespace CPUComponents {
@@ -53,7 +53,7 @@ namespace CPUComponents {
 			 *	\exception	Exceptions::Exception
 			 *		Throws exception if less than 2 inputs are connected (undefined behaviour).
 			 */
-			inline void tick() {
+			void tick(void) {
 				#ifdef THROW_EXCEPTIONS
 					if (this->getInputs().size() < 2)
 						throw Exceptions::Exception("[ERROR] XORGate requires at least 2 inputs!");

@@ -177,7 +177,7 @@ namespace Synchrotron {
              *	\return	size_t
              *      Returns the bit width of the internal bitset.
              */
-			inline size_t getBitWidth() const {
+			size_t getBitWidth() const {
 				return bit_width;
 			}
 
@@ -309,7 +309,7 @@ namespace Synchrotron {
              *	\return	virtual void
              *		This method should be implemented by a derived class.
              */
-			virtual inline void tick() {
+			virtual void tick() {
 				//LockBlock lock(this);
 				std::bitset<bit_width> prevState = this->state;
 

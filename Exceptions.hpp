@@ -51,7 +51,7 @@ namespace Exceptions {
 	 *	\brief
 	 *		Nullpointer exception with message.
 	 *	\param	msg
-	 *		The index that caused the out of bounds.
+	 *		The null reference.
 	 */
 	class NullPointerException : public Exception  {
 	public:
@@ -60,6 +60,22 @@ namespace Exceptions {
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
 			return "NullPointerException: " + Exception::getMessage();
+		}
+	};
+
+	/**
+	 *	\brief
+	 *		Divide by zero exception with message.
+	 *	\param	msg
+	 *		The index that caused the out of bounds.
+	 */
+	class DivideByZeroException : public Exception  {
+	public:
+		DivideByZeroException(string msg)
+			: Exception("Tried to devide by zero in " + msg) {}
+
+		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
+			return "DivideByZeroException: " + Exception::getMessage();
 		}
 	};
 

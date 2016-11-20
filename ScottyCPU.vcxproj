@@ -71,6 +71,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -115,34 +117,55 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ALUnit.hpp" />
-    <ClInclude Include="ANDGate.hpp" />
-    <ClInclude Include="Clock.hpp" />
-    <ClInclude Include="ControlUnit.hpp" />
-    <ClInclude Include="CPUComponentFactory.hpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CPUComponents\ADD.hpp" />
+    <ClInclude Include="CPUComponents\ALUnit.hpp" />
+    <ClInclude Include="CPUComponents\ANDGate.hpp" />
+    <ClInclude Include="CPUComponents\Clock.hpp" />
+    <ClInclude Include="CPUComponents\COMPERATOR.hpp" />
+    <ClInclude Include="CPUComponents\ControlUnit.hpp" />
+    <ClInclude Include="CPUComponents\CPUComponentFactory.hpp" />
+    <ClInclude Include="CPUComponents\DIVIDE.hpp" />
+    <ClInclude Include="CPUComponents\Memory.hpp" />
+    <ClInclude Include="CPUComponents\MemoryCell.hpp" />
+    <ClInclude Include="CPUComponents\MODULO.hpp" />
+    <ClInclude Include="CPUComponents\MULTIPLY.hpp" />
+    <ClInclude Include="CPUComponents\NANDGate.hpp" />
+    <ClInclude Include="CPUComponents\NORGate.hpp" />
+    <ClInclude Include="CPUComponents\NOTGate.hpp" />
+    <ClInclude Include="CPUComponents\ORGate.hpp" />
+    <ClInclude Include="CPUComponents\SHIFTLeft.hpp" />
+    <ClInclude Include="CPUComponents\SHIFTRight.hpp" />
+    <ClInclude Include="CPUComponents\SUBTRACT.hpp" />
+    <ClInclude Include="CPUComponents\XORGate.hpp" />
     <ClInclude Include="Exceptions.hpp" />
-    <ClInclude Include="Instructions\BinaryInstruction.hpp" />
-    <ClInclude Include="Instructions\Instruction.hpp" />
-    <ClInclude Include="Instructions\UnaryInstruction.hpp" />
-    <ClInclude Include="Memory.hpp" />
-    <ClInclude Include="MemoryCell.hpp" />
-    <ClInclude Include="NANDGate.hpp" />
-    <ClInclude Include="NORGate.hpp" />
-    <ClInclude Include="NOTGate.hpp" />
-    <ClInclude Include="ORGate.hpp" />
+    <ClInclude Include="FloatingBitset.hpp" />
+    <ClInclude Include="CPUInstructions\ADDInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\ANDInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\BinaryInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\CMPInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\DIVInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\Instruction.hpp" />
+    <ClInclude Include="CPUInstructions\MODInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\MULInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\NANDInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\NORInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\NOTInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\ORInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\SHLInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\SHRInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\SUBInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\UnaryInstruction.hpp" />
+    <ClInclude Include="CPUInstructions\XORInstruction.hpp" />
     <ClInclude Include="ScottyCPU.hpp" />
-    <ClInclude Include="SHIFTLeft.hpp" />
-    <ClInclude Include="SHIFTRight.hpp" />
     <ClInclude Include="SignedBitset.hpp" />
     <ClInclude Include="SynchrotronComponent.hpp" />
     <ClInclude Include="SynchrotronComponentEnable.hpp" />
     <ClInclude Include="SynchrotronComponentFixedInput.hpp" />
     <ClInclude Include="UnitTest.hpp" />
     <ClInclude Include="utils.hpp" />
-    <ClInclude Include="XORGate.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

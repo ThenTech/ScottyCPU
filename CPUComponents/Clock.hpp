@@ -3,33 +3,33 @@
 
 #include <chrono>
 #include <thread>
-#include "SynchrotronComponentFixedInput.hpp"
-#include "Exceptions.hpp"
+#include "../SynchrotronComponentFixedInput.hpp"
+#include "../Exceptions.hpp"
 
 using namespace std::chrono;
 
 namespace CPUComponents {
 
-	/** \brief
-	 *		**Clock** : Generate a pulse on a certain frequency.
+	/** \brief	**Clock** : Generate a pulse on a certain frequency.
 	 *
-	 *
+	 *	\param	bit_width
+	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
 	class Clock : public SynchrotronComponentFixedInput<bit_width, 0u>{
 		private:
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	The point in time where the current pulse started.
 			 */
 			time_point<high_resolution_clock> startTime;
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	The clock frequency in Hz.
 			 */
 			float freq;
 
 			/**
-			 *	\brief	in nanoseconds
+			 *	\brief	The clock period in nanoseconds.
 			 */
 			long long int period;
 		public:
@@ -46,12 +46,19 @@ namespace CPUComponents {
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Default destructor
 			 */
 			~Clock() {}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Set the Clock frequency.
+			 *
+			 *			Also sets period = (1 / frequency).
+			 *
+			 *	\param	frequency
+			 *			The frequency to set. Must be greater than 0.0.
+			 *	\exception	Exceptions::Exception
+			 *		Throws exception if frequency is less than or equal to zero (undefined behaviour).
 			 */
 			void setFrequency(float frequency) {
 				if (!frequency || frequency < 0.0F)
@@ -61,14 +68,21 @@ namespace CPUComponents {
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Return the clock frequency in Hz.
 			 */
 			float getFrequency(void) const {
 				return this->freq;
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Set the Clock period.
+			 *
+			 *			Also sets frequency = (1 / period).
+			 *
+			 *	\param	period
+			 *			The period to set. Must be greater than 0.0.
+			 *	\exception	Exceptions::Exception
+			 *		Throws exception if period is less than or equal to zero (undefined behaviour).
 			 */
 			void setPeriod(float period) {
 				if (!period || period < 0.0F)
@@ -78,21 +92,24 @@ namespace CPUComponents {
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Return the clock period in seconds.
 			 */
 			float getPeriod(void) const {
 				return this->period / 1e9F;
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Reset the clock by setting the startTime to now().
 			 */
-			void reset(void) {
+			inline void reset(void) {
 				this->startTime = high_resolution_clock::now();
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	Start a detached thread to run the clock.
+			 *
+			 *	\return	bool
+			 *		Returns true if thread has been detached.
 			 */
 			bool startThread(void) {
 				std::thread clk(*this);
@@ -101,7 +118,9 @@ namespace CPUComponents {
 			}
 
 			/**
-			 *	\brief	TO-DO
+			 *	\brief	The function called when the clock is started.
+			 *
+			 *			Uses sleep::untill on this this thread to wait for the setted period.
 			 */
 			void operator()(void) {
 				long long int difference = 0;
@@ -129,10 +148,9 @@ namespace CPUComponents {
 				}
 			}
 
-			/**	\brief
-			 *		The tick() method will be called when this Gate's input issues an emit().
+			/**	\brief	The tick() method will be called when this Gate's input issues an emit().
 			 */
-			inline void tick() {
+			inline void tick(void) {
 				this->state = 1;
 				this->emit();
 				this->state = 0;

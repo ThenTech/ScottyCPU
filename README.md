@@ -29,6 +29,8 @@ This batchfile can be used to copy files from working dir to GitHub dir for comm
    - Added `SynchrotronComponentFixedInput`: with a fixed/minimum amount of inputs (e.g. `NOTGate` must have at most 1 input, `ANDGate` cannot take less than 2 inputs...)
    - Added SHIFTLeft and SHIFTRight to shift the connected signal by one to the left or right respectively.
    - Added UML diagram
+   - Added Instruction and Instruction set
+   - Added Instruction equivalent for every CPUComponent
  
 #### Next
 Adding additional implementations of `SynchrotronComponent` for extra functionality:

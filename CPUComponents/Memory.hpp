@@ -61,6 +61,8 @@ namespace CPUComponents {
 			 *
 			 *	\param	defaultUnit
 			 *		The default unit to display data in ( `MemoryUnits::KILOBYTES` ).
+			 *	\exception	Exceptions::Exception
+			 *		Throws exception if mem_size is zero or larger than the highest possible address (undefined behaviour).
 			 */
 			Memory(MemoryUnits defaultUnit = MemoryUnits::KILOBYTES)
 				: defaultUnit(defaultUnit), max_size((1 << bit_width) - 1), max_address(std::bitset<bit_width>(mem_size - 1)) {
@@ -129,6 +131,9 @@ namespace CPUComponents {
 			 *
 			 *	\return	std::bitset<bit_width>
 			 *		Returns the bitset data on the given address
+			 *
+			 *	\exception	Exceptions::OutOfBoundsException
+			 *		Throws exception if address is larger than the highest possible address (undefined behaviour).
 			 */
 			std::bitset<bit_width>& getData(std::bitset<bit_width> address) {
 				#ifdef THROW_EXCEPTIONS
@@ -152,6 +157,11 @@ namespace CPUComponents {
 			 *
 			 *	\return	std::bitset<bit_width>*
 			 *		Returns an array with the bitset data from `from` to `to`.
+			 *
+			 *	\exception	Exceptions::OutOfBoundsException
+			 *		Throws exception if to is larger than the highest possible address (undefined behaviour).
+			 *	\exception	Exceptions::OutOfBoundsException
+			 *		Throws exception if from is larger than to (undefined behaviour).
 			 */
 			std::bitset<bit_width>* getDataRange(std::bitset<bit_width> from, std::bitset<bit_width> to) {
 				#ifdef THROW_EXCEPTIONS
@@ -177,6 +187,9 @@ namespace CPUComponents {
 			 *
 			 *	\param	data
 			 *		The bitset data to add.
+			 *
+			 *	\exception	Exceptions::OutOfBoundsException
+			 *		Throws exception if address is larger than the highest possible address (undefined behaviour).
 			 */
 			void setData(std::bitset<bit_width> address, std::bitset<bit_width> data) {
 				#ifdef THROW_EXCEPTIONS
@@ -193,6 +206,9 @@ namespace CPUComponents {
 			 *	\param	address
 			 *		The address where to put data.
 			 *		Must be smaller than the maximum address.
+			 *
+			 *	\exception	Exceptions::OutOfBoundsException
+			 *		Throws exception if address is larger than the highest possible address (undefined behaviour).
 			 */
 			void resetData(std::bitset<bit_width> address) {
 				#ifdef THROW_EXCEPTIONS

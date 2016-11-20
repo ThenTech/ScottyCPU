@@ -12,6 +12,7 @@
 	#include <cxxabi.h>
 #endif
 #include <limits>
+#include <cmath>
 #ifdef __WIN32__
 	#include <windows.h>
 #endif
@@ -55,7 +56,7 @@ namespace std {
 	 *		Returns the class name of o.
 	 */
 	template <class T>
-	static inline const string type2name(T& o) {
+	static inline const string type2name(T const& o) {
 		#ifdef _CXXABI_H
 				string s = string(abi::__cxa_demangle(typeid(o).name(),nullptr,nullptr,nullptr));
 		#else
@@ -102,6 +103,22 @@ namespace SysUtils {
 		return out;
 	}
 
+	/**	\brief	Check if the given doubles are equal.
+	 *
+	 *	\param	x
+	 *		The first value to compare.
+	 *	\param	y
+	 *		The second value to compare.
+	 *	\param	epsilon
+	 *		The precision to compare with (standard deviation of 1e-4 or 0.0001).
+	 *
+	 *	\return	bool
+	 *		Returns whether x equals y within the given epsilon precision.
+	 */
+	inline bool epsilon_equals(double x, double y, double epsilon = 1e-4) {
+		return std::abs(x - y) < epsilon;
+	}
+
 	/**	\brief	Call a system() cmd command.
 	 *
 	 *	\param	command
@@ -119,7 +136,7 @@ namespace SysUtils {
 	 *	\param	text
 	 *		The text to change the title to.
 	 */
-	inline void setWindowTitle(std::string text) {
+	void setWindowTitle(std::string text) {
 		#ifdef _MSC_VER
 			std::stringstream s;
 			s << "TITLE " << text;
@@ -136,7 +153,7 @@ namespace SysUtils {
 	 *	\param	debug
 	 *		Whether this is a debug build.
 	 */
-	inline void setTitle(std::string version, bool debug) {
+	void setTitle(std::string version, bool debug) {
 		std::stringstream s;
 		s << "ScottyCPU  ::  v" << version << (debug ? "d" : "")
 								<< "  ::  built on " << __DATE__ << " at " << __TIME__;

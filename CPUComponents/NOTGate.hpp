@@ -1,8 +1,8 @@
 #ifndef NOTGATE_HPP
 #define NOTGATE_HPP
 
-#include "SynchrotronComponentFixedInput.hpp"
-#include "Exceptions.hpp"
+#include "../SynchrotronComponentFixedInput.hpp"
+#include "../Exceptions.hpp"
 using namespace Synchrotron;
 
 namespace CPUComponents {
@@ -51,7 +51,7 @@ namespace CPUComponents {
 			/**	\brief
 			 *		The tick() method will be called when this Gate's input issues an emit().
 			 */
-			inline void tick() {
+			void tick(void) {
 				#ifdef THROW_EXCEPTIONS
 					if (this->getInputs().size() == 0)
 						throw Exceptions::Exception("[ERROR] NOTGate requires 1 input!");

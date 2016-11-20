@@ -6,28 +6,47 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 HEADERS += \
-    ANDGate.hpp \
     Exceptions.hpp \
     SynchrotronComponent.hpp \
     UnitTest.hpp \
     utils.hpp \
-    NANDGate.hpp \
-    ORGate.hpp \
-    NORGate.hpp \
-    XORGate.hpp \
-    NOTGate.hpp \
-    MemoryCell.hpp \
     SynchrotronComponentFixedInput.hpp \
     SynchrotronComponentEnable.hpp \
-    SHIFTRight.hpp \
-    SHIFTLeft.hpp \
-    Memory.hpp \
     Clock.hpp \
     SignedBitset.hpp \
-    CPUComponentFactory.hpp \
-    Instructions/BinaryInstruction.hpp \
-    Instructions/Instruction.hpp \
-    Instructions/UnaryInstruction.hpp \
     ScottyCPU.hpp \
-    ControlUnit.hpp \
-    ALUnit.hpp
+    CPUComponents/ALUnit.hpp \
+    CPUComponents/ANDGate.hpp \
+    CPUComponents/Clock.hpp \
+    CPUComponents/ControlUnit.hpp \
+    CPUComponents/CPUComponentFactory.hpp \
+    CPUComponents/Memory.hpp \
+    CPUComponents/MemoryCell.hpp \
+    CPUComponents/NANDGate.hpp \
+    CPUComponents/NORGate.hpp \
+    CPUComponents/NOTGate.hpp \
+    CPUComponents/ORGate.hpp \
+    CPUComponents/SHIFTLeft.hpp \
+    CPUComponents/SHIFTRight.hpp \
+    CPUComponents/XORGate.hpp \
+    CPUInstructions/ANDInstruction.hpp \
+    CPUInstructions/ORInstruction.hpp \
+    CPUInstructions/NANDInstruction.hpp \
+    CPUInstructions/NORInstruction.hpp \
+    CPUInstructions/NOTInstruction.hpp \
+    CPUInstructions/XORInstruction.hpp \
+    CPUInstructions/SHLInstruction.hpp \
+    CPUInstructions/SHRInstruction.hpp \
+    CPUComponents/ADD.hpp \
+    CPUComponents/SUBTRACT.hpp \
+    CPUInstructions/ADDInstruction.hpp \
+    CPUInstructions/SUBInstruction.hpp \
+    CPUComponents/MULTIPLY.hpp \
+    CPUInstructions/MULInstruction.hpp \
+    FloatingBitset.hpp \
+    CPUComponents/DIVIDE.hpp \
+    CPUInstructions/DIVInstruction.hpp \
+    CPUComponents/MODULO.hpp \
+    CPUInstructions/MODInstruction.hpp \
+    CPUComponents/COMPERATOR.hpp \
+    CPUInstructions/CMPInstruction.hpp

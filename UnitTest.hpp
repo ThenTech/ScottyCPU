@@ -3,27 +3,65 @@
 
 #ifndef NDEBUG		// ifndef NDEBUG
 
+#define THROW_EXCEPTIONS
+
 #include <iostream>
 #include <cassert>	// Debug assertion
 #include <bitset>
 #include "SignedBitset.hpp"
+#include "FloatingBitset.hpp"
 #include "Exceptions.hpp"
 
 #include "SynchrotronComponent.hpp"
 
-#include "ANDGate.hpp"
-#include "NANDGate.hpp"
-#include "ORGate.hpp"
-#include "NORGate.hpp"
-#include "XORGate.hpp"
-#include "NOTGate.hpp"
-#include "MemoryCell.hpp"
-#include "SHIFTLeft.hpp"
-#include "SHIFTRight.hpp"
-#include "Memory.hpp"
-#include "Clock.hpp"
+#include "CPUComponents/ANDGate.hpp"
+#include "CPUComponents/NANDGate.hpp"
+#include "CPUComponents/ORGate.hpp"
+#include "CPUComponents/NORGate.hpp"
+#include "CPUComponents/XORGate.hpp"
+#include "CPUComponents/NOTGate.hpp"
+#include "CPUComponents/MemoryCell.hpp"
+#include "CPUComponents/SHIFTLeft.hpp"
+#include "CPUComponents/SHIFTRight.hpp"
+#include "CPUComponents/Memory.hpp"
+#include "CPUComponents/Clock.hpp"
+#include "CPUComponents/ADD.hpp"
+#include "CPUComponents/SUBTRACT.hpp"
+#include "CPUComponents/MULTIPLY.hpp"
+#include "CPUComponents/DIVIDE.hpp"
+#include "CPUComponents/MODULO.hpp"
+#include "CPUComponents/COMPERATOR.hpp"
+
+
+#include "CPUInstructions/Instruction.hpp"
+#include "CPUInstructions/ANDInstruction.hpp"
+#include "CPUInstructions/NANDInstruction.hpp"
+#include "CPUInstructions/ORInstruction.hpp"
+#include "CPUInstructions/NORInstruction.hpp"
+#include "CPUInstructions/XORInstruction.hpp"
+#include "CPUInstructions/NOTInstruction.hpp"
+#include "CPUInstructions/SHLInstruction.hpp"
+#include "CPUInstructions/SHRInstruction.hpp"
+#include "CPUInstructions/ADDInstruction.hpp"
+#include "CPUInstructions/SUBInstruction.hpp"
+#include "CPUInstructions/MULInstruction.hpp"
+#include "CPUInstructions/DIVInstruction.hpp"
+#include "CPUInstructions/MODInstruction.hpp"
+#include "CPUInstructions/CMPInstruction.hpp"
+
+static bool _Error_Assertion_Failed;
+#define assert_error(F, E) {\
+	_Error_Assertion_Failed = false; \
+	try { \
+		F; \
+	} catch (E&) { \
+		_Error_Assertion_Failed = true; \
+	} \
+	assert(_Error_Assertion_Failed); \
+}
 
 using namespace CPUComponents;
+using namespace CPUInstructions;
 
 /*
  *	Constant bit values.
@@ -52,6 +90,7 @@ static std::bitset<4>	for_bit_0 = 0,	// 0000
 						for_bit_8 = 8,	// 1000
 						for_bit_A = 10,	// 1010
 						for_bit_B = 11,	// 1011
+						for_bit_E = 14,	// 1110
 						for_bit_F = 15;	// 1111
 
 /*
@@ -66,7 +105,9 @@ static SynchrotronComponent<2>	signal2_0(two_bit_0.to_ulong()),					// 00
 								signal2_1(two_bit_1.to_ulong()),					// 01
 								signal2_1_(two_bit_1.to_ulong()),					// 01 other unique
 								signal2_2(two_bit_2.to_ulong()),					// 10
-								signal2_3(two_bit_3.to_ulong());					// 11
+								signal2_2_(two_bit_2.to_ulong()),					// 10 other unique
+								signal2_3(two_bit_3.to_ulong()),					// 11
+								signal2_3_(two_bit_3.to_ulong());					// 11 other unique
 static SynchrotronComponent<4>	signal4_8( for_bit_8.to_ulong() ),					// 1000
 								signal4_A( for_bit_A.to_ulong() );					// 1010
 static SynchrotronComponent<1>	signalProvider1_0_0( {&signal1_0, &signal1_0_} ),	// 0 0
@@ -148,6 +189,29 @@ void testBitset(void) {
 //void testSignedBitset(void) {
 //	SignedBitset<4> x(-1);
 //}
+
+void testFloatingBitset(void) {
+	FloatingBitset<4>	b_8(for_bit_8.to_ullong()),
+						b0_50(0.50f),
+						b0_63(0.63f),
+						b0_99(0.99f),
+						b1_63(1.63f);
+	FloatingBitset<16>	b0_99_(0.99f),
+						b0_001(0.001f),
+						b_l(23210.9876);
+
+	assert(SysUtils::epsilon_equals(b_8.to_double(),	-8.0));
+	assert(SysUtils::epsilon_equals(b0_50.to_double(),	0.5));
+	assert(SysUtils::epsilon_equals(b0_63.to_double(),	0.625));
+	assert(SysUtils::epsilon_equals(b0_99.to_double(),	0.9375));
+	assert(SysUtils::epsilon_equals(b1_63.to_double(),	1.625));
+	assert(SysUtils::epsilon_equals(b0_99_.to_double(), 0.99));
+	assert(SysUtils::epsilon_equals(b0_001.to_double(), 0.001));
+	assert(SysUtils::epsilon_equals(b_l.to_double(),	23210.9876));
+
+//	for (int i = 0; i <= 0xF; ++i)
+//		std::cout << "Float: " << new FloatingBitset<4>(i) << std::endl;
+}
 
 
 /*
@@ -254,7 +318,8 @@ void testSynchrotronComponent(void) {
  *	AND Gate : Test basic logic.
  */
 void testLogic_AND_const(void) {
-	ANDGate<1>	g1_0_0(signalProvider1_0_0),
+	ANDGate<1>	g1,
+				g1_0_0(signalProvider1_0_0),
 				g1_0_1(signalProvider1_0_1),
 				g1_1_0(signalProvider1_1_0),
 				g1_1_1(signalProvider1_1_1);
@@ -266,6 +331,9 @@ void testLogic_AND_const(void) {
 				g2_1_2(signalProvider2_1_2),
 				g2_0_3(signalProvider2_0_3),
 				g2_1_3(signalProvider2_1_3);
+
+	// AND Gate with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	// AND Gate with width 1 (2 inputs)
 	assert(g1_0_0.getState()			== one_bit_0);
@@ -352,7 +420,8 @@ void testLogic_AND_dynamic(void) {
  *	NAND Gate : Test basic logic.
  */
 void testLogic_NAND_const(void) {
-	NANDGate<1>	g1_0_0(signalProvider1_0_0),
+	NANDGate<1>	g1,
+				g1_0_0(signalProvider1_0_0),
 				g1_0_1(signalProvider1_0_1),
 				g1_1_0(signalProvider1_1_0),
 				g1_1_1(signalProvider1_1_1);
@@ -364,6 +433,9 @@ void testLogic_NAND_const(void) {
 				g2_1_2(signalProvider2_1_2),
 				g2_0_3(signalProvider2_0_3),
 				g2_1_3(signalProvider2_1_3);
+
+	// NAND Gate with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	// NAND Gate with width 1 (2 inputs)
 	assert(g1_0_0.getState()			== one_bit_0);
@@ -450,7 +522,8 @@ void testLogic_NAND_dynamic(void) {
  *	OR Gate : Test basic logic.
  */
 void testLogic_OR_const(void) {
-	ORGate<1>	g1_0_0(signalProvider1_0_0),
+	ORGate<1>	g1,
+				g1_0_0(signalProvider1_0_0),
 				g1_0_1(signalProvider1_0_1),
 				g1_1_0(signalProvider1_1_0),
 				g1_1_1(signalProvider1_1_1);
@@ -462,6 +535,9 @@ void testLogic_OR_const(void) {
 				g2_1_2(signalProvider2_1_2),
 				g2_0_3(signalProvider2_0_3),
 				g2_1_3(signalProvider2_1_3);
+
+	// OR Gate with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	// OR Gate with width 1 (2 inputs)
 	assert(g1_0_0.getState()			== one_bit_0);
@@ -548,7 +624,8 @@ void testLogic_OR_dynamic(void) {
  *	NOR Gate : Test basic logic.
  */
 void testLogic_NOR_const(void) {
-	NORGate<1>	g1_0_0(signalProvider1_0_0),
+	NORGate<1>	g1,
+				g1_0_0(signalProvider1_0_0),
 				g1_0_1(signalProvider1_0_1),
 				g1_1_0(signalProvider1_1_0),
 				g1_1_1(signalProvider1_1_1);
@@ -560,6 +637,9 @@ void testLogic_NOR_const(void) {
 				g2_1_2(signalProvider2_1_2),
 				g2_0_3(signalProvider2_0_3),
 				g2_1_3(signalProvider2_1_3);
+
+	// NOR Gate with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	// NOR Gate with width 1 (2 inputs)
 	assert(g1_0_0.getState()			== one_bit_0);
@@ -646,7 +726,8 @@ void testLogic_NOR_dynamic(void) {
  *	XOR Gate : Test basic logic.
  */
 void testLogic_XOR_const(void) {
-	XORGate<1>	g1_0_0(signalProvider1_0_0),
+	XORGate<1>	g1,
+				g1_0_0(signalProvider1_0_0),
 				g1_0_1(signalProvider1_0_1),
 				g1_1_0(signalProvider1_1_0),
 				g1_1_1(signalProvider1_1_1);
@@ -658,6 +739,9 @@ void testLogic_XOR_const(void) {
 				g2_1_2(signalProvider2_1_2),
 				g2_0_3(signalProvider2_0_3),
 				g2_1_3(signalProvider2_1_3);
+
+	// XOR Gate with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	// XOR Gate with width 1 (2 inputs)
 	assert(g1_0_0.getState()			== one_bit_0);
@@ -749,12 +833,18 @@ void testLogic_XOR_dynamic(void) {
  *	NOT Gate : Test basic logic.
  */
 void testLogic_NOT_const(void) {
-	NOTGate<1>	g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
+	NOTGate<1>	g1,
+				g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
 				g1_1( { &signal1_1 } );
 	NOTGate<2>	g2_0( { &signal2_0 } ),
 				g2_1( { &signal2_1 } ),
 				g2_2( { &signal2_2 } ),
 				g2_3( { &signal2_3 } );
+
+	// NOT Gate with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
+	// NOT Gate with width 1 (2 inputs)
+	assert_error( g1_0.addInput(signal1_1), Exceptions::Exception);
 
 	// NOT Gate with width 1 (1 input)
 	assert(g1_0.getState()				== one_bit_0);
@@ -879,7 +969,8 @@ void testLogic_MemoryCell(void) {
 }
 
 void testLogic_ShiftRight_const(void) {
-	SHIFTRight<1>	g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
+	SHIFTRight<1>	g1,
+					g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
 					g1_1( { &signal1_1 } );
 	SHIFTRight<2>	g2_0( { &signal2_0 } ),
 					g2_1( { &signal2_1 } ),
@@ -887,6 +978,9 @@ void testLogic_ShiftRight_const(void) {
 					g2_3( { &signal2_3 } );
 	SHIFTRight<4>	g4_8( { &signal4_8 } ),	// 1000
 					g4_A( { &signal4_A } );	// 1010
+
+	// SHIFTRight with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	assert(g1_0.getInputs().size()		== 1);
 	assert(g1_0.getState()				== one_bit_0);
@@ -942,7 +1036,8 @@ void testLogic_ShiftRight_dynamic(void) {
 }
 
 void testLogic_ShiftLeft_const(void) {
-	SHIFTLeft<1>	g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
+	SHIFTLeft<1>	g1,
+					g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
 					g1_1( { &signal1_1 } );
 	SHIFTLeft<2>	g2_0( { &signal2_0 } ),
 					g2_1( { &signal2_1 } ),
@@ -950,6 +1045,9 @@ void testLogic_ShiftLeft_const(void) {
 					g2_3( { &signal2_3 } );
 	SHIFTLeft<4>	g4_8( { &signal4_8 } ),	// 1000
 					g4_A( { &signal4_A } );	// 1010
+
+	// SHIFTLeft with width 1 (0 inputs)
+	assert_error(g1.tick(), Exceptions::Exception);
 
 	assert(g1_0.getInputs().size()		== 1);
 	assert(g1_0.getState()				== one_bit_0);
@@ -1010,6 +1108,13 @@ void testLogic_Memory(void) {
 	Memory<4, 8>	m_4_8(MemoryUnits::BYTES);
 	std::bitset<4> *range;
 
+	// Memory with mem_size 0
+	typedef Memory<2, 0> ctor_2_0;
+	assert_error(ctor_2_0 m_2_0, Exceptions::Exception);
+	// Memory with mem_size - 1 > (1 << bit_width) - 1
+	typedef Memory<2, 5> ctor_2_5;
+	assert_error(ctor_2_5 m_2_5, Exceptions::Exception);
+
 	assert(m_2_1.getSize()				== 2);
 	assert(m_2_1.getSizeUnit()			== MemoryUnits::BITS);
 	assert(m_2_1.getMaxSize()			== 3);
@@ -1021,6 +1126,9 @@ void testLogic_Memory(void) {
 	assert(m_2_1.getData(two_bit_0)		== two_bit_3);
 	m_2_1.resetData(two_bit_0);
 	assert(m_2_1.getData(two_bit_0)		== two_bit_0);
+	assert_error( m_2_1.getData(two_bit_1), Exceptions::Exception);
+	assert_error( m_2_1.setData(two_bit_1, two_bit_0), Exceptions::Exception);
+	assert_error( m_2_1.resetData(two_bit_1), Exceptions::Exception);
 
 
 	assert(m_4_8.getSize()				== 4);
@@ -1036,7 +1144,10 @@ void testLogic_Memory(void) {
 	assert(m_4_8.getData(for_bit_7)		== for_bit_0);
 	m_4_8.setData(for_bit_7, for_bit_7);
 	assert(m_4_8.getData(for_bit_7)		== for_bit_7);
+	assert_error( m_4_8.getData(for_bit_8), Exceptions::Exception);
 
+	assert_error( m_4_8.getDataRange(for_bit_0, for_bit_8), Exceptions::Exception);
+	assert_error( m_4_8.getDataRange(for_bit_7, for_bit_0), Exceptions::Exception);
 	range = m_4_8.getDataRange(for_bit_0, for_bit_7);
 	for (i = 0; i < 8; ++i)
 		assert(range[i]					== (!i ? for_bit_1 : i == 7 ? for_bit_7 : for_bit_0));
@@ -1049,6 +1160,9 @@ void testLogic_Memory(void) {
 
 void testClock(void) {
 	Clock<1u> c(1.0F);
+
+	assert_error( c.setFrequency(0.0), Exceptions::Exception);
+	assert_error( c.setPeriod(0.0), Exceptions::Exception);
 
 	assert(c.getBitWidth()				== 1);
 	assert(c.getFrequency()				== 1.0F);
@@ -1067,6 +1181,635 @@ void testClock(void) {
 	// TO-DO: Test emit cycle
 }
 
+// TO-DO
+void testADD(void) {
+	ADD<2> g2;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_1);
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_3);
+
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_3);
+	g2.tick();
+	assert(g2.getState()				== two_bit_1); // Overflow
+}
+
+void testSUBTRACT(void) {
+	// Inputs are added in sequence sorted by address.
+	// To ensure proper working, the element to subtract from has to be created first.
+
+	SUBTRACT<4> g4;
+	assert_error(g4.tick(), Exceptions::Exception);
+
+	{
+		SynchrotronComponent<4> signal1({ &signal4_8 }), signal2({ &signal4_A });
+		signal1.tick(); signal2.tick();
+
+		SUBTRACT<4> g4_8_A( {&signal1, &signal2 });
+
+		assert(signal1.getState()		== signal4_8.getState());
+		assert(signal2.getState()		== signal4_A.getState());
+		g4_8_A.tick();
+		assert(g4_8_A.getState()		== for_bit_E);	// -2
+		assert(SignedBitset<4>(g4_8_A.getState().to_ullong()).to_long()
+										== -2);
+	}
+
+	{
+		SynchrotronComponent<4> signal1({ &signal4_A }), signal2({ &signal4_8 });
+		signal1.tick(); signal2.tick();
+
+		SUBTRACT<4> g4_A_8( {&signal1, &signal2 });
+		g4_A_8.tick();
+		assert(g4_A_8.getState()		== for_bit_2);
+		assert(SignedBitset<4>(g4_A_8.getState().to_ullong()).to_long()
+										== 2);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_1});
+		signal1.tick(); signal2.tick();
+
+		SUBTRACT<2> g2_0_2( {&signal1, &signal2 });
+		g2_0_2.tick();
+		assert(g2_0_2.getState()		== two_bit_3);	// -1
+		assert(SignedBitset<2>(g2_0_2.getState().to_ullong()).to_long()
+										== -1);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_3});
+		signal1.tick(); signal2.tick();
+
+		SUBTRACT<2> g2_0_2( {&signal1, &signal2 });
+		g2_0_2.tick();
+		assert(g2_0_2.getState()		== two_bit_1);	// -3 is overflow
+		assert(SignedBitset<2>(g2_0_2.getState().to_ullong()).to_long()
+										== 1);
+	}
+}
+
+void testMULTIPLY(void) {
+	MULTIPLY<2> g2;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_1);
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_2);
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_0);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+
+	g2.removeInput(signal2_0);
+	g2.addInput(signal2_2_);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);	// 4: Overflow
+
+	g2.removeInput(signal2_2);
+	g2.removeInput(signal2_2_);
+	g2.addInput(signal2_3);
+	g2.addInput(signal2_3_);
+	g2.tick();
+	assert(g2.getState()				== two_bit_1);	// 9: Overflow
+}
+
+void testDIVIDE(void) {
+	// Inputs are added in sequence sorted by address.
+	// To ensure proper working, the element to subtract from has to be created first.
+
+	DIVIDE<4> g4;
+	assert_error(g4.tick(), Exceptions::Exception);
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_2 });
+		signal1.tick(); signal2.tick();
+
+		DIVIDE<2> g2_2_2( {&signal1, &signal2 });
+		g2_2_2.tick();
+		assert(g2_2_2.getState()		== two_bit_1);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_1 });
+		signal1.tick(); signal2.tick();
+
+		DIVIDE<2> g2_2_1( {&signal1, &signal2 });
+		g2_2_1.tick();
+		assert(g2_2_1.getState()		== two_bit_2);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_3 }), signal2({ &signal2_2 });
+		signal1.tick(); signal2.tick();
+
+		DIVIDE<2> g2_3_2( {&signal1, &signal2 });
+		g2_3_2.tick();
+		assert(g2_3_2.getState()		== two_bit_1);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_2 });
+		signal1.tick(); signal2.tick();
+
+		DIVIDE<2> g2_0_2( {&signal1, &signal2 });
+		g2_0_2.tick();
+		assert(g2_0_2.getState()		== two_bit_0);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_0 });
+		signal1.tick(); signal2.tick();
+
+		DIVIDE<2> g2_2_0( {&signal1, &signal2 });
+		assert_error(g2_2_0.tick(), Exceptions::DivideByZeroException);
+	}
+}
+
+void testMODULO(void) {
+	// Inputs are added in sequence sorted by address.
+	// To ensure proper working, the element to subtract from has to be created first.
+
+	MODULO<4> g4;
+	assert_error(g4.tick(), Exceptions::Exception);
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_2 });
+		signal1.tick(); signal2.tick();
+
+		MODULO<2> g2_2_2( {&signal1, &signal2 });
+		g2_2_2.tick();
+		assert(g2_2_2.getState()		== two_bit_0);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_1 }), signal2({ &signal2_3 });
+		signal1.tick(); signal2.tick();
+
+		MODULO<2> g2_1_3( {&signal1, &signal2 });
+		g2_1_3.tick();
+		assert(g2_1_3.getState()		== two_bit_1);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_3 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		MODULO<2> g2_3_2( {&signal1, &signal2 });
+		g2_3_2.tick();
+		assert(g2_3_2.getState()		== two_bit_1);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_3 }), signal2({ &signal2_0 });
+		signal1.tick(); signal2.tick();
+
+		MODULO<2> g2_3_0( {&signal1, &signal2 });
+		assert_error(g2_3_0.tick(), Exceptions::DivideByZeroException);
+		assert(g2_3_0.getState()		== two_bit_0);
+	}
+}
+
+void testCOMPERATOR(void) {
+	// Inputs are added in sequence sorted by address.
+	// To ensure proper working, the element to subtract from has to be created first.
+
+	COMPERATOR<4> g4;
+	assert_error(g4.tick(), Exceptions::Exception);
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_2 });
+		signal1.tick(); signal2.tick();
+
+		COMPERATOR<2> g2_2_2( {&signal1, &signal2 });
+		g2_2_2.tick();
+		assert(g2_2_2.getState()		== two_bit_0);
+		assert(SignedBitset<2>(g2_2_2.getState().to_ullong()).to_long()
+										== 0);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_1 });
+		signal1.tick(); signal2.tick();
+
+		COMPERATOR<2> g2_2_1( {&signal1, &signal2 });
+		g2_2_1.tick();
+		assert(g2_2_1.getState()		== two_bit_1);
+		assert(SignedBitset<2>(g2_2_1.getState().to_ullong()).to_long()
+										== 1);
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_3 });
+		signal1.tick(); signal2.tick();
+
+		COMPERATOR<2> g2_0_3( {&signal1, &signal2 });
+		g2_0_3.tick();
+		assert(g2_0_3.getState()		== two_bit_3);
+		assert(SignedBitset<2>(g2_0_3.getState().to_ullong()).to_long()
+										== -1);
+	}
+}
+
+void testANDInstruction(void) {
+	ANDInstruction<2> g2;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_1);
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_3);
+	g2.tick();
+	assert(g2.getState()				== two_bit_1);
+	assert(g2.getFlags().none());
+
+	g2.removeInput(signal2_3);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()		== 1);
+	assert(g2.flagIsSet(FLAGS::Zero));
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_3);
+	g2.tick();
+	assert(g2.getState()				== two_bit_2);
+	assert(g2.getFlags().count()		== 1);
+	assert(g2.flagIsSet(FLAGS::Negative));
+
+//	std::cout  << "Result: " << g2.getState() << "  Flags: " << g2.getFlags() << std::endl;
+
+//	if (g2.flagIsSet(FLAGS::Negative)) {
+//		SignedBitset<2> signedBit(g2.getState().to_ulong());
+//		std::cout << "Negative result: " << signedBit << std::endl;
+//	}
+}
+
+// ... TO-DO ...
+
+void testSHLInstruction(void) {
+	SHLInstruction<2> g2;
+	SHLInstruction<4> g4;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+
+	g2.addInput(signal2_0);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()		== 1);
+	assert(g2.flagIsSet(FLAGS::Zero));
+
+	g2.removeInput(signal2_0);
+	g2.addInput(signal2_1);
+	g2.tick();
+	assert(g2.getState()				== two_bit_2);
+	assert(g2.getFlags().none());
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()		== 2);
+	assert(g2.flagIsSet(FLAGS::Zero));
+	assert(g2.flagIsSet(FLAGS::CarryOut));
+
+
+	g4.addInput(signal4_8);
+	g4.tick();
+	assert(g4.getState()				== for_bit_0);
+	assert(g4.getFlags().count()		== 2);
+	assert(g4.flagIsSet(FLAGS::Zero));
+	assert(g4.flagIsSet(FLAGS::CarryOut));
+
+	g4.removeInput(signal4_8);
+	g4.addInput(signal4_A);
+	g4.tick();
+	assert(g4.getState()				== for_bit_4);
+	assert(g4.getFlags().count()		== 1);
+	assert(g4.flagIsSet(FLAGS::CarryOut));
+}
+
+void testSHRInstruction(void) {
+	SHRInstruction<2> g2;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+
+	g2.addInput(signal2_0);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()		== 1);
+	assert(g2.flagIsSet(FLAGS::Zero));
+
+	g2.removeInput(signal2_0);
+	g2.addInput(signal2_1);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()		== 1);
+	assert(g2.flagIsSet(FLAGS::Zero));
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_1);
+	assert(g2.getFlags().none());
+}
+
+void testADDInstruction(void) {
+	ADDInstruction<2> g2;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_0);
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_3);
+	g2.tick();
+	assert(g2.getState()				== two_bit_3);
+	assert(g2.getFlags().none());
+
+	g2.removeInput(signal2_0);
+	g2.addInput(signal2_1);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()		== 3);
+	assert(g2.flagIsSet(FLAGS::Zero));
+	assert(g2.flagIsSet(FLAGS::Negative));
+	assert(g2.flagIsSet(FLAGS::CarryOut));
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_1);
+	assert(g2.getFlags().count()		== 2);
+	assert(g2.flagIsSet(FLAGS::Negative));
+	assert(g2.flagIsSet(FLAGS::CarryOut));
+}
+
+void testSUBInstruction(void) {
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_3});
+		signal1.tick(); signal2.tick();
+
+		SUBInstruction<2> g2_0_3;
+		assert_error(g2_0_3.tick(), Exceptions::Exception);
+		g2_0_3.addInput( {&signal1, &signal2 } );
+		g2_0_3.tick();
+		assert(g2_0_3.getState()		== two_bit_1);	// -3
+		assert(SignedBitset<2>(g2_0_3.getState().to_ullong()).to_long()
+										== -3);
+		assert(g2_0_3.getFlags().count()		== 2);
+		assert(g2_0_3.flagIsSet(FLAGS::Negative));
+		assert(g2_0_3.flagIsSet(FLAGS::CarryOut));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_3});
+		signal1.tick(); signal2.tick();
+
+		SUBInstruction<2> g2_2_3;
+		g2_2_3.addInput( {&signal1, &signal2 } );
+		g2_2_3.tick();
+		assert(g2_2_3.getState()		== two_bit_3);	// -1
+		assert(SignedBitset<2>(g2_2_3.getState().to_ullong()).to_long()
+										== -1);
+		assert(g2_2_3.getFlags().count()== 2);
+		assert(g2_2_3.flagIsSet(FLAGS::Negative));
+		assert(g2_2_3.flagIsSet(FLAGS::CarryOut));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_1});
+		signal1.tick(); signal2.tick();
+
+		SUBInstruction<2> g2_2_1;
+		g2_2_1.addInput( {&signal1, &signal2 } );
+		g2_2_1.tick();
+		assert(g2_2_1.getState()		== two_bit_1);	// 1
+		assert(SignedBitset<2>(g2_2_1.getState().to_ullong()).to_long()
+										== 1);
+		assert(g2_2_1.getFlags().none());
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		SUBInstruction<2> g2_2_2;
+		g2_2_2.addInput( {&signal1, &signal2 } );
+		g2_2_2.tick();
+		assert(g2_2_2.getState()		== two_bit_0);	// 0
+		assert(SignedBitset<2>(g2_2_2.getState().to_ullong()).to_long()
+										== 0);
+		assert(g2_2_2.getFlags().count()== 1);
+		assert(g2_2_2.flagIsSet(FLAGS::Zero));
+	}
+}
+
+void testMULInstruction(void) {
+	MULInstruction<2> g2;
+
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_1);
+	assert_error(g2.tick(), Exceptions::Exception);
+	g2.addInput(signal2_2);
+	g2.tick();
+	assert(g2.getState()				== two_bit_2);
+	assert(g2.getFlags().none());
+
+	g2.removeInput(signal2_1);
+	g2.addInput(signal2_0);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);
+	assert(g2.getFlags().count()== 1);
+	assert(g2.flagIsSet(FLAGS::Zero));
+
+	g2.removeInput(signal2_0);
+	g2.addInput(signal2_2_);
+	g2.tick();
+	assert(g2.getState()				== two_bit_0);	// 4: Overflow
+	assert(g2.getFlags().count()== 2);
+	assert(g2.flagIsSet(FLAGS::Zero));
+	assert(g2.flagIsSet(FLAGS::CarryOut));
+
+	g2.removeInput(signal2_2);
+	g2.removeInput(signal2_2_);
+	g2.addInput(signal2_3);
+	g2.addInput(signal2_3_);
+	g2.tick();
+	assert(g2.getState()				== two_bit_1);	// 9: Overflow
+	assert(g2.getFlags().count()== 1);
+	assert(g2.flagIsSet(FLAGS::CarryOut));
+}
+
+void testDIVInstruction(void) {
+	{
+		SynchrotronComponent<2> signal1({ &signal2_1 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		DIVInstruction<2> g2_1_2;
+		assert_error(g2_1_2.tick(), Exceptions::Exception);
+		g2_1_2.addInput( {&signal1, &signal2 } );
+		g2_1_2.tick();
+		assert(g2_1_2.getState()		== two_bit_0);	// 0.5
+		assert(g2_1_2.getFlags().count()== 1);
+		assert(g2_1_2.flagIsSet(FLAGS::Zero));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		DIVInstruction<2> g2_0_2;
+		assert_error(g2_0_2.tick(), Exceptions::Exception);
+		g2_0_2.addInput( {&signal1, &signal2 } );
+		g2_0_2.tick();
+		assert(g2_0_2.getState()		== two_bit_0);	// 0
+		assert(g2_0_2.getFlags().count()== 1);
+		assert(g2_0_2.flagIsSet(FLAGS::Zero));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_2_});
+		signal1.tick(); signal2.tick();
+
+		DIVInstruction<2> g2_2_2;
+		assert_error(g2_2_2.tick(), Exceptions::Exception);
+		g2_2_2.addInput( {&signal1, &signal2 } );
+		g2_2_2.tick();
+		assert(g2_2_2.getState()		== two_bit_1);	// 1
+		assert(g2_2_2.getFlags().none());
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_0});
+		signal1.tick(); signal2.tick();
+
+		DIVInstruction<2> g2_2_0;
+		assert_error(g2_2_0.tick(), Exceptions::Exception);
+		g2_2_0.addInput( {&signal1, &signal2 } );
+		g2_2_0.tick();
+		assert(g2_2_0.getState()		== two_bit_3);	// +Inf
+		assert(g2_2_0.getFlags().count()== 3);
+		assert(g2_2_0.flagIsSet(FLAGS::Negative));
+		assert(g2_2_0.flagIsSet(FLAGS::CarryOut));
+		assert(g2_2_0.flagIsSet(FLAGS::DivByZero));
+	}
+}
+
+void testMODInstruction(void) {
+	{
+		SynchrotronComponent<2> signal1({ &signal2_1 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		MODInstruction<2> g2_1_2;
+		assert_error(g2_1_2.tick(), Exceptions::Exception);
+		g2_1_2.addInput( {&signal1, &signal2 } );
+		g2_1_2.tick();
+		assert(g2_1_2.getState()		== two_bit_1);	// 1
+		assert(g2_1_2.getFlags().none());
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		MODInstruction<2> g2_0_2;
+		assert_error(g2_0_2.tick(), Exceptions::Exception);
+		g2_0_2.addInput( {&signal1, &signal2 } );
+		g2_0_2.tick();
+		assert(g2_0_2.getState()		== two_bit_0);	// 0
+		assert(g2_0_2.getFlags().count()== 1);
+		assert(g2_0_2.flagIsSet(FLAGS::Zero));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_3 }), signal2({ &signal2_2});
+		signal1.tick(); signal2.tick();
+
+		MODInstruction<2> g2_3_2;
+		assert_error(g2_3_2.tick(), Exceptions::Exception);
+		g2_3_2.addInput( {&signal1, &signal2 } );
+		g2_3_2.tick();
+		assert(g2_3_2.getState()		== two_bit_1);	// 1
+		assert(g2_3_2.getFlags().none());
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_0});
+		signal1.tick(); signal2.tick();
+
+		MODInstruction<2> g2_2_0;
+		assert_error(g2_2_0.tick(), Exceptions::Exception);
+		g2_2_0.addInput( {&signal1, &signal2 } );
+		g2_2_0.tick();
+		assert(g2_2_0.getState()		== two_bit_3);	// +Inf
+		assert(g2_2_0.getFlags().count()== 3);
+		assert(g2_2_0.flagIsSet(FLAGS::Negative));
+		assert(g2_2_0.flagIsSet(FLAGS::CarryOut));
+		assert(g2_2_0.flagIsSet(FLAGS::DivByZero));
+	}
+}
+
+void testCMPInstruction(void) {
+	// Inputs are added in sequence sorted by address.
+	// To ensure proper working, the element to subtract from has to be created first.
+
+	CMPInstruction<4> g4;
+	assert_error(g4.tick(), Exceptions::Exception);
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_2 });
+		signal1.tick(); signal2.tick();
+
+		CMPInstruction<2> g2_2_2;
+		assert_error(g2_2_2.tick(), Exceptions::Exception);
+		g2_2_2.addInput( {&signal1, &signal2 } );
+		g2_2_2.tick();
+		assert(g2_2_2.getState()		== two_bit_0);
+		assert(SignedBitset<2>(g2_2_2.getState().to_ullong()).to_long()
+										== 0);
+		assert(g2_2_2.getFlags().count()== 2);
+		assert(g2_2_2.flagIsSet(FLAGS::Equal));
+		assert(g2_2_2.flagIsSet(FLAGS::Zero));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_2 }), signal2({ &signal2_1 });
+		signal1.tick(); signal2.tick();
+
+		CMPInstruction<2> g2_2_1;
+		assert_error(g2_2_1.tick(), Exceptions::Exception);
+		g2_2_1.addInput( {&signal1, &signal2 } );
+		g2_2_1.tick();
+		assert(g2_2_1.getState()		== two_bit_1);
+		assert(SignedBitset<2>(g2_2_1.getState().to_ullong()).to_long()
+										== 1);
+		assert(g2_2_1.getFlags().count()== 1);
+		assert(g2_2_1.flagIsSet(FLAGS::Larger));
+	}
+
+	{
+		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_3 });
+		signal1.tick(); signal2.tick();
+
+		CMPInstruction<2> g2_0_3;
+		assert_error(g2_0_3.tick(), Exceptions::Exception);
+		g2_0_3.addInput( {&signal1, &signal2 } );
+		g2_0_3.tick();
+		assert(g2_0_3.getState()		== two_bit_3);
+		assert(SignedBitset<2>(g2_0_3.getState().to_ullong()).to_long()
+										== -1);
+		assert(g2_0_3.getFlags().count()== 2);
+		assert(g2_0_3.flagIsSet(FLAGS::Smaller));
+		assert(g2_0_3.flagIsSet(FLAGS::Negative));
+	}
+}
+
 /*
  *	Run all tests.
  */
@@ -1075,6 +1818,8 @@ void runTests(void) {
 
 	try {
 		testBitset();
+		testFloatingBitset();
+
 		testSynchrotronComponent();
 		testLogic_AND_const();
 		testLogic_AND_dynamic();
@@ -1096,8 +1841,29 @@ void runTests(void) {
 		testLogic_ShiftLeft_dynamic();
 		testLogic_Memory();
 		testClock();					// WIP
+
+		testADD();
+		testSUBTRACT();
+		testMULTIPLY();
+		testDIVIDE();
+		testMODULO();
+		testCOMPERATOR();
+
+		testANDInstruction();
+
+		testSHLInstruction();
+		testSHRInstruction();
+		testADDInstruction();
+		testMULInstruction();
+		testDIVInstruction();
+		testMODInstruction();
+		testCMPInstruction();
+
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;
+		errorlevel++;
+	} catch(std::exception const& e) {
+		std::cerr << "std::exception: " << e.what() << std::endl;
 		errorlevel++;
 	} catch(...) {
 		std::cerr << "Unknown exception." << std::endl;
