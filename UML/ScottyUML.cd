@@ -1,0 +1,616 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="FullSignature">
+  <Class Name="CPUComponents::ADD&lt;bit_width&gt;">
+    <Position X="41" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAIAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\ADD.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::ALUnit&lt;bit_width&gt;">
+    <Position X="19.25" Y="7.5" Width="3" />
+    <InheritanceLine Type="Synchrotron::SynchrotronComponentFixedInput&lt;bit_width, max_inputs&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="18.5" Y="6.579" />
+        <Point X="18.5" Y="9" />
+        <Point X="19.25" Y="9" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedToPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="37.458" Y="9.875" Type="JumpStart" />
+        <Point X="37.292" Y="9.875" Type="JumpEnd" />
+        <Point X="34.021" Y="9.875" Type="JumpStart" />
+        <Point X="33.854" Y="9.875" Type="JumpEnd" />
+        <Point X="30.521" Y="9.875" Type="JumpStart" />
+        <Point X="30.354" Y="9.875" Type="JumpEnd" />
+        <Point X="27.021" Y="9.875" Type="JumpStart" />
+        <Point X="26.854" Y="9.875" Type="JumpEnd" />
+        <Point X="23.521" Y="9.875" Type="JumpStart" />
+        <Point X="23.354" Y="9.875" Type="JumpEnd" />
+        <Point X="22.25" Y="9.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>QABAgCABAAAAEAEAAABAAFBAAAACABAAgMAAAQAFAEA=</HashCode>
+      <FileName>CPUComponents\ALUnit.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::ANDGate&lt;bit_width&gt;">
+    <Position X="52" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AADAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\ANDGate.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::Clock&lt;bit_width&gt;">
+    <Position X="14.75" Y="10.75" Width="3" />
+    <InheritanceLine Type="Synchrotron::SynchrotronComponentFixedInput&lt;bit_width, max_inputs&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="18.5" Y="6.579" />
+        <Point X="18.5" Y="12.625" />
+        <Point X="17.75" Y="12.625" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAACAEAAAIAAAAEAAogAAAAAAAEAAAAIAAAgAACgA=</HashCode>
+      <FileName>CPUComponents\Clock.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::COMPERATOR&lt;bit_width&gt;">
+    <Position X="26.5" Y="7.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAABAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\COMPERATOR.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::ControlUnit&lt;bit_width, reg_size&gt;">
+    <Position X="14.75" Y="7.5" Width="3" />
+    <InheritanceLine Type="Synchrotron::SynchrotronComponentFixedInput&lt;bit_width, max_inputs&gt;" FixedToPoint="true">
+      <Path>
+        <Point X="18.5" Y="6.579" />
+        <Point X="18.5" Y="9" />
+        <Point X="17.75" Y="9" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABBAAAAAAAAAAAAAAAgAAAYAAAAEAEAAAAAAAAAAAI=</HashCode>
+      <FileName>CPUComponents\ControlUnit.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::DIVIDE&lt;bit_width&gt;">
+    <Position X="49.25" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAQA=</HashCode>
+      <FileName>CPUComponents\DIVIDE.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::Memory&lt;bit_width, mem_size&gt;">
+    <Position X="9.25" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>IAEQgAAAAoAAIAAAAAAAAAAgAAAAAAYAAgAAAAIAEAI=</HashCode>
+      <FileName>CPUComponents\Memory.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::MemoryCell&lt;bit_width&gt;">
+    <Position X="14.75" Y="15" Width="3" />
+    <InheritanceLine Type="Synchrotron::SynchrotronComponentFixedInput&lt;bit_width, max_inputs&gt;" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.5" Y="6.579" />
+        <Point X="18.5" Y="16" />
+        <Point X="17.75" Y="16" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>CPUComponents\MemoryCell.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::MODULO&lt;bit_width&gt;">
+    <Position X="30" Y="7.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>CPUComponents\MODULO.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::MULTIPLY&lt;bit_width&gt;">
+    <Position X="46.5" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\MULTIPLY.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::NANDGate&lt;bit_width&gt;">
+    <Position X="54.75" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAIAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\NANDGate.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::NORGate&lt;bit_width&gt;">
+    <Position X="60.25" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>CPUComponents\NORGate.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::NOTGate&lt;bit_width&gt;">
+    <Position X="23" Y="7.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAABAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\NOTGate.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::ORGate&lt;bit_width&gt;">
+    <Position X="57.5" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>CPUComponents\ORGate.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::SHIFTLeft&lt;bit_width&gt;">
+    <Position X="33.5" Y="7.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\SHIFTLeft.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::SHIFTRight&lt;bit_width&gt;">
+    <Position X="37" Y="7.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAgAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\SHIFTRight.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::SUBTRACT&lt;bit_width&gt;">
+    <Position X="43.75" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>CPUComponents\SUBTRACT.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::XORGate&lt;bit_width&gt;">
+    <Position X="63" Y="7.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAA=</HashCode>
+      <FileName>CPUComponents\XORGate.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUComponents::ScottyCPU&lt;bit_width, mem_size, reg_size&gt;">
+    <Position X="4.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAIAAAAUAgQAAQgAAAAiAAAAAgAAAAAAAIAAg=</HashCode>
+      <FileName>ScottyCPU.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::Exception">
+    <Position X="38.25" Y="13.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAABAAAAgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::OutOfBoundsException">
+    <Position X="46" Y="16.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::NullPointerException">
+    <Position X="30" Y="16.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::DivideByZeroException">
+    <Position X="33.25" Y="16.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::CastingException">
+    <Position X="36.5" Y="16.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::FileReadException">
+    <Position X="40" Y="16.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions::FileWriteException">
+    <Position X="43" Y="16.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAgAAA=</HashCode>
+      <FileName>Exceptions.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::FloatingBitset&lt;bit_width&gt;">
+    <Position X="5.25" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQAQAAAAAAAAAAAAAAAAAQAAAQABAAAAEAAgAAQAAAA=</HashCode>
+      <FileName>FloatingBitset.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::SignedBitset&lt;bit_width&gt;">
+    <Position X="5.25" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAIAAAAAAAAAUAQAAAAAAAAAAACAgACAAAAE=</HashCode>
+      <FileName>SignedBitset.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::ADDInstruction&lt;bit_width&gt;">
+    <Position X="41" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::ADD&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="41.375" Y="9.502" />
+        <Point X="41.375" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAQAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\ADDInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::ANDInstruction&lt;bit_width&gt;">
+    <Position X="52" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::ANDGate&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="52.438" Y="9.502" />
+        <Point X="52.438" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedFromPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="41.292" Y="9.875" Type="JumpStart" />
+        <Point X="41.458" Y="9.875" Type="JumpEnd" />
+        <Point X="44.042" Y="9.875" Type="JumpStart" />
+        <Point X="44.208" Y="9.875" Type="JumpEnd" />
+        <Point X="46.854" Y="9.875" Type="JumpStart" />
+        <Point X="47.021" Y="9.875" Type="JumpEnd" />
+        <Point X="49.542" Y="9.875" Type="JumpStart" />
+        <Point X="49.708" Y="9.875" Type="JumpEnd" />
+        <Point X="52.354" Y="9.875" Type="JumpStart" />
+        <Point X="52.521" Y="9.875" Type="JumpEnd" />
+        <Point X="53.125" Y="9.875" />
+        <Point X="53.125" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\ANDInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::CMPInstruction&lt;bit_width&gt;">
+    <Position X="26.5" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::COMPERATOR&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="26.938" Y="9.502" />
+        <Point X="26.938" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AADAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\CMPInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::DIVInstruction&lt;bit_width&gt;">
+    <Position X="49.25" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::DIVIDE&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="49.625" Y="9.502" />
+        <Point X="49.625" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedFromPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="41.292" Y="9.875" Type="JumpStart" />
+        <Point X="41.458" Y="9.875" Type="JumpEnd" />
+        <Point X="44.042" Y="9.875" Type="JumpStart" />
+        <Point X="44.208" Y="9.875" Type="JumpEnd" />
+        <Point X="46.854" Y="9.875" Type="JumpStart" />
+        <Point X="47.021" Y="9.875" Type="JumpEnd" />
+        <Point X="49.542" Y="9.875" Type="JumpStart" />
+        <Point X="49.708" Y="9.875" Type="JumpEnd" />
+        <Point X="50.375" Y="9.875" />
+        <Point X="50.375" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\DIVInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::FlagRegister">
+    <Position X="39.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAACCAAAAAAAAAAAAEAQEBAAAQAAAE=</HashCode>
+      <FileName>CPUInstructions\Instruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::MODInstruction&lt;bit_width&gt;">
+    <Position X="30" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::MODULO&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="30.438" Y="9.502" />
+        <Point X="30.438" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgIAA=</HashCode>
+      <FileName>CPUInstructions\MODInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::MULInstruction&lt;bit_width&gt;">
+    <Position X="46.5" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::MULTIPLY&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="46.938" Y="9.502" />
+        <Point X="46.938" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedFromPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="41.292" Y="9.875" Type="JumpStart" />
+        <Point X="41.458" Y="9.875" Type="JumpEnd" />
+        <Point X="44.042" Y="9.875" Type="JumpStart" />
+        <Point X="44.208" Y="9.875" Type="JumpEnd" />
+        <Point X="46.854" Y="9.875" Type="JumpStart" />
+        <Point X="47.021" Y="9.875" Type="JumpEnd" />
+        <Point X="47.625" Y="9.875" />
+        <Point X="47.625" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>CPUInstructions\MULInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::NANDInstruction&lt;bit_width&gt;">
+    <Position X="54.75" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::NANDGate&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="55.125" Y="9.502" />
+        <Point X="55.125" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedFromPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="41.292" Y="9.875" Type="JumpStart" />
+        <Point X="41.458" Y="9.875" Type="JumpEnd" />
+        <Point X="44.042" Y="9.875" Type="JumpStart" />
+        <Point X="44.208" Y="9.875" Type="JumpEnd" />
+        <Point X="46.854" Y="9.875" Type="JumpStart" />
+        <Point X="47.021" Y="9.875" Type="JumpEnd" />
+        <Point X="49.542" Y="9.875" Type="JumpStart" />
+        <Point X="49.708" Y="9.875" Type="JumpEnd" />
+        <Point X="52.354" Y="9.875" Type="JumpStart" />
+        <Point X="52.521" Y="9.875" Type="JumpEnd" />
+        <Point X="55.042" Y="9.875" Type="JumpStart" />
+        <Point X="55.208" Y="9.875" Type="JumpEnd" />
+        <Point X="55.875" Y="9.875" />
+        <Point X="55.875" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAIAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\NANDInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::NORInstruction&lt;bit_width&gt;">
+    <Position X="60.25" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::NORGate&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="60.625" Y="9.502" />
+        <Point X="60.625" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedFromPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="41.292" Y="9.875" Type="JumpStart" />
+        <Point X="41.458" Y="9.875" Type="JumpEnd" />
+        <Point X="44.042" Y="9.875" Type="JumpStart" />
+        <Point X="44.208" Y="9.875" Type="JumpEnd" />
+        <Point X="46.854" Y="9.875" Type="JumpStart" />
+        <Point X="47.021" Y="9.875" Type="JumpEnd" />
+        <Point X="49.542" Y="9.875" Type="JumpStart" />
+        <Point X="49.708" Y="9.875" Type="JumpEnd" />
+        <Point X="52.354" Y="9.875" Type="JumpStart" />
+        <Point X="52.521" Y="9.875" Type="JumpEnd" />
+        <Point X="55.042" Y="9.875" Type="JumpStart" />
+        <Point X="55.208" Y="9.875" Type="JumpEnd" />
+        <Point X="57.854" Y="9.875" Type="JumpStart" />
+        <Point X="58.021" Y="9.875" Type="JumpEnd" />
+        <Point X="60.542" Y="9.875" Type="JumpStart" />
+        <Point X="60.708" Y="9.875" Type="JumpEnd" />
+        <Point X="61.375" Y="9.875" />
+        <Point X="61.375" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\NORInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::NOTInstruction&lt;bit_width&gt;">
+    <Position X="23" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::NOTGate&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="23.438" Y="9.502" />
+        <Point X="23.438" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>BABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\NOTInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::ORInstruction&lt;bit_width&gt;">
+    <Position X="57.5" Y="10.25" Width="2" />
+    <InheritanceLine Type="CPUComponents::ORGate&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="57.938" Y="9.502" />
+        <Point X="57.938" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAABAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\ORInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::SHLInstruction&lt;bit_width&gt;">
+    <Position X="33.5" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::SHIFTLeft&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="33.938" Y="9.502" />
+        <Point X="33.938" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\SHLInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::SHRInstruction&lt;bit_width&gt;">
+    <Position X="37" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::SHIFTRight&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="37.375" Y="9.502" />
+        <Point X="37.375" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>CPUInstructions\SHRInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::SUBInstruction&lt;bit_width&gt;">
+    <Position X="43.75" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::SUBTRACT&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="44.125" Y="9.502" />
+        <Point X="44.125" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <InheritanceLine Type="CPUInstructions::FlagRegister" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="40.5" Y="5.661" />
+        <Point X="40.5" Y="9.875" />
+        <Point X="41.292" Y="9.875" Type="JumpStart" />
+        <Point X="41.458" Y="9.875" Type="JumpEnd" />
+        <Point X="44.042" Y="9.875" Type="JumpStart" />
+        <Point X="44.208" Y="9.875" Type="JumpEnd" />
+        <Point X="44.875" Y="9.875" />
+        <Point X="44.875" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>CPUInstructions\SUBInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPUInstructions::XORInstruction&lt;bit_width&gt;">
+    <Position X="63" Y="10.25" Width="2.25" />
+    <InheritanceLine Type="CPUComponents::XORGate&lt;bit_width&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="63.438" Y="9.502" />
+        <Point X="63.438" Y="10.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAABAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUInstructions\XORInstruction.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Synchrotron::Mutex">
+    <Position X="9.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAEAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAIAQA=</HashCode>
+      <FileName>SynchrotronComponent.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Synchrotron::LockBlock">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAIAAA=</HashCode>
+      <FileName>SynchrotronComponent.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Synchrotron::SynchrotronComponent&lt;bit_width&gt;">
+    <Position X="35.75" Y="0.75" Width="2.75" />
+    <InheritanceLine Type="Synchrotron::Mutex" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="2.312" />
+        <Point X="28.366" Y="2.312" />
+        <Point X="28.366" Y="2.312" />
+        <Point X="35.75" Y="2.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>cABAAAEAAAAAAAAAEQoAgAAAAAABACAEAAQAAABAAQE=</HashCode>
+      <FileName>SynchrotronComponent.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Synchrotron::SynchrotronComponentEnable">
+    <Position X="13.25" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>SynchrotronComponentEnable.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Synchrotron::SynchrotronComponentFixedInput&lt;bit_width, max_inputs&gt;">
+    <Position X="16.5" Y="4" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAQAEAAAAgAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>SynchrotronComponentFixedInput.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="SETTINGS">
+    <Position X="6.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAACAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="CPUComponents::MemoryUnits">
+    <Position X="9.75" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAEAAAAAEAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CPUComponents\Memory.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CPUInstructions::InstructionSet">
+    <Position X="12.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQAABAgACQAgIgAAEDAQAAAAAlIIAABABAAAAAAACA=</HashCode>
+      <FileName>CPUInstructions\Instruction.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CPUInstructions::FLAGS">
+    <Position X="20" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEEAAABAAAAAAAgAAAAAAgAQAAAgAAAEAAAACAAAA=</HashCode>
+      <FileName>CPUInstructions\Instruction.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
