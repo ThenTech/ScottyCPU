@@ -14,7 +14,7 @@ build: debug
 	@echo Build successful!
 	
 test:
-	@echo Runnign build...
+	@echo Running build...
 	@IF EXIST "$(BIN)\$(EXECUTABLE_NAME).exe" ( \
 		$(BIN)\$(EXECUTABLE_NAME).exe -d \
 	) else ( \
