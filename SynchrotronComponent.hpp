@@ -8,7 +8,8 @@
 #include <iostream> // For testing for now
 
 #include <bitset>
-#include <set>
+//#include <set>
+#include <list>
 #include <initializer_list>
 #include <mutex>
 
@@ -60,14 +61,14 @@ namespace Synchrotron {
 			 *
 			 *		Emit this.signal to subscribers in slotOutput.
 			 */
-			std::set<SynchrotronComponent*> slotOutput;
+			std::list<SynchrotronComponent*> slotOutput;
 
 			/**	\brief
 			 *	**Signals == inputs**
 			 *
 			 *		Receive tick()s from these subscriptions in signalInput.
 			 */
-			std::set<SynchrotronComponent*> signalInput;
+			std::list<SynchrotronComponent*> signalInput;
 
             /**	\brief	Connect a new slot s:
              *		* Add s to this SynchrotronComponent's outputs.
@@ -79,8 +80,11 @@ namespace Synchrotron {
 			inline void connectSlot(SynchrotronComponent* s) {
 				//LockBlock lock(this);
 
-				this->slotOutput.insert(s);
-				s->signalInput.insert(this);
+				//this->slotOutput.insert(s);
+				//s->signalInput.insert(this);
+
+				this->slotOutput.push_back(s);
+				s->signalInput.push_back(this);
 			}
 
             /**	\brief	Disconnect a slot s:
@@ -93,8 +97,11 @@ namespace Synchrotron {
 			inline void disconnectSlot(SynchrotronComponent* s) {
 				//LockBlock lock(this);
 
-				this->slotOutput.erase(s);
-				s->signalInput.erase(this);
+				//this->slotOutput.erase(s);
+				//s->signalInput.erase(this);
+
+				this->slotOutput.remove(s);
+				s->signalInput.remove(this);
 			}
 
 		public:
@@ -159,13 +166,15 @@ namespace Synchrotron {
 
 				// Disconnect all Slots
 				for(auto& connection : this->slotOutput) {
-					connection->signalInput.erase(this);
+					//connection->signalInput.erase(this);
+					connection->signalInput.remove(this);
 					//delete connection; //?
 				}
 
 				// Disconnect all Signals
 				for(auto &sender: this->signalInput) {
-					sender->slotOutput.erase(this);
+					//sender->slotOutput.erase(this);
+					sender->slotOutput.remove(this);
 				}
 
 				this->slotOutput.clear();
@@ -209,7 +218,7 @@ namespace Synchrotron {
              *	\return	std::set<SynchrotronComponent*>&
              *      Returns a reference set to this SynchrotronComponent's inputs.
              */
-			const std::set<SynchrotronComponent*>& getInputs() const {
+			const std::list<SynchrotronComponent*>& getInputs() const {
 				return this->signalInput;
 			}
 
@@ -218,7 +227,7 @@ namespace Synchrotron {
              *	\return	std::set<SynchrotronComponent*>&
              *      Returns a reference set to this SynchrotronComponent's outputs.
              */
-			const std::set<SynchrotronComponent*>& getOutputs() const {
+			const std::list<SynchrotronComponent*>& getOutputs() const {
 				return this->slotOutput;
 			}
 
