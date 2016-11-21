@@ -70,7 +70,7 @@ namespace CPUInstructions {
 			 *	\brief	Bitset containing flags on bit location as set in FLAGS.
 			 */
 			//Flags REG_FLAGS;
-			std::bitset<(size_t) FLAGS::FLAGS_COUNT>	REG_FLAGS;
+			std::bitset<(size_t) FLAGS::FLAGS_COUNT> REG_FLAGS;
 			//SynchrotronComponent<FLAGS::FLAGS_COUNT> REG_FLAGS;
 
 		protected:
@@ -148,7 +148,7 @@ namespace CPUInstructions {
 			/**
 			 *	\brief	Returns the flag register.
 			 */
-			const std::bitset<(size_t) FLAGS::FLAGS_COUNT>& getFlags(void) {
+			const std::bitset<(size_t) FLAGS::FLAGS_COUNT>& getFlags(void) const {
 				return this->REG_FLAGS;
 			}
 	};
