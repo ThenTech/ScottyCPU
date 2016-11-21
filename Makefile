@@ -3,7 +3,7 @@
 ##############
 EXECUTABLE_NAME=ScottyCPU
 BIN=bin
-LOG=build_log.txt
+BLOG=build_log.txt
 
 ##############
 ##  Build   ##
@@ -13,24 +13,32 @@ LOG=build_log.txt
 build: debug
 	@echo Build successful!
 	
+test:
+	@echo Runnign build...
+	@IF EXIST "$(BIN)\$(EXECUTABLE_NAME).exe" ( \
+		$(BIN)\$(EXECUTABLE_NAME).exe -d \
+	) else ( \
+		@echo No build present. Run debug or release first. \
+	)
+	
 debug: prepare
 	@echo Compiling debug...
-	$(CXX) -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(LOG)
+	$(CXX) -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
 	
 release: prepare
 	@echo Compiling release...
-	$(CXX) -pthread -std=c++0x -Wall -Wextra -O2 -s main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(LOG)
+	$(CXX) -pthread -std=c++0x -Wall -Wextra -O2 -s main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
 	@echo Build successful!
 	
 debug_VS2013: prepare
 	@echo Compiling release...
-	$(CXX) -Wall main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(LOG)
+	$(CXX) -Wall main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
 	@del main.obj
 	@echo Build successful!
 
 release_VS2013: prepare
 	@echo Compiling release...
-	$(CXX) -Wall -O2 main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(LOG)
+	$(CXX) -Wall -O2 main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
 	@del main.obj
 	@echo Build successful!
 	

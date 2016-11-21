@@ -1,9 +1,9 @@
 #ifndef MEMORY_HPP
 #define MEMORY_HPP
 
-#include "SynchrotronComponent.hpp"
-#include "Exceptions.hpp"
-#include "utils.hpp"
+#include "../SynchrotronComponent.hpp"
+#include "../Exceptions.hpp"
+#include "../utils.hpp"
 using namespace Synchrotron;
 
 namespace CPUComponents {

@@ -56,6 +56,8 @@ namespace CPUInstructions {
 						if (connection == *this->getInputs().begin())
 							current = connection->getState().to_ullong();
 						else
+							//current /= std::FloatingBitset<current.size()>(connection->getState().to_ullong());
+							// MSVC fixed:
 							current /= std::FloatingBitset<bit_width + 1>(connection->getState().to_ullong());
 					}
 				} catch (Exceptions::DivideByZeroException&) {

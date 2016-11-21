@@ -53,7 +53,9 @@ namespace CPUInstructions {
 					if (connection == *this->getInputs().begin())
 						current = connection->getState().to_ullong();
 					else
-						current -= std::SignedBitset<current.size()>(connection->getState().to_ullong());
+						//current -= std::SignedBitset<current.size()>(connection->getState().to_ullong());
+						// MSVC fixed:
+						current -= std::SignedBitset<bit_width + 1>(connection->getState().to_ullong());
 				}
 
 				this->state = current.to_ullong();
