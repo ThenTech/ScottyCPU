@@ -49,4 +49,5 @@ HEADERS += \
     CPUComponents/MODULO.hpp \
     CPUInstructions/MODInstruction.hpp \
     CPUComponents/COMPERATOR.hpp \
-    CPUInstructions/CMPInstruction.hpp
+    CPUInstructions/CMPInstruction.hpp \
+    CPUInstructions/Instruction.hpp
