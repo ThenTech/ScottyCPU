@@ -10,14 +10,14 @@ SET MSVC_PATH_2=
 for /f "delims=" %%a in ('where %MSVC_MAKE%') do @set MSVC_PATH_2="%%a"
 
 SET MINGW_MAKE=mingw32-make.exe
-SET MINGW_PATH_1="C:\Apps\Qt\Tools\mingw492_32\bin\"%MINGW_MAKE%
-SET MINGW_PATH_2="C:\Apps\Qt\Tools\mingw530_32\bin\"%MINGW_MAKE%
-SET MINGW_PATH_3="D:\Apps\Qt\Tools\mingw492_32\bin\"%MINGW_MAKE%
-SET MINGW_PATH_4="D:\Apps\Qt\Tools\mingw530_32\bin\"%MINGW_MAKE%
+SET MINGW_PATH_1="C:\Apps\Qt\Tools\mingw492_32\bin\"
+SET MINGW_PATH_2="C:\Apps\Qt\Tools\mingw530_32\bin\"
+SET MINGW_PATH_3="D:\Apps\Qt\Tools\mingw492_32\bin\"
+SET MINGW_PATH_4="D:\Apps\Qt\Tools\mingw530_32\bin\"
 SET MINGW_PATH_5=
 for /f "delims=" %%a in ('where %MINGW_MAKE%') do @set MINGW_PATH_5="%%a"
-SET MINGW_PATH_6="C:\Program Files (x86)\Qt\Tools\mingw530_32\bin\"%MINGW_MAKE%
-SET MINGW_PATH_7="C:\Program Files (x86)\Qt\Tools\mingw492_32\bin\"%MINGW_MAKE%
+SET MINGW_PATH_6="C:\Program Files (x86)\Qt\Tools\mingw530_32\bin\"
+SET MINGW_PATH_7="C:\Program Files (x86)\Qt\Tools\mingw492_32\bin\"
 
 CLS
 
@@ -54,19 +54,19 @@ IF NOT %COMPILER_ID% == 0 (
 	
 	IF %COMPILER_ID% == 3 (
 		SET USE_MAKE=%MINGW_PATH_1%
-		goto :Compile
+		goto :MinGWCompile
 	)
 	IF %COMPILER_ID% == 4 (
 		SET USE_MAKE=%MINGW_PATH_2%
-		goto :Compile
+		goto :MinGWCompile
 	)
 	IF %COMPILER_ID% == 5 (
 		SET USE_MAKE=%MINGW_PATH_3%
-		goto :Compile
+		goto :MinGWCompile
 	)
 	IF %COMPILER_ID% == 6 (
 		SET USE_MAKE=%MINGW_PATH_4%
-		goto :Compile
+		goto :MinGWCompile
 	)
 	IF %COMPILER_ID% == 7 (
 		SET USE_MAKE=%MINGW_PATH_5%
@@ -74,16 +74,21 @@ IF NOT %COMPILER_ID% == 0 (
 	)
 	IF %COMPILER_ID% == 8 (
 		SET USE_MAKE=%MINGW_PATH_6%
-		goto :Compile
+		goto :MinGWCompile
 	)
 	IF %COMPILER_ID% == 9 (
 		SET USE_MAKE=%MINGW_PATH_7%
-		goto :Compile
+		goto :MinGWCompile
 	)
 	
 	echo Invalid argument.
 	GOTO :END
 )
+
+:MinGWCompile
+setlocal
+SET PATH=%USE_MAKE:"=%;%PATH%
+SET USE_MAKE=%USE_MAKE%%MINGW_MAKE%
 
 :Compile
 IF [%2]==[] (
