@@ -8,25 +8,41 @@
 #include <iostream> // For testing for now
 
 #include <bitset>
-//#include <set>
-#include <list>
+#include <set>
 #include <initializer_list>
 #include <mutex>
 
 namespace Synchrotron {
 
     /** \brief Mutex class to lock the current working thread.
+	 *
+	 *	Includes a `static size_t` with an increment when a new instance is created.
+	 *	This is used in a custom compare method `Mutex::compare`.
      */
 	class Mutex {
+		protected:
+			static size_t mutex_id;
 		private:
+			const size_t idx;
 			std::mutex m_mutex;
 		public:
-			Mutex() 				{}
-			//Mutex(const Mutex&) 	{}
-			virtual ~Mutex() 		{}
-			virtual void lock()		{ m_mutex.lock();		}
-			virtual void unlock()	{ m_mutex.unlock();		}
+			Mutex() : idx(mutex_id++)		{}
+			Mutex(const Mutex&) : Mutex()	{}
+			virtual ~Mutex()				{}
+			virtual void lock()				{ m_mutex.lock();	}
+			virtual void unlock()			{ m_mutex.unlock();	}
+
+			struct compare {
+				inline bool operator() (const Mutex* lhs, const Mutex* rhs) const {
+					return lhs->idx < rhs->idx;
+				}
+			};
 	};
+
+	/**
+	 *	\brief	Default `Mutex::mutex_id`to 0.
+	 */
+	size_t Mutex::mutex_id = 0;
 
 	/**	\brief
 	 *	Creating a new LockBlock(this) locks the current thread,
@@ -61,14 +77,14 @@ namespace Synchrotron {
 			 *
 			 *		Emit this.signal to subscribers in slotOutput.
 			 */
-			std::list<SynchrotronComponent*> slotOutput;
+			std::set<SynchrotronComponent*, Mutex::compare> slotOutput;
 
 			/**	\brief
 			 *	**Signals == inputs**
 			 *
 			 *		Receive tick()s from these subscriptions in signalInput.
 			 */
-			std::list<SynchrotronComponent*> signalInput;
+			std::set<SynchrotronComponent*, Mutex::compare> signalInput;
 
             /**	\brief	Connect a new slot s:
              *		* Add s to this SynchrotronComponent's outputs.
@@ -80,11 +96,8 @@ namespace Synchrotron {
 			inline void connectSlot(SynchrotronComponent* s) {
 				//LockBlock lock(this);
 
-				//this->slotOutput.insert(s);
-				//s->signalInput.insert(this);
-
-				this->slotOutput.push_back(s);
-				s->signalInput.push_back(this);
+				this->slotOutput.insert(s);
+				s->signalInput.insert(this);
 			}
 
             /**	\brief	Disconnect a slot s:
@@ -97,11 +110,8 @@ namespace Synchrotron {
 			inline void disconnectSlot(SynchrotronComponent* s) {
 				//LockBlock lock(this);
 
-				//this->slotOutput.erase(s);
-				//s->signalInput.erase(this);
-
-				this->slotOutput.remove(s);
-				s->signalInput.remove(this);
+				this->slotOutput.erase(s);
+				s->signalInput.erase(this);
 			}
 
 		public:
@@ -166,15 +176,13 @@ namespace Synchrotron {
 
 				// Disconnect all Slots
 				for(auto& connection : this->slotOutput) {
-					//connection->signalInput.erase(this);
-					connection->signalInput.remove(this);
+					connection->signalInput.erase(this);
 					//delete connection; //?
 				}
 
 				// Disconnect all Signals
 				for(auto &sender: this->signalInput) {
-					//sender->slotOutput.erase(this);
-					sender->slotOutput.remove(this);
+					sender->slotOutput.erase(this);
 				}
 
 				this->slotOutput.clear();
@@ -214,20 +222,20 @@ namespace Synchrotron {
 			}
 
 			/**	\brief	Gets the SynchrotronComponent's input connections.
-             *
-             *	\return	std::set<SynchrotronComponent*>&
-             *      Returns a reference set to this SynchrotronComponent's inputs.
-             */
-			const std::list<SynchrotronComponent*>& getInputs() const {
+			 *
+			 *	\return	std::set<SynchrotronComponent*>&
+			 *      Returns a reference set to this SynchrotronComponent's inputs.
+			 */
+			const std::set<SynchrotronComponent*, Mutex::compare>& getInputs() const {
 				return this->signalInput;
 			}
 
 			/**	\brief	Gets the SynchrotronComponent's output connections.
-             *
-             *	\return	std::set<SynchrotronComponent*>&
-             *      Returns a reference set to this SynchrotronComponent's outputs.
-             */
-			const std::list<SynchrotronComponent*>& getOutputs() const {
+			 *
+			 *	\return	std::set<SynchrotronComponent*>&
+			 *      Returns a reference set to this SynchrotronComponent's outputs.
+			 */
+			const std::set<SynchrotronComponent*, Mutex::compare>& getOutputs() const {
 				return this->slotOutput;
 			}
 

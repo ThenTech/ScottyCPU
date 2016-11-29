@@ -241,11 +241,11 @@ void testSynchrotronComponent(void) {
 
 	s_with_null.addOutput( {&s_with_1, &s_with_2} );
 	assert(s_with_null.getOutputs().size()		== 2);
-	//s_with_null.addOutput(s_with_1); // Add again to see if size() increases, it should not.
-	//assert(s_with_null.getOutputs().size()		== 2);
+	s_with_null.addOutput(s_with_1); // Add again to see if size() increases, it should not.
+	assert(s_with_null.getOutputs().size()		== 2);
 	assert(s_with_1.getInputs().size()			== 1);
-	//s_with_1.addInput(s_with_null); // Add again to see if size() increases, it should not.
-	//assert(s_with_1.getInputs().size()			== 1);
+	s_with_1.addInput(s_with_null); // Add again to see if size() increases, it should not.
+	assert(s_with_1.getInputs().size()			== 1);
 	assert(s_with_2.getInputs().size()			== 1);
 
 	s_with_null.emit();	// Internal State is 0x0, gets ORed to subscribers
