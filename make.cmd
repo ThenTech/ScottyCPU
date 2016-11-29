@@ -1,5 +1,6 @@
 @echo off
 TITLE Run Makefile with a given compiler
+COLOR 1F
 
 SET USE_MAKE=
 SET USE_ARG=
