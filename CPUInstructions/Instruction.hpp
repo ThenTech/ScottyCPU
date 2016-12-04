@@ -1,7 +1,10 @@
 #ifndef INSTRUCTION_HPP
 #define INSTRUCTION_HPP
 
+#include <unordered_map>
 #include <bitset>
+
+#define I(X)	((size_t) X)
 
 //#include "../SynchrotronComponent.hpp"
 //using namespace Synchrotron;
@@ -11,35 +14,118 @@ namespace CPUInstructions {
 	/**
 	 *	\brief	The complete instruction set.
 	 */
-	enum class InstructionSet {
+	enum class InstructionSet : size_t {
 		/// Operators
-		ADD, SUB, MUL, DIV, MOD, SHL, SHR,
+		ADD		= 0x01,  // 0000 0001
+		SUB		= 0x02,  // 0000 0010
+		MUL		= 0x03,  // 0000 0011
+		DIV		= 0x04,  // 0000 0100
+		MOD		= 0x05,  // 0000 0101
+		SHL		= 0x06,  // 0000 0110
+		SHR		= 0x07,  // 0000 0111
 		// Extra? ROtateRight, ROtateLeft
+		//ROR= 0x08,  // 0000 1000
+		//ROL= 0x09,  // 0000 1001
 
 		/// Compare
-		CMP,
+		CMP		= 0x1F,  // 0001 1111
 
 		/// Logic Operators
-		NOT, AND, NAND, OR, NOR, XOR,
+		NOT		= 0x11,  // 0001 0001
+		AND		= 0x12,  // 0001 0010
+		NAND	= 0x13,  // 0001 0011
+		OR		= 0x14,  // 0001 0100
+		NOR		= 0x15,  // 0001 0101
+		XOR		= 0x16,  // 0001 0110
 
 		/// Memory Operators
-		MOV, DATA,
+		MOV		= 0x20,  // 0010 0000
+		DATA	= 0x21,  // 0010 0001
 
 		/// Empty Instruction
-		NOP,
+		NOP		= 0x00,  // 0000 0000
 
 		/// Jump Instructions (without condition)
-		JMP,
+		JMP		= 0x40,  // 0100 0000
 
 		/// Jump if [E]qual, [L]arger, [S]maller, [Z]ero, [C]arry
-		JE, JL, JS, JZ,
-		JLE, JSE,
-		JCE, JCL, JCS, JCZ,
-		JLZ, JSZ, JEZ,
-		JCLE, JCLZ, JCEZ, JLEZ, JCLEZ,
+		JE		= 0x41,  // 0100 0001
+		JL		= 0x42,  // 0100 0010
+		JS		= 0x43,  // 0100 0011
+		JZ		= 0x44,  // 0100 0100
+
+		JLE		= 0x50,  // 0101 0000
+		JSE		= 0x51,  // 0101 0001
+
+		JCE		= 0x52,  // 0101 0010
+		JCL		= 0x53,  // 0101 0011
+		JCS		= 0x54,  // 0101 0100
+		JCZ		= 0x55,  // 0101 0101
+
+		JLZ		= 0x56,  // 0101 0110
+		JSZ		= 0x57,  // 0101 0111
+		JEZ		= 0x58,  // 0101 1000
+
+		JCLE	= 0x60,  // 0110 0000
+		JCLZ	= 0x61,  // 0110 0001
+		JCEZ	= 0x62,  // 0110 0010
+		JLEZ	= 0x63,  // 0110 0011
+		JCLEZ	= 0x64,  // 0110 0100
 
 		/// Clear Jump Flags
-		CLF
+		CLF		= 0x80,  // 1000 0000
+	};
+
+	static const std::unordered_map<std::string, size_t> InstructionLUT =
+	{
+		{ "ADD",	I(InstructionSet::ADD)		},
+		{ "SUB",	I(InstructionSet::SUB)		},
+		{ "MUL",	I(InstructionSet::MUL)		},
+		{ "DIV",	I(InstructionSet::DIV)		},
+		{ "MOD",	I(InstructionSet::MOD)		},
+		{ "SHL",	I(InstructionSet::SHL)		},
+		{ "SHR",	I(InstructionSet::SHR)		},
+
+		{ "CMP",	I(InstructionSet::CMP)		},
+
+		{ "NOT",	I(InstructionSet::NOT)		},
+		{ "AND",	I(InstructionSet::AND)		},
+		{ "NAND",	I(InstructionSet::NAND)		},
+		{ "OR",		I(InstructionSet::OR)		},
+		{ "NOR",	I(InstructionSet::NOR)		},
+		{ "XOR",	I(InstructionSet::XOR)		},
+
+		{ "MOV",	I(InstructionSet::MOV)		},
+		{ "DATA",	I(InstructionSet::DATA)		},
+
+		{ "NOP",	I(InstructionSet::NOP)		},
+
+		{ "JMP",	I(InstructionSet::JMP)		},
+
+		{ "JE",		I(InstructionSet::JE)		},
+		{ "JL",		I(InstructionSet::JL)		},
+		{ "JS",		I(InstructionSet::JS)		},
+		{ "JZ",		I(InstructionSet::JZ)		},
+
+		{ "JLE",	I(InstructionSet::JLE)		},
+		{ "JSE",	I(InstructionSet::JSE)		},
+
+		{ "JCE",	I(InstructionSet::JCE)		},
+		{ "JCL",	I(InstructionSet::JCL)		},
+		{ "JCS",	I(InstructionSet::JCS)		},
+		{ "JCZ",	I(InstructionSet::JCZ)		},
+
+		{ "JLZ",	I(InstructionSet::JLZ)		},
+		{ "JSZ",	I(InstructionSet::JSZ)		},
+		{ "JEZ",	I(InstructionSet::JEZ)		},
+
+		{ "JCLE",	I(InstructionSet::JCLE)		},
+		{ "JCLZ",	I(InstructionSet::JCLZ)		},
+		{ "JCEZ",	I(InstructionSet::JCEZ)		},
+		{ "JLEZ",	I(InstructionSet::JLEZ)		},
+		{ "JCLEZ",	I(InstructionSet::JCLEZ)	},
+
+		{ "CLF",	I(InstructionSet::CLF)		}
 	};
 
 	/**
@@ -54,7 +140,7 @@ namespace CPUInstructions {
 		Negative	= 5,
 		CarryOut	= 6,
 		DivByZero	= 7,
-		FLAGS_COUNT = FLAGS::DivByZero
+		FLAGS_COUNT = I(FLAGS::DivByZero)
 	};
 
 //	typedef struct {

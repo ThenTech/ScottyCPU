@@ -1,0 +1,24 @@
+; Comment
+// Comment
+
+MOV R1,R4
+DATA R1, 213
+DATA R1,B
+
+ADD		R3  , R4
+
+SUB	R0, 84;
+
+JE	label //Meer tekst because why not?
+ADD R3, 1
+label:	
+JMP lbl
+;d468d6 d646d4
+lbl: SHL R1
+XOR R0, 3	; Xor met 3
+NOP
+txt:	DIV R3	,	38
+CMP   R5, 14786 ;;;;???
+	// commentaar
+13
+B:	12

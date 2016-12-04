@@ -120,6 +120,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="CPUComponents\ADD.hpp" />
     <ClInclude Include="CPUComponents\ALUnit.hpp" />
     <ClInclude Include="CPUComponents\ANDGate.hpp" />
@@ -140,11 +143,10 @@
     <ClInclude Include="CPUComponents\SHIFTRight.hpp" />
     <ClInclude Include="CPUComponents\SUBTRACT.hpp" />
     <ClInclude Include="CPUComponents\XORGate.hpp" />
-    <ClInclude Include="Exceptions.hpp" />
-    <ClInclude Include="FloatingBitset.hpp" />
+    <ClInclude Include="CPUFactory\SCAMAssembler.hpp" />
+    <ClInclude Include="CPUFactory\SCAMParser.hpp" />
     <ClInclude Include="CPUInstructions\ADDInstruction.hpp" />
     <ClInclude Include="CPUInstructions\ANDInstruction.hpp" />
-    <ClInclude Include="CPUInstructions\BinaryInstruction.hpp" />
     <ClInclude Include="CPUInstructions\CMPInstruction.hpp" />
     <ClInclude Include="CPUInstructions\DIVInstruction.hpp" />
     <ClInclude Include="CPUInstructions\Instruction.hpp" />
@@ -157,8 +159,9 @@
     <ClInclude Include="CPUInstructions\SHLInstruction.hpp" />
     <ClInclude Include="CPUInstructions\SHRInstruction.hpp" />
     <ClInclude Include="CPUInstructions\SUBInstruction.hpp" />
-    <ClInclude Include="CPUInstructions\UnaryInstruction.hpp" />
     <ClInclude Include="CPUInstructions\XORInstruction.hpp" />
+    <ClInclude Include="Exceptions.hpp" />
+    <ClInclude Include="FloatingBitset.hpp" />
     <ClInclude Include="ScottyCPU.hpp" />
     <ClInclude Include="SignedBitset.hpp" />
     <ClInclude Include="SynchrotronComponent.hpp" />

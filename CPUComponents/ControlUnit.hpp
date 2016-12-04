@@ -52,7 +52,7 @@ namespace CPUComponents {
 			/** \brief	Default destructor
 			 */
 			~ControlUnit() {
-				delete this->_REG;
+				SysUtils::deallocVar(this->_REG);
 			}
 
 			/**

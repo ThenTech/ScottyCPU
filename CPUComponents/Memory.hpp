@@ -82,7 +82,7 @@ namespace CPUComponents {
 			 *			Deletes internal memory array.
 			 */
 			~Memory() {
-				delete this->_memory;
+				SysUtils::deallocArray<std::bitset<bit_width>>(this->_memory);
 			}
 
 			/**	\brief	Return the size of the memory expressed in a given MemoryUnit.
@@ -171,7 +171,7 @@ namespace CPUComponents {
 						throw Exceptions::OutOfBoundsException(from.to_ulong());
 				#endif
 				LockBlock lock(this);
-				std::bitset<bit_width>* range = SysUtils::allocArray<std::bitset<bit_width>>(to.to_ulong() - from.to_ulong());
+				std::bitset<bit_width>* range = SysUtils::allocArray<std::bitset<bit_width>>(to.to_ulong() - from.to_ulong() + 1);
 
 				for (size_t i = from.to_ulong(); i <= to.to_ulong(); ++i)
 					range[i - from.to_ulong()] = this->_memory[i];

@@ -50,4 +50,10 @@ HEADERS += \
     CPUInstructions/MODInstruction.hpp \
     CPUComponents/COMPERATOR.hpp \
     CPUInstructions/CMPInstruction.hpp \
-    CPUInstructions/Instruction.hpp
+    CPUInstructions/Instruction.hpp \
+    Assembler.hpp \
+    CPUFactory/SCAMParser.hpp \
+    CPUFactory/SCAMAssembler.hpp
+
+DISTFILES += \
+    Programs/example.scam

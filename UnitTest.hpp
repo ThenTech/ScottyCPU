@@ -49,6 +49,10 @@
 #include "CPUInstructions/MODInstruction.hpp"
 #include "CPUInstructions/CMPInstruction.hpp"
 
+
+#include "CPUFactory/SCAMParser.hpp"
+#include "CPUFactory/SCAMAssembler.hpp"
+
 static bool _Error_Assertion_Failed;
 #define assert_error(F, E) {\
 	_Error_Assertion_Failed = false; \
@@ -1106,7 +1110,7 @@ void testLogic_Memory(void) {
 	int i;
 	Memory<2, 1>	m_2_1(MemoryUnits::BITS);
 	Memory<4, 8>	m_4_8(MemoryUnits::BYTES);
-	std::bitset<4> *range;
+	std::bitset<4> *range = nullptr;
 
 	// Memory with mem_size 0
 	typedef Memory<2, 0> ctor_2_0;
@@ -1151,11 +1155,13 @@ void testLogic_Memory(void) {
 	range = m_4_8.getDataRange(for_bit_0, for_bit_7);
 	for (i = 0; i < 8; ++i)
 		assert(range[i]					== (!i ? for_bit_1 : i == 7 ? for_bit_7 : for_bit_0));
-//	delete range;	// Invalid vor MSVC?
+	SysUtils::deallocArray(range);
+	range = nullptr;
 
 	range = m_4_8.getDataRange(for_bit_7, for_bit_7);
 	assert(range[0]						== for_bit_7);
-//	delete range;	// Invalid vor MSVC?
+	SysUtils::deallocArray(range);
+	range = nullptr;
 }
 
 void testClock(void) {
@@ -1810,6 +1816,19 @@ void testCMPInstruction(void) {
 	}
 }
 
+void testInstructionLUT(void) {
+
+//	std::cout << "LUT size: " << CPUInstructions::InstructionLUT.size() << std::endl;
+
+//	for (std::pair<std::string, size_t> i : CPUInstructions::InstructionLUT)
+//		printf("%s \t : 0x%02X\n", i.first.c_str(), i.second);
+
+
+
+	CPUFactory::SCAMParser scamfile("Programs/example.scam");
+	std::cout << scamfile;
+}
+
 /*
  *	Run all tests.
  */
@@ -1858,6 +1877,8 @@ void runTests(void) {
 		testDIVInstruction();
 		testMODInstruction();
 		testCMPInstruction();
+
+		testInstructionLUT();
 
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;

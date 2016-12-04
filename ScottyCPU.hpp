@@ -75,8 +75,9 @@ namespace CPUComponents {
 			 *	\brief	Default destructor
 			 */
 			~ScottyCPU() {
-				delete this->_CU;
-				delete this->_RAM;
+				SysUtils::deallocVar(this->_ALU);
+				SysUtils::deallocVar(this->_CU);
+				SysUtils::deallocVar(this->_RAM);
 			}
 
 			/**	\brief	Returns the ALU of the CPU.

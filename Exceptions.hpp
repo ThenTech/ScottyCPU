@@ -29,6 +29,10 @@ namespace Exceptions {
 		virtual const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
 			return "Exception: " + _msg;
 		}
+
+		virtual const string getMsg() const /*_GLIBCXX_USE_NOEXCEPT*/ {
+			return _msg;
+		}
 	};
 
 	/**
@@ -43,7 +47,7 @@ namespace Exceptions {
 			: Exception("Index " + to_string(idx) + " was out of bounds.") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return "OutOfBoundsException: " + Exception::getMessage();
+			return "OutOfBoundsException: " + Exception::getMsg();
 		}
 	};
 
@@ -59,7 +63,7 @@ namespace Exceptions {
 			: Exception("Reference " + msg + " not set to an object.") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return "NullPointerException: " + Exception::getMessage();
+			return "NullPointerException: " + Exception::getMsg();
 		}
 	};
 
@@ -75,7 +79,7 @@ namespace Exceptions {
 			: Exception("Tried to devide by zero in " + msg) {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return "DivideByZeroException: " + Exception::getMessage();
+			return "DivideByZeroException: " + Exception::getMsg();
 		}
 	};
 
@@ -93,7 +97,7 @@ namespace Exceptions {
 			: Exception("Cannot cast \"" + src + "\" to object of type \"" + dest + "\"!") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return "CastingException: " + Exception::getMessage();
+			return "CastingException: " + Exception::getMsg();
 		}
 	};
 
@@ -103,11 +107,11 @@ namespace Exceptions {
 	 */
 	class FileReadException : public Exception  {
 	public:
-		FileReadException()
-			: Exception("Cannot read from file.") {}
+		FileReadException(string name)
+			: Exception("Cannot read from file: " + name) {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return "FileReadException: " + Exception::getMessage();
+			return "FileReadException: " + Exception::getMsg();
 		}
 	};
 
@@ -121,7 +125,20 @@ namespace Exceptions {
 			: Exception("Cannot write to file.") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
-			return "FileWriteException: " + Exception::getMessage();
+			return "FileWriteException: " + Exception::getMsg();
+		}
+	};
+	/**
+	 *	\brief
+	 *		Unexpected file extension exception.
+	 */
+	class UnexpectedExtension : public Exception  {
+	public:
+		UnexpectedExtension(string ext)
+			: Exception(ext) {}
+
+		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
+			return "UnexpectedExtension: " + Exception::getMsg();
 		}
 	};
 }

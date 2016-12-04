@@ -25,6 +25,10 @@ debug: prepare
 	@echo Compiling debug...
 	$(CXX) -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
 	
+debug-extra: prepare
+	@echo Compiling debug with extra's...
+	$(CXX) -m32 -g -fno-inline -fno-omit-frame-pointer -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
+	
 release: prepare
 	@echo Compiling release...
 	$(CXX) -pthread -std=c++0x -Wall -Wextra -O2 -s main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
@@ -44,6 +48,8 @@ release_VS2013: prepare
 	
 clean:
 	@echo Delete bin folder...
+	@IF EXIST "$(BIN)" @del /f /s /q $(BIN) 1>nul
+	@IF EXIST "$(BIN)" @rmdir /S /Q $(BIN)
 	@IF EXIST "$(BIN)" @rmdir /S /Q $(BIN)
 	
 create_directories:

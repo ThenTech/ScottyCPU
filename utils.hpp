@@ -6,8 +6,14 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <functional>
+#include <cctype>
+#include <locale>
 #include <typeinfo>
+#include <stdarg.h>
 #ifndef _MSC_VER
 	#include <cxxabi.h>
 #endif
@@ -24,6 +30,46 @@
 #endif
 
 namespace std {
+
+	// trim from start (in place)
+	static inline void ltrim(std::string &s) {
+		s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+				std::not1(std::ptr_fun<int, int>(std::isspace))));
+	}
+
+	// trim from end (in place)
+	static inline void rtrim(std::string &s) {
+		s.erase(std::find_if(s.rbegin(), s.rend(),
+				std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+	}
+
+	// trim from both ends (in place)
+	static inline void trim(std::string &s) {
+		ltrim(s);
+		rtrim(s);
+	}
+
+	// trim from both ends (copying)
+	static inline std::string trimmed(std::string s) {
+		trim(s);
+		return s;
+	}
+
+	// erase from erase_from until end (in place)
+	static inline void strEraseFrom(string &str, const string& erase_from) {
+		str = str.substr(0, str.find(erase_from));
+	}
+
+	// erase from begin to erase_to (in place)
+	static inline void strEraseTo(string &str, const string& erase_to) {
+		str = str.substr(str.find(erase_to));
+	}
+
+	// erase from begin to erase_to (copying)
+	static inline std::string strErasedTo(string str, const string& erase_to) {
+		strEraseTo(str, erase_to);
+		return str;
+	}
 
 	/**	\brief	Replace all occurences of from with to in the given std::string str.
 	 *
@@ -71,7 +117,6 @@ namespace std {
 }
 
 namespace SysUtils {
-
 	/**	\brief	Convert the given char* to a wchar_t* variable.
 	 *
 	 *	\param	buffer
@@ -80,9 +125,28 @@ namespace SysUtils {
 	 *		Returns L##buffer : each char is replaced with its wide version.
 	 */
 	inline wchar_t* convert2WSTR(const char* buffer) {
-		wchar_t* WSTRbuff = new wchar_t[strlen(buffer) * 2 + 2];
-		swprintf(WSTRbuff, (strlen(buffer) * 2 + 2), L"%s", buffer);
+		wchar_t* WSTRbuff = new wchar_t[strlen(buffer) * 2 + 1];
+		#ifdef _MSC_VER
+			swprintf_s(WSTRbuff, (strlen(buffer) * 2 + 1), L"%hs", buffer);
+		#else
+			swprintf(WSTRbuff, (strlen(buffer) * 2 + 1), L"%hs", buffer);
+		#endif
 		return WSTRbuff;
+	}
+
+	inline std::string stringFormat(char* buffer, size_t length, const char* format, ...) {
+		va_list args;
+
+		va_start(args, format);
+		#ifdef _MSC_VER
+			vsprintf_s(buffer, length, format, args);
+		#else
+			(void) length;
+			vsprintf(buffer, format, args);
+		#endif
+		va_end(args);
+
+		return std::string(buffer);
 	}
 
 	/**	\brief
@@ -142,7 +206,9 @@ namespace SysUtils {
 			s << "TITLE " << text;
 			callSystemCmd(s.str());
 		#else
-			SetConsoleTitle(convert2WSTR(text.c_str()));
+			wchar_t *buff = convert2WSTR(text.c_str());
+			SetConsoleTitle(buff);
+			delete[] buff;
 		#endif // _MSC_VER
 	}
 
@@ -160,6 +226,47 @@ namespace SysUtils {
 		SysUtils::setWindowTitle(s.str());
 	}
 
+	/**
+	 *	\brief TO-DO
+	 *	\param filename
+	 *	\return
+	 */
+	const std::string* readStringFromFile(const std::string filename) {
+		std::string *str = new std::string();
+		std::fstream file(filename);
+
+		try {
+			file.seekg(0, std::ios::end);
+			str->reserve((size_t) file.tellg());
+			file.seekg(0, std::ios::beg);
+
+			str->assign((std::istreambuf_iterator<char>(file)),
+						 std::istreambuf_iterator<char>());
+		} catch (...) {
+			throw Exceptions::FileReadException(filename);
+		}
+
+		return str;
+	}
+
+	/**
+	 *	\brief TO-DO
+	 *	\param filename
+	 *	\param str
+	 */
+	void writeStringToFile(const std::string filename, const std::string& str) {
+		std::ofstream file(filename);
+
+		try {			
+			file << str;
+		} catch (...) {
+			file.close();
+			throw Exceptions::FileWriteException();
+		}
+
+		file.close();
+	}
+
 	/*
 	 *	Overloaded methods to allocate an array of T of size x, y, z.
 	 */
@@ -175,6 +282,11 @@ namespace SysUtils {
 		return new T();
 	}
 
+	template <class T>
+	static inline void deallocVar(T* v) {
+		delete v;
+	}
+
 	/**	\brief	Allocate an array of objects of type T and length x on the heap using `new T[x]()`.
 	 *
 	 *	\param	T
@@ -187,6 +299,11 @@ namespace SysUtils {
 	template <class T>
 	static inline T* allocArray(size_t x) {
 		return new T[x]();
+	}
+
+	template <class T>
+	static inline void deallocArray(T* a) {
+		delete[] a;
 	}
 
 	/**	\brief	Allocate y arrays of objects of type T and length x on the heap.
@@ -207,6 +324,12 @@ namespace SysUtils {
 		return arr;
 	}
 
+	template <class T>
+	static inline void deallocArray(T** a, size_t y) {
+		for(size_t i = 0; i < y; i++) SysUtils::deallocArray(a[i]);
+		SysUtils::deallocArray(a);
+	}
+
 	/**	\brief	Allocate z arrays of y arrays of objects of type T and length x on the heap.
 	 *
 	 *	\param	T
@@ -225,6 +348,12 @@ namespace SysUtils {
 		T ***arr = new T**[x];
 		for(size_t i = 0; i < x; i++) arr[i] = SysUtils::allocArray<T>(y, z);
 		return arr;
+	}
+
+	template <class T>
+	static inline void deallocArray(T*** a, size_t y, size_t z) {
+		for(size_t i = 0; i < z; i++) SysUtils::deallocArray(a[i], y);
+		SysUtils::deallocArray(a);
 	}
 }
 
