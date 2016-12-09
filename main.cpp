@@ -88,6 +88,8 @@ int main(int argc, char *argv[]) {
 
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;
+	} catch(std::exception const& e) {
+		std::cerr << "std::exception: " << e.what() << std::endl;
 	} catch(...) {
 		std::cerr << "Unknown exception." << std::endl;
 	}

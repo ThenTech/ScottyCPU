@@ -3,8 +3,7 @@
 
 #include <unordered_map>
 #include <bitset>
-
-#define I(X)	((size_t) X)
+#include "utils.hpp"
 
 //#include "../SynchrotronComponent.hpp"
 //using namespace Synchrotron;
@@ -40,7 +39,13 @@ namespace CPUInstructions {
 
 		/// Memory Operators
 		MOV		= 0x20,  // 0010 0000
-		DATA	= 0x21,  // 0010 0001
+		MOVRR	= 0x20,  // 0010 0000
+		MOVRA	= 0x22,  // 0010 0010
+		MOVAR	= 0x24,  // 0010 0100
+		MOVAA	= 0x28,  // 0010 1000
+
+		DATA	= 0x31,  // 0011 0001
+		DATAC	= 0x32,  // 0011 0010
 
 		/// Empty Instruction
 		NOP		= 0x00,  // 0000 0000
@@ -74,58 +79,92 @@ namespace CPUInstructions {
 
 		/// Clear Jump Flags
 		CLF		= 0x80,  // 1000 0000
+
+		/// Bitsize of one instruction
+		LENGHT	= 0x10,   // 0001 0000
 	};
 
-	static const std::unordered_map<std::string, size_t> InstructionLUT =
+	enum class OperandType {
+		REG, VAL, LBL, NONE
+	};
+
+	typedef struct {
+		size_t		OpCode;
+		OperandType Op1_type;
+		OperandType Op2_type;
+		//size_t		extra_bit_width_size;	// MOV with values
+	} InstructionInfo;
+
+//	static const std::unordered_map<std::string, size_t> RegisterLUT =
+//	{
+//		{ "R0" , 0 }, { "R1" , 1 }, { "R2" , 2 }, { "R3" , 3 }, { "R4" , 4 },
+//		{ "R5" , 5 }, { "R6" , 5 }, { "R7" , 7 }, { "R8" , 8 }, { "R9" , 9 }
+//	};
+
+	/// Bitsize of one register
+	static const size_t REG_BITS_SIZE = 4;
+
+	/// Register prefix
+	static const std::string REG_PREFIX = "R$";
+
+	// bitsize of 1 instruction = UINT(InstructionSet::LENGHT) << 1 + (amount of OperandType::VALs in optype) * 16
+
+	static const std::unordered_map<std::string, InstructionInfo> InstructionLUT =
 	{
-		{ "ADD",	I(InstructionSet::ADD)		},
-		{ "SUB",	I(InstructionSet::SUB)		},
-		{ "MUL",	I(InstructionSet::MUL)		},
-		{ "DIV",	I(InstructionSet::DIV)		},
-		{ "MOD",	I(InstructionSet::MOD)		},
-		{ "SHL",	I(InstructionSet::SHL)		},
-		{ "SHR",	I(InstructionSet::SHR)		},
+		{ "ADD",	{ UINT(InstructionSet::ADD),	OperandType::REG, OperandType::REG	} },
+		{ "SUB",	{ UINT(InstructionSet::SUB),	OperandType::REG, OperandType::REG	} },
+		{ "MUL",	{ UINT(InstructionSet::MUL),	OperandType::REG, OperandType::REG	} },
+		{ "DIV",	{ UINT(InstructionSet::DIV),	OperandType::REG, OperandType::REG	} },
+		{ "MOD",	{ UINT(InstructionSet::MOD),	OperandType::REG, OperandType::REG	} },
+		{ "SHL",	{ UINT(InstructionSet::SHL),	OperandType::REG, OperandType::NONE	} },
+		{ "SHR",	{ UINT(InstructionSet::SHR),	OperandType::REG, OperandType::NONE	} },
 
-		{ "CMP",	I(InstructionSet::CMP)		},
+		{ "CMP",	{ UINT(InstructionSet::CMP),	OperandType::REG, OperandType::REG	} },
 
-		{ "NOT",	I(InstructionSet::NOT)		},
-		{ "AND",	I(InstructionSet::AND)		},
-		{ "NAND",	I(InstructionSet::NAND)		},
-		{ "OR",		I(InstructionSet::OR)		},
-		{ "NOR",	I(InstructionSet::NOR)		},
-		{ "XOR",	I(InstructionSet::XOR)		},
+		{ "NOT",	{ UINT(InstructionSet::NOT),	OperandType::REG, OperandType::NONE	} },
+		{ "AND",	{ UINT(InstructionSet::AND),	OperandType::REG, OperandType::REG	} },
+		{ "NAND",	{ UINT(InstructionSet::NAND),	OperandType::REG, OperandType::REG	} },
+		{ "OR",		{ UINT(InstructionSet::OR),		OperandType::REG, OperandType::REG	} },
+		{ "NOR",	{ UINT(InstructionSet::NOR),	OperandType::REG, OperandType::REG	} },
+		{ "XOR",	{ UINT(InstructionSet::XOR),	OperandType::REG, OperandType::REG	} },
 
-		{ "MOV",	I(InstructionSet::MOV)		},
-		{ "DATA",	I(InstructionSet::DATA)		},
+		{ "MOV",	{ UINT(InstructionSet::MOV),	OperandType::REG, OperandType::REG,	} },
+		{ "MOVRR",	{ UINT(InstructionSet::MOVRR),	OperandType::REG, OperandType::REG,	} },
+		{ "MOVRA",	{ UINT(InstructionSet::MOVRA),	OperandType::REG, OperandType::VAL,	} }, // +bit_width
+		{ "MOVAR",	{ UINT(InstructionSet::MOVAR),	OperandType::VAL, OperandType::REG,	} }, // +bit_width
+		{ "MOVAA",	{ UINT(InstructionSet::MOVAA),	OperandType::VAL, OperandType::VAL,	} }, // +bit_width<<1
 
-		{ "NOP",	I(InstructionSet::NOP)		},
+		{ "DATA",	{ UINT(InstructionSet::DATA),	OperandType::REG, OperandType::VAL,	} },
+		{ "DATAC",	{ UINT(InstructionSet::DATAC),	OperandType::REG, OperandType::LBL,	} },
 
-		{ "JMP",	I(InstructionSet::JMP)		},
+		{ "NOP",	{ UINT(InstructionSet::NOP),	OperandType::NONE, OperandType::NONE} },
 
-		{ "JE",		I(InstructionSet::JE)		},
-		{ "JL",		I(InstructionSet::JL)		},
-		{ "JS",		I(InstructionSet::JS)		},
-		{ "JZ",		I(InstructionSet::JZ)		},
+		{ "JMP",	{ UINT(InstructionSet::JMP),	OperandType::LBL, OperandType::NONE	} },
 
-		{ "JLE",	I(InstructionSet::JLE)		},
-		{ "JSE",	I(InstructionSet::JSE)		},
+		{ "JE",		{ UINT(InstructionSet::JE),		OperandType::LBL, OperandType::NONE	} },
+		{ "JL",		{ UINT(InstructionSet::JL),		OperandType::LBL, OperandType::NONE	} },
+		{ "JS",		{ UINT(InstructionSet::JS),		OperandType::LBL, OperandType::NONE	} },
+		{ "JZ",		{ UINT(InstructionSet::JZ),		OperandType::LBL, OperandType::NONE	} },
 
-		{ "JCE",	I(InstructionSet::JCE)		},
-		{ "JCL",	I(InstructionSet::JCL)		},
-		{ "JCS",	I(InstructionSet::JCS)		},
-		{ "JCZ",	I(InstructionSet::JCZ)		},
+		{ "JLE",	{ UINT(InstructionSet::JLE),	OperandType::LBL, OperandType::NONE	} },
+		{ "JSE",	{ UINT(InstructionSet::JSE),	OperandType::LBL, OperandType::NONE	} },
 
-		{ "JLZ",	I(InstructionSet::JLZ)		},
-		{ "JSZ",	I(InstructionSet::JSZ)		},
-		{ "JEZ",	I(InstructionSet::JEZ)		},
+		{ "JCE",	{ UINT(InstructionSet::JCE),	OperandType::LBL, OperandType::NONE	} },
+		{ "JCL",	{ UINT(InstructionSet::JCL),	OperandType::LBL, OperandType::NONE	} },
+		{ "JCS",	{ UINT(InstructionSet::JCS),	OperandType::LBL, OperandType::NONE	} },
+		{ "JCZ",	{ UINT(InstructionSet::JCZ),	OperandType::LBL, OperandType::NONE	} },
 
-		{ "JCLE",	I(InstructionSet::JCLE)		},
-		{ "JCLZ",	I(InstructionSet::JCLZ)		},
-		{ "JCEZ",	I(InstructionSet::JCEZ)		},
-		{ "JLEZ",	I(InstructionSet::JLEZ)		},
-		{ "JCLEZ",	I(InstructionSet::JCLEZ)	},
+		{ "JLZ",	{ UINT(InstructionSet::JLZ),	OperandType::LBL, OperandType::NONE	} },
+		{ "JSZ",	{ UINT(InstructionSet::JSZ),	OperandType::LBL, OperandType::NONE	} },
+		{ "JEZ",	{ UINT(InstructionSet::JEZ),	OperandType::LBL, OperandType::NONE	} },
 
-		{ "CLF",	I(InstructionSet::CLF)		}
+		{ "JCLE",	{ UINT(InstructionSet::JCLE),	OperandType::LBL, OperandType::NONE	} },
+		{ "JCLZ",	{ UINT(InstructionSet::JCLZ),	OperandType::LBL, OperandType::NONE	} },
+		{ "JCEZ",	{ UINT(InstructionSet::JCEZ),	OperandType::LBL, OperandType::NONE	} },
+		{ "JLEZ",	{ UINT(InstructionSet::JLEZ),	OperandType::LBL, OperandType::NONE	} },
+		{ "JCLEZ",	{ UINT(InstructionSet::JCLEZ),	OperandType::LBL, OperandType::NONE	} },
+
+		{ "CLF",	{ UINT(InstructionSet::CLF),	OperandType::NONE, OperandType::NONE} },
 	};
 
 	/**
@@ -140,7 +179,7 @@ namespace CPUInstructions {
 		Negative	= 5,
 		CarryOut	= 6,
 		DivByZero	= 7,
-		FLAGS_COUNT = I(FLAGS::DivByZero)
+		FLAGS_COUNT = UINT(FLAGS::DivByZero)
 	};
 
 //	typedef struct {
@@ -156,7 +195,7 @@ namespace CPUInstructions {
 			 *	\brief	Bitset containing flags on bit location as set in FLAGS.
 			 */
 			//Flags REG_FLAGS;
-			std::bitset<(size_t) FLAGS::FLAGS_COUNT> REG_FLAGS;
+			std::bitset<UINT(FLAGS::FLAGS_COUNT)> REG_FLAGS;
 			//SynchrotronComponent<FLAGS::FLAGS_COUNT> REG_FLAGS;
 
 		protected:
@@ -175,7 +214,7 @@ namespace CPUInstructions {
 			 */
 			inline void setFlag(FLAGS f) {
 				if (f == FLAGS::CLEAR)	this->clearFlags();
-				else					this->REG_FLAGS.set(((size_t) f) - 1);
+				else					this->REG_FLAGS.set(UINT(f) - 1);
 			}
 
 			/**
@@ -208,7 +247,7 @@ namespace CPUInstructions {
 			 *	\param	__val
 			 *			Default value to set the flags.
 			 */
-			FlagRegister(std::bitset<(size_t) FLAGS::FLAGS_COUNT> __val = (size_t) FLAGS::CLEAR)
+			FlagRegister(std::bitset<UINT(FLAGS::FLAGS_COUNT)> __val = UINT(FLAGS::CLEAR))
 				: REG_FLAGS(__val) /* REG_FLAGS() */ {}
 
 			/**
@@ -228,7 +267,7 @@ namespace CPUInstructions {
 			inline bool flagIsSet(FLAGS f) const {
 				if (f == FLAGS::CLEAR)
 					return this->REG_FLAGS.none();
-				return this->REG_FLAGS.test(((size_t) f) - 1);
+				return this->REG_FLAGS.test(UINT(f) - 1);
 			}
 
 			/**

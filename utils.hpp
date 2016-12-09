@@ -29,6 +29,9 @@
 #error A C++ compiler is required!
 #endif
 
+#define UINT(X)	((size_t) X)
+
+
 namespace std {
 
 	// trim from start (in place)
@@ -69,6 +72,49 @@ namespace std {
 	static inline std::string strErasedTo(string str, const string& erase_to) {
 		strEraseTo(str, erase_to);
 		return str;
+	}
+
+	// toUpper (in place)
+	static inline void strToUpper(string &str) {
+		std::transform(str.begin(), str.end(), str.begin(),
+			[](std::string::value_type ch) {
+				return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).toupper(ch);
+			}
+		);
+	}
+
+	// toUpper (copying)
+	static inline std::string strToUppercase(string str) {
+		strToUpper(str);
+		return str;
+	}
+
+	// toLower (in place)
+	static inline void strToLower(string &str) {
+		std::transform(str.begin(), str.end(), str.begin(),
+			[](std::string::value_type ch) {
+				return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).tolower(ch);
+			}
+		);
+	}
+
+	// toLower (copying)
+	static inline std::string strToLowercase(string str) {
+		strToLower(str);
+		return str;
+	}
+
+	static inline bool strHasChar(const string &str, const char ch) {
+		// string.h : strchr(str.c_str(), ch)
+		return str.find(ch) != std::string::npos;
+	}
+
+	static inline void strReplaceConsecutive(string &str, const char ch) {
+		str.erase(std::unique(str.begin(), str.end(),
+								[&](const char lhs, const char rhs) {
+									return (lhs == ch) && (lhs == rhs);
+								}
+							 ), str.end());
 	}
 
 	/**	\brief	Replace all occurences of from with to in the given std::string str.
@@ -161,7 +207,12 @@ namespace SysUtils {
 	template <class T>
 	inline T lexical_cast(const char* buffer) {
 		T out;
-		std::istringstream cast(buffer);
+		std::stringstream cast;
+
+		if (strToUppercase(std::string(buffer)).substr(0, 2) == "0X")
+				cast << std::hex << buffer;
+		else	cast << buffer;
+
 		if (!(cast >> out))
 			throw Exceptions::CastingException(buffer, std::type2name(out));
 		return out;
@@ -354,6 +405,12 @@ namespace SysUtils {
 	static inline void deallocArray(T*** a, size_t y, size_t z) {
 		for(size_t i = 0; i < z; i++) SysUtils::deallocArray(a[i], y);
 		SysUtils::deallocArray(a);
+	}
+
+	template <class T>
+	static inline void deallocVector(std::vector<T> *v) {
+		for (T i : *v)	SysUtils::deallocVar(i);
+		SysUtils::deallocVar(v);
 	}
 }
 
