@@ -19,10 +19,10 @@ namespace CPUComponents {
 	 *	\param	longStr
 	 *		Specifies whether to return a shortend or the full name of the unit.
 	 */
-	inline std::string memoryUnitToString(MemoryUnits u, bool longStr = false) {
+	static inline std::string memoryUnitToString(MemoryUnits u, bool longStr = false) {
 		static std::string shortString[] = { "bits", "B", "kB", "MB" };
 		static std::string longString[]  = { "bits", "Bytes", "Kilobytes", "Megabytes" };
-		return (longStr ? longString : shortString)[(size_t) u];
+		return (longStr ? longString : shortString)[UINT(u)];
 	}
 
 	/** \brief	**Memory** : Save the state of a SynchrotronComponent on an adress.

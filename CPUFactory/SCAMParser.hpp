@@ -210,7 +210,7 @@ namespace CPUFactory {
 				std::string line, item;
 				std::stringstream ss(*this->rawFileData);
 
-				for (size_t file_line = 1; std::getline(ss, line); file_line++) {
+				for (size_t file_line = 1; std::getline(ss, line); ++file_line) {
 					std::ltrim(line);
 					if (line[0] == ';' || line[0] == '/' || line.length() < 2)
 						continue;	// Skip comment or empty lines

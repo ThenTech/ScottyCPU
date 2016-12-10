@@ -2,6 +2,7 @@
 #define INSTRUCTION_HPP
 
 #include <unordered_map>
+#include <set>
 #include <bitset>
 #include "../utils.hpp"
 
@@ -81,12 +82,17 @@ namespace CPUInstructions {
 		CLF		= 0x80,  // 1000 0000
 
 		/// Bitsize of one instruction
-		LENGHT	= 0x10,   // 0001 0000
+		LENGHT	= 0x08,  // 0000 1000
 	};
 
 	enum class OperandType {
 		REG, VAL, LBL, NONE
 	};
+
+	static inline std::string OperandTypeToString(OperandType u) {
+		static std::string LUT[] = { "Register", "Value", "Label", "None" };
+		return LUT[UINT(u)];
+	}
 
 	typedef struct {
 		size_t		OpCode;
@@ -164,8 +170,50 @@ namespace CPUInstructions {
 		{ "JLEZ",	{ UINT(InstructionSet::JLEZ),	OperandType::LBL, OperandType::NONE	} },
 		{ "JCLEZ",	{ UINT(InstructionSet::JCLEZ),	OperandType::LBL, OperandType::NONE	} },
 
-		{ "CLF",	{ UINT(InstructionSet::CLF),	OperandType::NONE, OperandType::NONE} },
+		{ "CLF",	{ UINT(InstructionSet::CLF),	OperandType::NONE, OperandType::NONE} }
 	};
+
+	/** TO-DO
+	 *
+		std::ostream& operator<<(std::ostream &os, const std::unordered_map<std::string, InstructionInfo>& lut) {
+			// os << printInstructionSet()
+			return os;
+		}
+	 */
+	static void printInstructionSet(void) {
+		char *tmp = SysUtils::allocArray<char>(83);
+		std::cout << "/----------------------------------------------------------------------------\\" << std::endl
+				  << "|------------------------- ScottyCPU InstructionSet -------------------------|"  << std::endl
+				  << "\\----------------------------------------------------------------------------/" << std::endl << std::endl
+				  << "    |   Name   | OpCode | Operand code | Operand 1 type | Operand 2 type |"	<< std::endl
+				  << "    +----------+--------+--------------+----------------+----------------+" << std::endl;;
+
+		/**********************************************************************/
+		/* Sort InstructionLUT by re-inserting Pairs in std::set with custom sorter */
+		typedef std::pair<std::string const, CPUInstructions::InstructionInfo const> Pair;
+
+		struct opcode_sort {
+			inline bool operator() (const Pair& lhs, const Pair& rhs) const {
+				return lhs.second.OpCode <= rhs.second.OpCode;
+			}
+		};
+
+		std::set<Pair, opcode_sort> sortedLUT(InstructionLUT.begin(), InstructionLUT.end());
+		/****************************************************************************/
+
+		for (const Pair& i : sortedLUT) {
+			std::cout << SysUtils::stringFormat(tmp, 83, "    |  %-5s   |  0x%02X  |  %04s %04s   |    %8s    |    %8s    |",
+												i.first.c_str(),
+												i.second.OpCode,
+												std::bitset<4>((i.second.OpCode & 0xF0) >> 4).to_string().c_str(),
+												std::bitset<4>(i.second.OpCode & 0x0F).to_string().c_str(),
+												OperandTypeToString(i.second.Op1_type).c_str(),
+												OperandTypeToString(i.second.Op2_type).c_str())
+					  << std::endl;
+		}
+
+		SysUtils::deallocArray(tmp);
+	}
 
 	/**
 	 *	\brief	Enum containing all flags possible in the CPU.

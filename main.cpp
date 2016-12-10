@@ -38,9 +38,11 @@ void showUsage(char* _name) {
 	string name(_name);
 	stringstream usage;
 	usage << "Usage: " << name.substr(name.find_last_of('\\') + 1)
-		  << " [-d|-D] [-c|-C <float>]" << endl
+		  << " [-d|-D] [-c|-C <float>] [-i|-I]" << endl
 		  << "  -d, -D, --debug    Execute UnitTests" << endl
-		  << "  -c, -C <float>     Set the ScottyCPU clock frequency" << endl << endl;
+		  << "  -c, -C <float>     Set the ScottyCPU clock frequency" << endl
+		  << "  -i, -I             Show InstructionSet" << endl
+		  << endl;
 
 	//fprintf(stderr, usage.str().c_str());
 	cerr << usage.str();
@@ -74,6 +76,12 @@ int main(int argc, char *argv[]) {
 			} else if (arg == "-c" || arg == "-C") {
 				/// Set clk_freq
 				ScottySettings.clk_freq = SysUtils::lexical_cast<float>(argv[++i]);
+			} else if (arg == "-i" || arg == "-I") {
+				/// Show InstructionSet
+				CPUInstructions::printInstructionSet();
+			} else {
+				/// Show usage
+				showUsage(argv[0]);
 			}
 		}
 
