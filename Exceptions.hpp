@@ -43,7 +43,7 @@ namespace Exceptions {
 	 */
 	class OutOfBoundsException : public Exception  {
 	public:
-		OutOfBoundsException(int idx)
+		OutOfBoundsException(const int& idx)
 			: Exception("Index " + to_string(idx) + " was out of bounds.") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
@@ -59,7 +59,7 @@ namespace Exceptions {
 	 */
 	class NullPointerException : public Exception  {
 	public:
-		NullPointerException(string msg)
+		NullPointerException(const string& msg)
 			: Exception("Reference " + msg + " not set to an object.") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
@@ -75,7 +75,7 @@ namespace Exceptions {
 	 */
 	class DivideByZeroException : public Exception  {
 	public:
-		DivideByZeroException(string msg)
+		DivideByZeroException(const string& msg)
 			: Exception("Tried to devide by zero in " + msg) {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
@@ -93,7 +93,7 @@ namespace Exceptions {
 	 */
 	class CastingException : public Exception  {
 	public:
-		CastingException(string src, string dest)
+		CastingException(const string& src, const string& dest)
 			: Exception("Cannot cast \"" + src + "\" to object of type \"" + dest + "\"!") {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
@@ -107,7 +107,7 @@ namespace Exceptions {
 	 */
 	class FileReadException : public Exception  {
 	public:
-		FileReadException(string name)
+		FileReadException(const string& name)
 			: Exception("Cannot read from file: " + name) {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {

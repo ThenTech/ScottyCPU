@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include <bitset>
-#include "utils.hpp"
+#include "../utils.hpp"
 
 //#include "../SynchrotronComponent.hpp"
 //using namespace Synchrotron;

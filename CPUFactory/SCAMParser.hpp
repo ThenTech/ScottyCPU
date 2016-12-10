@@ -194,11 +194,11 @@ namespace CPUFactory {
 				return *this->rawFileData;
 			}
 
-			const bool hasErrors(void) {
+			bool hasErrors(void) {
 				return this->parse_errors->size() > 0;
 			}
 
-			const bool reparseFile(void) {
+			bool reparseFile(void) {
 				if (this->instr_entries != nullptr) {
 					SysUtils::deallocVector(this->instr_entries);
 					SysUtils::deallocVector(this->parse_errors);
@@ -207,13 +207,10 @@ namespace CPUFactory {
 				this->instr_entries = SysUtils::allocVar<std::vector<CPUFactory::InstructionEntry*>>();
 				this->parse_errors = SysUtils::allocVar<std::vector<CPUFactory::InstructionEntryError*>>();
 
-				size_t file_line = 0;
 				std::string line, item;
 				std::stringstream ss(*this->rawFileData);
 
-				while (std::getline(ss, line)) {
-					file_line++;
-
+				for (size_t file_line = 1; std::getline(ss, line); file_line++) {
 					std::ltrim(line);
 					if (line[0] == ';' || line[0] == '/' || line.length() < 2)
 						continue;	// Skip comment or empty lines

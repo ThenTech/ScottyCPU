@@ -150,13 +150,15 @@ namespace std {
 	template <class T>
 	static inline const string type2name(T const& o) {
 		#ifdef _CXXABI_H
-				string s = string(abi::__cxa_demangle(typeid(o).name(),nullptr,nullptr,nullptr));
+			char *demang = abi::__cxa_demangle(typeid(o).name(), nullptr, nullptr, nullptr);
+			string s(demang);
+			std::free(demang);
 		#else
-				string s = string(typeid(o).name());
+			string s(typeid(o).name());
 		#endif
 
-		std::strReplaceAll(s, string("std::"), string(""));           // Remove std:: from output
-		std::strReplaceAll(s, string("CPUComponents::"), string("")); // Remove CPUComponents:: from output
+		std::strReplaceAll(s, "std::", "");           // Remove std:: from output
+		std::strReplaceAll(s, "CPUComponents::", ""); // Remove CPUComponents:: from output
 		return s;
 	}
 
