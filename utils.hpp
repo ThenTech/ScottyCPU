@@ -10,6 +10,7 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
+#include <unordered_map>
 #include <cctype>
 #include <locale>
 #include <typeinfo>
@@ -29,8 +30,8 @@
 #error A C++ compiler is required!
 #endif
 
-#define UINT(X)	((size_t) X)
-
+#define UINT(X)		((size_t) X)
+#define BOOLSTR(X)	((X) ? "true" : "false")
 
 namespace std {
 
@@ -66,6 +67,12 @@ namespace std {
 	// erase from begin to erase_to (in place)
 	static inline void strEraseTo(string &str, const string& erase_to) {
 		str = str.substr(str.find(erase_to));
+	}
+
+	// erase from erase_from until end (copying)
+	static inline std::string strErasedFrom(string str, const string& erase_from) {
+		strEraseFrom(str, erase_from);
+		return str;
 	}
 
 	// erase from begin to erase_to (copying)
@@ -132,6 +139,18 @@ namespace std {
 			str.replace(start_pos, from.length(), to);
 			start_pos += to.length();
 		}
+	}
+
+	template <class key_type, class mapped_type>
+	static inline bool mapHasKey(const std::unordered_map<key_type, mapped_type>& map, const string& key) {
+		return map.find(key) != map.end();
+	}
+
+	template <class key_type, class mapped_type>
+	static inline const mapped_type& mapGetMapped(const std::unordered_map<key_type, mapped_type>& map, const string& key) {
+		//if (mapHasKey(map, key))
+		//returnmap.find(key)->second;
+		return map.at(key);
 	}
 
 	/**	\brief	Returns the internal actual class name of the given object o.
@@ -314,7 +333,25 @@ namespace SysUtils {
 			file << str;
 		} catch (...) {
 			file.close();
-			throw Exceptions::FileWriteException();
+			throw Exceptions::FileWriteException(filename);
+		}
+
+		file.close();
+	}
+
+	/**
+	 *	\brief TO-DO
+	 *	\param filename
+	 *	\param str
+	 */
+	void writeBinaryFile(const std::string filename, const char* buffer, size_t length) {
+		std::ofstream file(filename, std::ofstream::binary);
+
+		try {
+			file.write(buffer, length);
+		} catch (...) {
+			file.close();
+			throw Exceptions::FileWriteException(filename);
 		}
 
 		file.close();
@@ -411,8 +448,14 @@ namespace SysUtils {
 
 	template <class T>
 	static inline void deallocVector(std::vector<T> *v) {
-		for (T i : *v)	SysUtils::deallocVar(i);
+		for (T i : *v) SysUtils::deallocVar(i);
 		SysUtils::deallocVar(v);
+	}
+
+	template <class FIRST, class SECOND>
+	static inline void deallocMap(std::unordered_map<FIRST, SECOND> *m) {
+		for (std::pair<FIRST, SECOND> i : *m) SysUtils::deallocVar(i.second);
+		SysUtils::deallocVar(m);
 	}
 }
 

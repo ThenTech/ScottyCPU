@@ -121,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="Programs\example.scam" />
+    <None Include="Programs\example_corrected.scam" />
+    <None Include="Programs\example_corrected.schex" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPUComponents\ADD.hpp" />

@@ -1825,8 +1825,13 @@ void testInstructionLUT(void) {
 
 
 
-	CPUFactory::SCAMParser scamfile("Programs/example.scam");
+	//CPUFactory::SCAMParser scamfile("Programs/example.scam");
+	//CPUFactory::SCAMParser scamfile("Programs/example_corrected.scam");
+	//std::cout << scamfile;
+
+	CPUFactory::SCAMAssembler scamfile("Programs/example_corrected.scam");
 	std::cout << scamfile;
+	scamfile.exportScHex();
 }
 
 /*

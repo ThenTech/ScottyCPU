@@ -121,8 +121,8 @@ namespace Exceptions {
 	 */
 	class FileWriteException : public Exception  {
 	public:
-		FileWriteException()
-			: Exception("Cannot write to file.") {}
+		FileWriteException(const string& name)
+			: Exception("Cannot write to file: " + name) {}
 
 		const string getMessage() const /*_GLIBCXX_USE_NOEXCEPT*/ {
 			return "FileWriteException: " + Exception::getMsg();

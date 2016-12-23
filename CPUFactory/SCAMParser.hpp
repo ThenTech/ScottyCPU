@@ -63,11 +63,11 @@ namespace CPUFactory {
 			void checkInstructionEntry(const CPUFactory::InstructionEntry &i) {
 				InstructionEntryError *err = nullptr;
 
-				if (i.LBL != "") {
+				if (!i.LBL.empty()) {
 					this->checkInstructionEntryLabel(i, i.LBL);
 				}
 
-				if ((i.LBL == "" || i.NAME != "") && CPUInstructions::InstructionLUT.find(i.NAME) == CPUInstructions::InstructionLUT.end()) {
+				if ((i.LBL.empty() || !i.NAME.empty()) && !CPUInstructions::isValidInstruction(i.NAME)) {
 					if (i.LBL == "") {
 						err = SysUtils::allocVar<InstructionEntryError>();
 						err->LBL = "ERROR";
@@ -79,7 +79,7 @@ namespace CPUFactory {
 						std::string cast_err;
 
 						try {
-							// Will cast allpha chars to 0, so cast checking might me redundant.
+							// Will cast alpha chars to 0, so cast checking might me redundant.
 							//int xx =
 							SysUtils::lexical_cast<size_t>(i.NAME.c_str());
 							//printf("Var => %s \tcast = %d\n", i.NAME.c_str(), xx);
@@ -98,9 +98,8 @@ namespace CPUFactory {
 							// Add variable to dictionary (map)
 						}
 					}
-				} else if (i.NAME != "") {
-					const CPUInstructions::InstructionInfo &instr = CPUInstructions::InstructionLUT.find(i.NAME)->second;
-																// =  CPUInstructions::InstructionLUT[i.NAME];  //???
+				} else if (!i.NAME.empty()) {
+					const CPUInstructions::InstructionInfo &instr = CPUInstructions::getInstructionInfo(i.NAME);
 					std::string OP;
 
 					for (int j = 2; j; --j) {
@@ -155,7 +154,7 @@ namespace CPUFactory {
 								break;
 							}
 							case CPUInstructions::OperandType::NONE:
-								if (OP != ""){
+								if (!OP.empty()){
 									err = SysUtils::allocVar<InstructionEntryError>();
 									err->LBL = "ERROR";
 									err->FILE_LINENR = i.FILE_LINENR;
@@ -173,6 +172,7 @@ namespace CPUFactory {
 		public:
 			SCAMParser(const std::string& filename)
 				: scamFile(filename), rawFileData(nullptr), instr_entries(nullptr), parse_errors(nullptr) {
+				// Possible unexpected behaviour if path contains '.' in dir name
 				std::string ext = std::strErasedTo(scamFile, ".");
 				if (ext != SCAMParser::EXTENSION)
 					throw Exceptions::UnexpectedExtension(ext);
@@ -181,9 +181,12 @@ namespace CPUFactory {
 			}
 
 			~SCAMParser() {
-				SysUtils::deallocVar(this->rawFileData);
-				SysUtils::deallocVector(this->instr_entries);
-				SysUtils::deallocVector(this->parse_errors);
+				if (this->rawFileData != nullptr)
+					SysUtils::deallocVar(this->rawFileData);
+				if (this->instr_entries != nullptr)
+					SysUtils::deallocVector(this->instr_entries);
+				if (this->parse_errors != nullptr)
+					SysUtils::deallocVector(this->parse_errors);
 			}
 
 			const std::string& getFileName(void) const {
@@ -205,10 +208,18 @@ namespace CPUFactory {
 				}
 
 				this->instr_entries = SysUtils::allocVar<std::vector<CPUFactory::InstructionEntry*>>();
-				this->parse_errors = SysUtils::allocVar<std::vector<CPUFactory::InstructionEntryError*>>();
+				this->parse_errors  = SysUtils::allocVar<std::vector<CPUFactory::InstructionEntryError*>>();
 
 				std::string line, item;
 				std::stringstream ss(*this->rawFileData);
+				InstructionEntry *instr = SysUtils::allocVar<InstructionEntry>();
+
+				// Add default JMP MAIN to skip constants
+				instr->FILE_LINENR	= 0;
+				instr->LINENR		= 0;
+				instr->NAME			= "JMP";
+				instr->OP1			= "MAIN";
+				this->instr_entries->push_back(instr);
 
 				for (size_t file_line = 1; std::getline(ss, line); ++file_line) {
 					std::ltrim(line);
@@ -221,7 +232,7 @@ namespace CPUFactory {
 					std::strEraseFrom(line, "/");
 					std::rtrim(line);
 
-					InstructionEntry *instr = SysUtils::allocVar<InstructionEntry>();
+					instr = SysUtils::allocVar<InstructionEntry>();
 					std::stringstream iss(line);
 
 					std::getline(iss, item, ' ');
@@ -253,7 +264,16 @@ namespace CPUFactory {
 					this->instr_entries->push_back(instr);
 				}
 
-				return this->hasErrors();
+				// Add default JMP END to halt execution on finish
+				instr = SysUtils::allocVar<InstructionEntry>();
+				instr->FILE_LINENR	= 9999;
+				instr->LINENR		= this->instr_entries->size();
+				instr->LBL			= "END";
+				instr->NAME			= "JMP";
+				instr->OP1			= "END";
+				this->instr_entries->push_back(instr);
+
+				return !this->hasErrors();
 			}
 
 			const std::vector<InstructionEntryError*>& getParseErrors(void) {
@@ -272,29 +292,36 @@ namespace CPUFactory {
 				return *this->instr_entries;
 			}
 
-			friend std::ostream& operator<<(std::ostream &os, SCAMParser &s) {
+
+			const std::string toString(void) {
+				std::stringstream os;
 				char *tmp = SysUtils::allocArray<char>(83);
 
-				os << "SCAM-file: \"" << s.getFileName() << "\"" << std::endl;
-				os << " Line | Inst |   Label    | Instr | Operand 1  | Operand 2" << std::endl;
+				os << "SCAM-file: \"" << this->getFileName() << "\"" << std::endl;
+				os << " Line | Addr |   Label    | Instr | Operand 1  | Operand 2"   << std::endl;
 				os << "------+------+------------+-------+------------+------------" << std::endl;
 
-				for (CPUFactory::InstructionEntry* i : s.getInstructionEntries()) {
-					os << SysUtils::stringFormat(tmp, 83, " % 4d | % 4d | %-10s | %-5s | %10s | %10s",
+				for (CPUFactory::InstructionEntry* i : this->getInstructionEntries()) {
+					os << SysUtils::stringFormat(tmp, 83, " %4d | % 4d | %-10s | %-5s | %10s | %10s",
 												 i->FILE_LINENR, i->LINENR, i->LBL.c_str(), i->NAME.c_str(), i->OP1.c_str(), i->OP2.c_str())
 					   << std::endl;
 				}
 
-				if (s.hasErrors()) {
+				if (this->hasErrors()) {
 					os << std::endl << "SCAM-file has errors!" << std::endl;
-					for (CPUFactory::InstructionEntryError* e : s.getParseErrors()) {
+					for (CPUFactory::InstructionEntryError* e : this->getParseErrors()) {
 						os << "Line " << SysUtils::stringFormat(tmp, 5, "% 4d", e->FILE_LINENR) << ": [" << e->LBL << "] " << e->descr
 						   << std::endl;
 					}
 				}
 
 				SysUtils::deallocArray(tmp);
-				return os;
+
+				return os.str();
+			}
+
+			friend std::ostream& operator<<(std::ostream &os, SCAMParser &s) {
+				return os << s.toString();
 			}
 
 			friend std::ostream& operator<<(std::ostream &os, SCAMParser *s) {

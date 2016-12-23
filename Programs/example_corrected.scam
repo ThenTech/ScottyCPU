@@ -1,0 +1,135 @@
+; Comment
+// Comment
+A:	42
+C:	0xF3
+D:	4a
+//end data
+
+MAIN:
+		MOV		R1, R4
+		DATA	R1, 213
+		DATAC	R1, B
+		DATAC	R0, A
+		ADD		R3, R4
+		SUB		R0, R1;
+		MUL		R9, R15
+		JE		label	//Meer tekst because whynaut?
+		ADD		R3, R0
+label:
+        JMP 	lbl
+	;d468d6 d646d4
+lbl:	SHL 	R1
+        XOR 	R0, R3	; Xor met 3
+		NOP
+txt:	DIV 	R3, R0
+        CMP 	R5, R3	;;;;???
+	                // commentaar
+		JL		END
+B:	12
+
+// Expected output from SCAMParser:
+;	SCAM-file: "Programs/example_corrected.scam"
+;	 Line | Addr |   Label    | Instr | Operand 1  | Operand 2
+;	------+------+------------+-------+------------+------------
+;	    0 |    0 |            | JMP   |       MAIN |
+;	    3 |    1 | A          | 42    |            |
+;	    4 |    2 | C          | 0xF3  |            |
+;	    5 |    3 | D          | 4a    |            |
+;	    8 |    4 | MAIN       |       |            |
+;	    9 |    5 |            | MOV   |         R1 |         R4
+;	   10 |    6 |            | DATA  |         R1 |        213
+;	   11 |    7 |            | DATAC |         R1 |          B
+;	   12 |    8 |            | DATAC |         R0 |          A
+;	   13 |    9 |            | ADD   |         R3 |         R4
+;	   14 |   10 |            | SUB   |         R0 |         R1
+;	   15 |   11 |            | MUL   |         R9 |        R15
+;	   16 |   12 |            | JE    |      label |
+;	   17 |   13 |            | ADD   |         R3 |         R0
+;	   18 |   14 | label      |       |            |
+;	   19 |   15 |            | JMP   |        lbl |
+;	   21 |   16 | lbl        | SHL   |         R1 |
+;	   22 |   17 |            | XOR   |         R0 |         R3
+;	   23 |   18 |            | NOP   |            |
+;	   24 |   19 | txt        | DIV   |         R3 |         R0
+;	   25 |   20 |            | CMP   |         R5 |         R3
+;	   27 |   21 |            | JL    |        END |
+;	   28 |   22 | B          | 12    |            |
+;	 9999 |   23 | END        | JMP   |        END |
+
+// Expected output from SCAMAssembler:
+;   SCAM-file: "Programs/example_corrected.scam"
+;    Line | Addr |   Label    | Instr | Operand 1  | Operand 2
+;   ------+------+------------+-------+------------+------------
+;       0 |    0 |            | JMP   |       MAIN |
+;       3 |    2 | A          | 42    |            |
+;       4 |    3 | C          | 0xF3  |            |
+;       5 |    4 | D          | 4a    |            |
+;      28 |    5 | B          | 12    |            |
+;       8 |    6 | MAIN       |       |            |
+;       9 |    7 |            | MOV   |         R1 |         R4
+;      10 |    8 |            | DATA  |         R1 |        213
+;      11 |   10 |            | DATAC |         R1 |          B
+;      12 |   12 |            | DATAC |         R0 |          A
+;      13 |   14 |            | ADD   |         R3 |         R4
+;      14 |   15 |            | SUB   |         R0 |         R1
+;      15 |   16 |            | MUL   |         R9 |        R15
+;      16 |   17 |            | JE    |      label |
+;      17 |   19 |            | ADD   |         R3 |         R0
+;      18 |   20 | label      |       |            |
+;      19 |   21 |            | JMP   |        lbl |
+;      21 |   23 | lbl        | SHL   |         R1 |
+;      22 |   24 |            | XOR   |         R0 |         R3
+;      23 |   25 |            | NOP   |            |
+;      24 |   26 | txt        | DIV   |         R3 |         R0
+;      25 |   27 |            | CMP   |         R5 |         R3
+;      27 |   28 |            | JL    |        END |
+;    9999 |   30 | END        | JMP   |        END |
+;
+;   SCAM-file: Symboltable
+;    Addr |    Label    | isConstant |  Value  | Decimal
+;   ------+-------------+------------+---------+---------
+;       2 | A           |   true     |  0x002A |      42
+;       3 | C           |   true     |  0x00F3 |     243
+;       4 | D           |   true     |  0x0004 |       4
+;       5 | B           |   true     |  0x000C |      12
+;       6 | MAIN        |   false    |  0x0000 |       0
+;      20 | label       |   false    |  0x0000 |       0
+;      23 | lbl         |   false    |  0x0000 |       0
+;      26 | txt         |   false    |  0x0000 |       0
+;      30 | END         |   false    |  0x0000 |       0
+;
+;   SCAM-file: Assembled
+;    Addr |  ScAM  | Instr    Operand  | hasData | isData
+;   ------+--------+-------------------+---------+--------
+;       0 | 0x4000 | 01000000 00000000 |  true   |
+;       1 | 0x0006 | 00000000 00000110 |         |  true
+;       2 | 0x002A | 00000000 00101010 |         |
+;       3 | 0x00F3 | 00000000 11110011 |         |
+;       4 | 0x0004 | 00000000 00000100 |         |
+;       5 | 0x000C | 00000000 00001100 |         |
+;       6 | 0x0000 | 00000000 00000000 |         |
+;       7 | 0x2014 | 00100000 00010100 |         |
+;       8 | 0x3110 | 00110001 00010000 |  true   |
+;       9 | 0x00D5 | 00000000 11010101 |         |  true
+;      10 | 0x3210 | 00110010 00010000 |  true   |
+;      11 | 0x000C | 00000000 00001100 |         |  true
+;      12 | 0x3200 | 00110010 00000000 |  true   |
+;      13 | 0x002A | 00000000 00101010 |         |  true
+;      14 | 0x0134 | 00000001 00110100 |         |
+;      15 | 0x0201 | 00000010 00000001 |         |
+;      16 | 0x039F | 00000011 10011111 |         |
+;      17 | 0x4100 | 01000001 00000000 |  true   |
+;      18 | 0x0014 | 00000000 00010100 |         |  true
+;      19 | 0x0130 | 00000001 00110000 |         |
+;      20 | 0x0000 | 00000000 00000000 |         |
+;      21 | 0x4000 | 01000000 00000000 |  true   |
+;      22 | 0x0017 | 00000000 00010111 |         |  true
+;      23 | 0x0610 | 00000110 00010000 |         |
+;      24 | 0x1603 | 00010110 00000011 |         |
+;      25 | 0x0000 | 00000000 00000000 |         |
+;      26 | 0x0430 | 00000100 00110000 |         |
+;      27 | 0x1F53 | 00011111 01010011 |         |
+;      28 | 0x4200 | 01000010 00000000 |  true   |
+;      29 | 0x001E | 00000000 00011110 |         |  true
+;      30 | 0x4000 | 01000000 00000000 |  true   |
+;      31 | 0x001E | 00000000 00011110 |         |  true

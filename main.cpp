@@ -6,6 +6,7 @@
 #define	THROW_EXCEPTIONS	// Uncomment to enable Exception checking and throwing.
 
 #include <iostream>
+#include <iomanip>
 #include "ScottyCPU.hpp"
 
 #include "utils.hpp"
@@ -28,20 +29,34 @@ using namespace std;
 static struct SETTINGS {
 	float clk_freq		= 1.0F;
 	bool debug			= false;
-	string version		= "0.4.18";
+	string version		= "0.4.39";
+	bool parseScAM		= true;
+	bool loadScHex		= false;
+	string scamFile		= "";
+	string schexFile	= "";
 } ScottySettings;
 
 /**
  *	\brief	Print the usage (command line arguments) of this program and exit.
  */
 void showUsage(char* _name) {
-	string name(_name);
+	string name(_name),
+		   help_1 = " [-h|-H] [-d|-D] [-c|-C <float>] [-i|-I]",
+		   help_2 = " [-l|-L|-a|-A <file>] [-o <file>] [-hex <file>]";
 	stringstream usage;
-	usage << "Usage: " << name.substr(name.find_last_of('\\') + 1)
-		  << " [-d|-D] [-c|-C <float>] [-i|-I]" << endl
-		  << "  -d, -D, --debug    Execute UnitTests" << endl
-		  << "  -c, -C <float>     Set the ScottyCPU clock frequency" << endl
-		  << "  -i, -I             Show InstructionSet" << endl
+
+	name = "Usage: " + name.substr(name.find_last_of('\\') + 1);
+
+	usage << name << help_1 << endl
+		  << std::setw(name.size() + help_2.size()) << help_2				<< endl << endl
+		  << "  -h, -H, --help     Show this help message"					<< endl
+		  << "  -d, -D, --debug    Execute UnitTests"						<< endl
+		  << "  -c, -C  <float>	   Set the ScottyCPU clock frequency"		<< endl
+		  << "  -i, -I             Show InstructionSet"						<< endl
+		  << "  -l, -L  <file>     Load .ScAM file and parse"				<< endl
+		  << "  -a, -A  <file>     Load .ScAM file and compile to .ScHex"	<< endl
+		  << "  -o		<file>     Specify output file for assembly"		<< endl
+		  << "  -hex    <file>     Load .ScHex file into ScottyCPU RAM"		<< endl
 		  << endl;
 
 	//fprintf(stderr, usage.str().c_str());
@@ -70,7 +85,7 @@ int main(int argc, char *argv[]) {
 			if (arg == "-d" || arg == "-D" || arg == "--debug") {
 				/// Enable debugging
 				ScottySettings.debug = true;
-			} else if (arg == "-h" || arg == "-H") {
+			} else if (arg == "-h" || arg == "-H" || arg == "--help") {
 				/// Show usage
 				showUsage(argv[0]);
 			} else if (arg == "-c" || arg == "-C") {
@@ -79,6 +94,17 @@ int main(int argc, char *argv[]) {
 			} else if (arg == "-i" || arg == "-I") {
 				/// Show InstructionSet
 				CPUInstructions::printInstructionSet();
+			} else if (arg == "-l" || arg == "-L" || arg == "-a" || arg == "-A") {
+				/// Parse ScAM file
+				ScottySettings.parseScAM = (arg == "-l" || arg == "-L");
+				ScottySettings.scamFile = std::string(argv[++i]);
+			} else if (arg == "-o") {
+				/// Set output .ScHex file
+				ScottySettings.schexFile = std::string(argv[++i]);
+			} else if (arg == "-hex") {
+				/// Load .ScHex file
+				ScottySettings.loadScHex = true;
+				ScottySettings.schexFile = std::string(argv[++i]);
 			} else {
 				/// Show usage
 				showUsage(argv[0]);
@@ -92,7 +118,25 @@ int main(int argc, char *argv[]) {
 			runTests();
 		#endif
 
+		if (!ScottySettings.scamFile.empty()) {
+			if (ScottySettings.parseScAM) {
+				CPUFactory::SCAMParser parser (ScottySettings.scamFile);
+				std::cout << parser;
+			} else {
+				CPUFactory::SCAMAssembler assembler(ScottySettings.scamFile);
+				std::cout << assembler;
+				assembler.exportScHex(ScottySettings.schexFile);
+			}
+		}
+
 		CPUComponents::ScottyCPU<16u, 10u, 10u> cpu(ScottySettings.clk_freq);
+
+		if (ScottySettings.loadScHex) {
+//			auto buffer = SysUtils::readBinaryFile(ScottySettings.schexFile);
+//			cpu.loadInRAM(buffer);
+		}
+
+		(void) cpu;
 
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;

@@ -56,4 +56,6 @@ HEADERS += \
     CPUFactory/SCAMAssembler.hpp
 
 DISTFILES += \
-    Programs/example.scam
+    Programs/example.scam \
+    Programs/example_corrected.scam \
+    Programs/example_corrected.schex

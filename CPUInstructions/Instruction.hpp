@@ -143,7 +143,7 @@ namespace CPUInstructions {
 		{ "DATA",	{ UINT(InstructionSet::DATA),	OperandType::REG, OperandType::VAL,	} },
 		{ "DATAC",	{ UINT(InstructionSet::DATAC),	OperandType::REG, OperandType::LBL,	} },
 
-		{ "NOP",	{ UINT(InstructionSet::NOP),	OperandType::NONE, OperandType::NONE} },
+		{ "NOP",	{ UINT(InstructionSet::NOP),	OperandType::NONE,OperandType::NONE} },
 
 		{ "JMP",	{ UINT(InstructionSet::JMP),	OperandType::LBL, OperandType::NONE	} },
 
@@ -170,8 +170,16 @@ namespace CPUInstructions {
 		{ "JLEZ",	{ UINT(InstructionSet::JLEZ),	OperandType::LBL, OperandType::NONE	} },
 		{ "JCLEZ",	{ UINT(InstructionSet::JCLEZ),	OperandType::LBL, OperandType::NONE	} },
 
-		{ "CLF",	{ UINT(InstructionSet::CLF),	OperandType::NONE, OperandType::NONE} }
+		{ "CLF",	{ UINT(InstructionSet::CLF),	OperandType::NONE,OperandType::NONE} }
 	};
+
+	static bool isValidInstruction(const std::string& str) {
+		return std::mapHasKey(CPUInstructions::InstructionLUT, str);
+	}
+
+	static const CPUInstructions::InstructionInfo& getInstructionInfo(const std::string& str) {
+		return std::mapGetMapped(CPUInstructions::InstructionLUT, str);
+	}
 
 	/** TO-DO
 	 *
