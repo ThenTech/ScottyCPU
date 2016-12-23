@@ -27,12 +27,12 @@ This batchfile can be used to copy files from working dir to GitHub dir for comm
  3. By using the [SynchrotronComponent class](https://github.com/Wosser1sProductions/Synchrotron) every `Gate` is now able to connects its output to inputs of other `Gates` and vica versa (*Signals & Slots* paradigm).
  4. Creating more components:
    - Added `SynchrotronComponentFixedInput`: with a fixed/minimum amount of inputs (e.g. `NOTGate` must have at most 1 input, `ANDGate` cannot take less than 2 inputs...)
-   - Added SHIFTLeft and SHIFTRight to shift the connected signal by one to the left or right respectively.
+   - Added `SHIFTLeft` and `SHIFTRight` to shift the connected signal by one to the left or right respectively.
    - Added UML diagram
-   - Added Instruction and Instruction set
-   - Added Instruction equivalent for every CPUComponent
-   - Added Bitset representations
-   - Added SCAMParser and SCAMAssembler to parse and compile .ScAM files (Scotty Assembler Markup)
+   - Added `Instruction` and `InstructionSet`
+   - Added `Instruction` equivalent for every `CPUComponent`
+   - Added `bitset` representations
+   - Added `SCAMParser` and `SCAMAssembler` to parse and compile .ScAM files (Scotty Assembler Markup)
  
 #### Next
 Adding additional implementations of `SynchrotronComponent` for extra functionality:
