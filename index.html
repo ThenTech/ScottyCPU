@@ -83,10 +83,12 @@ this ingenious, yet basically simple invention called a computer.</p>
 
 <ul>
 <li>Added <code>SynchrotronComponentFixedInput</code>: with a fixed/minimum amount of inputs (e.g. <code>NOTGate</code> must have at most 1 input, <code>ANDGate</code> cannot take less than 2 inputs...)</li>
-<li>Added SHIFTLeft and SHIFTRight to shift the connected signal by one to the left or right respectively.</li>
+<li>Added <code>SHIFTLeft</code> and <code>SHIFTRight</code> to shift the connected signal by one to the left or right respectively.</li>
 <li>Added UML diagram</li>
-<li>Added Instruction and Instruction set</li>
-<li>Added Instruction equivalent for every CPUComponent</li>
+<li>Added <code>Instruction</code> and <code>InstructionSet</code></li>
+<li>Added <code>Instruction</code> equivalent for every <code>CPUComponent</code></li>
+<li>Added <code>bitset</code> representations</li>
+<li>Added <code>SCAMParser</code> and <code>SCAMAssembler</code> to parse and compile .ScAM files (Scotty Assembler Markup)</li>
 </ul>
 </li>
 </ol>
@@ -97,9 +99,10 @@ this ingenious, yet basically simple invention called a computer.</p>
 <p>Adding additional implementations of <code>SynchrotronComponent</code> for extra functionality:</p>
 
 <ul>
-<li>A <code>SynchrotronComponent</code> with an extra enable input (which can only be connected once)</li>
-<li>Other <code>CPUComponents</code>
-</li>
+  <li>A <code>SynchrotronComponent</code> with an extra enable input (which can only be connected once)</li>
+  <li>Other <code>CPUComponents</code></li>
+  <li>Functioning <code>ControlUnit</code></li>
+  <li>GUI connection with <a href="https://github.com/llewella20/Scotty_Output_GUI">Scotty Output GUI</a></li>
 </ul>
       </section>
     </div>
