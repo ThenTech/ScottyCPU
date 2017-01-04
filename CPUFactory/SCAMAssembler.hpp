@@ -33,6 +33,8 @@ namespace CPUFactory {
 	class SCAMAssembler : public SCAMParser {
 		protected:
 
+			std::string schexFile;
+
 			std::unordered_map<std::string, CPUFactory::SymbolTableEntry*> *symbol_table;
 
 			std::vector<CPUFactory::AssembledEntry*> *assembled;
@@ -191,13 +193,19 @@ namespace CPUFactory {
 
 		public:
 			SCAMAssembler(const std::string& filename)
-				: SCAMParser(filename), symbol_table(nullptr), assembled(nullptr)  {}
+				: SCAMParser(filename),
+				  schexFile(std::strErasedFrom(filename, ".") + SCAMAssembler::EXTENSION),
+				  symbol_table(nullptr), assembled(nullptr) {}
 
 			~SCAMAssembler() {
 				if (this->symbol_table != nullptr)
 					SysUtils::deallocMap(this->symbol_table);
 				if (this->assembled != nullptr)
 					SysUtils::deallocVector(this->assembled);
+			}
+
+			const std::string& getFileName(void) const {
+				return this->schexFile;
 			}
 
 			bool compile(void) {
@@ -291,7 +299,7 @@ namespace CPUFactory {
 			void exportScHex(const std::string& filename = "") {
 				//std::string hexfile = this->tohex().toString();
 
-				std::string file = (filename.empty() ? std::strErasedFrom(this->scamFile, ".") : filename) + SCAMAssembler::EXTENSION;
+				this->schexFile = (filename.empty() ? std::strErasedFrom(this->scamFile, ".") : filename) + SCAMAssembler::EXTENSION;
 				size_t pos = 0;
 				const size_t length = this->getAssembledEntries().size() * 2;
 				char *buffer = SysUtils::allocArray<char>(length);
@@ -301,7 +309,7 @@ namespace CPUFactory {
 					buffer[pos++] = a->OPERANDS;
 				}
 
-				SysUtils::writeBinaryFile(file, buffer, length);
+				SysUtils::writeBinaryFile(this->schexFile, buffer, length);
 
 				SysUtils::deallocArray<char>(buffer);
 			}

@@ -315,9 +315,11 @@ namespace SysUtils {
 			str->assign((std::istreambuf_iterator<char>(file)),
 						 std::istreambuf_iterator<char>());
 		} catch (...) {
+			file.close();
 			throw Exceptions::FileReadException(filename);
 		}
 
+		file.close();
 		return str;
 	}
 
@@ -337,6 +339,33 @@ namespace SysUtils {
 		}
 
 		file.close();
+	}
+
+	/**
+	 *	\brief TO-DO
+	 *	\param filename
+	 *
+	 *	\return	std::vector<char>*
+	 *			A vector with buffer->size() bytes containing a program in raw binary.
+	 *			Print with cast to (unsigned char) for proper viewing.
+	 */
+	std::vector<char>* readBinaryFile(const std::string filename) {
+		std::vector<char> *v_buff = new std::vector<char>();
+		std::ifstream file(filename, std::ifstream::binary);
+
+		try {
+			file.seekg(0, std::ios::end);
+			v_buff->reserve((size_t) file.tellg());
+			file.seekg(0, std::ios::beg);
+			v_buff->assign((std::istreambuf_iterator<char>(file)),
+							std::istreambuf_iterator<char>());
+		} catch (...) {
+			file.close();
+			throw Exceptions::FileReadException(filename);
+		}
+
+		file.close();
+		return v_buff;
 	}
 
 	/**

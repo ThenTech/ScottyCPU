@@ -8,7 +8,7 @@ using namespace Synchrotron;
 
 /** \brief	Extra registers for the CU.
  */
-#define	EXTRA_CPU_REGISTERS	2
+#define	EXTRA_CPU_REGISTERS	3
 
 
 namespace CPUComponents {
@@ -29,13 +29,17 @@ namespace CPUComponents {
 			 */
 			Memory<bit_width, reg_size + EXTRA_CPU_REGISTERS>	*_REG;
 
-			/**	\brief	Flags register.
+			/**	\brief	Address of flags register.
 			 */
-			bitset<bit_width> REG_FLAGS_ADDR;
+			const std::bitset<bit_width> REG_FLAGS_ADDR;
 
-			/**	\brief	Register containing the address in RAM to execute.
+			/**	\brief	Address of register containing the address in RAM to execute.
 			 */
-			bitset<bit_width> REG_ProgCounter_ADDR;
+			const std::bitset<bit_width> REG_PROGRAM_COUNTER_ADDR;
+
+			/**	\brief	Address of register containing the instruction to execute.
+			 */
+			const std::bitset<bit_width> REG_INTRUCTION_REGISTER_ADDR;
 
 		public:
 
@@ -44,7 +48,8 @@ namespace CPUComponents {
 			ControlUnit()
 				: _REG(SysUtils::allocVar<Memory<bit_width, reg_size + EXTRA_CPU_REGISTERS>>()),
 				  REG_FLAGS_ADDR(_REG->getMaxAddress().to_ulong()),
-				  REG_ProgCounter_ADDR(_REG->getMaxAddress().to_ulong() - 1)
+				  REG_PROGRAM_COUNTER_ADDR(_REG->getMaxAddress().to_ulong() - 1),
+				  REG_INTRUCTION_REGISTER_ADDR(_REG->getMaxAddress().to_ulong() - 2)
 			{
 				// Empty
 			}

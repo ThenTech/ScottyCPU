@@ -55,7 +55,7 @@ void showUsage(char* _name) {
 		  << "  -i, -I             Show InstructionSet"						<< endl
 		  << "  -l, -L  <file>     Load .ScAM file and parse"				<< endl
 		  << "  -a, -A  <file>     Load .ScAM file and compile to .ScHex"	<< endl
-		  << "  -o		<file>     Specify output file for assembly"		<< endl
+		  << "  -o      <file>     Specify output file for assembly"		<< endl
 		  << "  -hex    <file>     Load .ScHex file into ScottyCPU RAM"		<< endl
 		  << endl;
 
@@ -125,15 +125,19 @@ int main(int argc, char *argv[]) {
 			} else {
 				CPUFactory::SCAMAssembler assembler(ScottySettings.scamFile);
 				std::cout << assembler;
-				assembler.exportScHex(ScottySettings.schexFile);
+				if (!assembler.hasErrors())
+					assembler.exportScHex(ScottySettings.schexFile);
 			}
 		}
 
-		CPUComponents::ScottyCPU<16u, 10u, 10u> cpu(ScottySettings.clk_freq);
+		CPUComponents::ScottyCPU<16u, 64u, 16u> cpu(ScottySettings.clk_freq);
 
 		if (ScottySettings.loadScHex) {
-//			auto buffer = SysUtils::readBinaryFile(ScottySettings.schexFile);
-//			cpu.loadInRAM(buffer);
+			std::vector<char> *buffer = SysUtils::readBinaryFile(ScottySettings.schexFile);
+
+			cpu.staticLoader(buffer);
+
+			SysUtils::deallocVar(buffer);
 		}
 
 		(void) cpu;
