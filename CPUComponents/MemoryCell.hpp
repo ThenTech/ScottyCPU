@@ -48,16 +48,22 @@ namespace CPUComponents {
 			 */
 			~MemoryCell() {}
 
+			void setState(const std::bitset<bit_width>& newstate) {
+				this->state = newstate;
+			}
+
 			/**	\brief
 			 *		The tick() method will be called when one of this Gate's inputs issues an emit().
 			 */
 			void tick(void) {
 				//if (enabled) {
-					std::bitset<bit_width> prevState = this->state;
+//					std::bitset<bit_width> prevState = this->state;
 
-					this->state = this->getInput().getState();
+//					this->state = this->getInput().getState();
 
-					if (prevState != this->state) this->emit();
+//					if (prevState != this->state) this->emit();
+
+					this->emit();
 				//}
 			}
 	};

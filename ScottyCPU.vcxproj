@@ -173,6 +173,12 @@
     <ClInclude Include="UnitTest.hpp" />
     <ClInclude Include="utils.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\icoBeamMeUp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ScottyResources.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

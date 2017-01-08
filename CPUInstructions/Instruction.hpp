@@ -274,6 +274,16 @@ namespace CPUInstructions {
 			}
 
 			/**
+			 *	\brief	Copy flags.
+			 *
+			 *	\param	f
+			 *		The flags to copy.
+			 */
+			inline void setFlags(const std::bitset<UINT(FLAGS::FLAGS_COUNT)>& f) {
+				this->REG_FLAGS = f;
+			}
+
+			/**
 			 *	\brief	Set a flag if result is Zero of Negative (output from Logic Gates).
 			 *
 			 *	\param	result

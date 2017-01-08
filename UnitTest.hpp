@@ -1829,9 +1829,9 @@ void testInstructionLUT(void) {
 	//CPUFactory::SCAMParser scamfile("Programs/example_corrected.scam");
 	//std::cout << scamfile;
 
-	CPUFactory::SCAMAssembler scamfile("Programs/example_corrected.scam");
-	std::cout << scamfile;
-	scamfile.exportScHex();
+//	CPUFactory::SCAMAssembler scamfile("Programs/example_corrected.scam");
+//	std::cout << scamfile;
+//	scamfile.exportScHex();
 }
 
 /*
@@ -1839,6 +1839,8 @@ void testInstructionLUT(void) {
  */
 void runTests(void) {
 	int errorlevel = 0;
+
+	std::cout << "Starting UnitTests..." << std::endl;
 
 	try {
 		testBitset();

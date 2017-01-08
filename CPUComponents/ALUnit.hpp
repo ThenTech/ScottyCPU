@@ -39,12 +39,6 @@ namespace CPUComponents {
 			 */
 			InstructionSet operation;
 
-			/**
-			 *	\brief	The Register containing ALU flags.
-			 */
-			//bitset<(size_t) FLAGS::FLAGS_COUNT> REG_FLAGS;
-			FlagRegister REG_FLAGS;
-
 			/**	\brief	ALU Instructions AND
 			 */
 			ANDInstruction<bit_width>	_AND;
@@ -122,22 +116,25 @@ namespace CPUComponents {
 					return;
 
 				std::initializer_list<SynchrotronComponent<bit_width>*> inputList
-						= { *this->getInputs().begin(), *this->getInputs().end() };
+						= { *this->getInputs().begin(), *this->getInputs().rbegin() };
 
 				this->_AND.addInput(inputList);
 				this->_NAND.addInput(inputList);
 				this->_OR.addInput(inputList);
 				this->_NOR.addInput(inputList);
 				this->_XOR.addInput(inputList);
-				this->_NOT.addInput(inputList);
+				this->_NOT.addInput(**this->getInputs().begin());
 				this->_ADD.addInput(inputList);
 				this->_SUB.addInput(inputList);
 				this->_MUL.addInput(inputList);
 				this->_DIV.addInput(inputList);
 				this->_MOD.addInput(inputList);
-				this->_SHL.addInput(inputList);
-				this->_SHR.addInput(inputList);
+				this->_SHL.addInput(**this->getInputs().begin());
+				this->_SHR.addInput(**this->getInputs().begin());
 				this->_CMP.addInput(inputList);
+
+				this->removeInput(**this->getInputs().begin());
+				this->removeInput(**this->getInputs().begin());
 			}
 
 			/**	\brief	Set the operation/instruction to execute on tick().
@@ -147,6 +144,10 @@ namespace CPUComponents {
 			 */
 			void setOperation(InstructionSet _instr) {
 				this->operation = _instr;
+			}
+
+			void clearFlagsReg(void) {
+				this->clearFlags();
 			}
 
 			/**	\brief	The tick() method will be called when one of this SynchrotronComponent's inputs issues an emit().
@@ -163,20 +164,21 @@ namespace CPUComponents {
 					//				by "this->REG_FLAGS	= this->_AND;"
 					//				or "this->REG_FLAGS	= (FlagRegister) this->_AND;"
 					//				instead?
-					case InstructionSet::AND:	this->state = this->_AND.getState();	this->REG_FLAGS	= this->_AND.getFlags();	break;
-					case InstructionSet::NAND:	this->state = this->_NAND.getState();	this->REG_FLAGS	= this->_NAND.getFlags();	break;
-					case InstructionSet::OR:	this->state = this->_OR.getState();		this->REG_FLAGS	= this->_OR.getFlags(); 	break;
-					case InstructionSet::NOR:	this->state = this->_NOR.getState();	this->REG_FLAGS	= this->_NOR.getFlags(); 	break;
-					case InstructionSet::XOR:	this->state = this->_XOR.getState();	this->REG_FLAGS	= this->_XOR.getFlags();	break;
-					case InstructionSet::NOT:	this->state = this->_NOT.getState();	this->REG_FLAGS	= this->_NOT.getFlags(); 	break;
-					case InstructionSet::ADD:	this->state = this->_ADD.getState();	this->REG_FLAGS	= this->_ADD.getFlags();	break;
-					case InstructionSet::SUB:	this->state = this->_SUB.getState();	this->REG_FLAGS	= this->_SUB.getFlags();	break;
-					case InstructionSet::MUL:	this->state = this->_MUL.getState();	this->REG_FLAGS	= this->_MUL.getFlags();	break;
-					case InstructionSet::DIV:	this->state = this->_DIV.getState();	this->REG_FLAGS	= this->_DIV.getFlags();	break;
-					case InstructionSet::MOD:	this->state = this->_MOD.getState();	this->REG_FLAGS	= this->_MOD.getFlags();	break;
-					case InstructionSet::SHL:	this->state = this->_SHL.getState();	this->REG_FLAGS	= this->_SHL.getFlags();	break;
-					case InstructionSet::SHR:	this->state = this->_SHR.getState();	this->REG_FLAGS	= this->_SHR.getFlags();	break;
-					case InstructionSet::CMP:	this->state = this->_CMP.getState();	this->REG_FLAGS	= this->_CMP.getFlags();	break;
+					case InstructionSet::AND:	this->state = this->_AND.getState();	this->setFlags(this->_AND.getFlags());	break;
+					case InstructionSet::NAND:	this->state = this->_NAND.getState();	this->setFlags(this->_NAND.getFlags());	break;
+					case InstructionSet::OR:	this->state = this->_OR.getState();		this->setFlags(this->_OR.getFlags()); 	break;
+					case InstructionSet::NOR:	this->state = this->_NOR.getState();	this->setFlags(this->_NOR.getFlags()); 	break;
+					case InstructionSet::XOR:	this->state = this->_XOR.getState();	this->setFlags(this->_XOR.getFlags());	break;
+					case InstructionSet::NOT:	this->state = this->_NOT.getState();	this->setFlags(this->_NOT.getFlags()); 	break;
+					case InstructionSet::ADD:	this->state = this->_ADD.getState();	this->setFlags(this->_ADD.getFlags());	break;
+					case InstructionSet::SUB:	this->state = this->_SUB.getState();	this->setFlags(this->_SUB.getFlags());	break;
+					case InstructionSet::MUL:	this->state = this->_MUL.getState();	this->setFlags(this->_MUL.getFlags());	break;
+					case InstructionSet::DIV:	this->state = this->_DIV.getState();	this->setFlags(this->_DIV.getFlags());	break;
+					case InstructionSet::MOD:	this->state = this->_MOD.getState();	this->setFlags(this->_MOD.getFlags());	break;
+					case InstructionSet::SHL:	this->state = this->_SHL.getState();	this->setFlags(this->_SHL.getFlags());	break;
+					case InstructionSet::SHR:	this->state = this->_SHR.getState();	this->setFlags(this->_SHR.getFlags());	break;
+					case InstructionSet::CMP:	this->state = this->_CMP.getState();	this->setFlags(this->_CMP.getFlags());	break;
+					case InstructionSet::NOP:	break;
 					default:
 						throw Exceptions::Exception("ALU: Unsupported Arithmetic or Logic operation!");
 						break;

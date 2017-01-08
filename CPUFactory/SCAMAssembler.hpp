@@ -258,7 +258,7 @@ namespace CPUFactory {
 								||	(instr.Op1_type ==CPUInstructions::OperandType::LBL))
 								++start;
 							if (	(instr.Op1_type == CPUInstructions::OperandType::VAL)
-									&& (instr.Op2_type == CPUInstructions::OperandType::VAL))
+								&&	(instr.Op2_type == CPUInstructions::OperandType::VAL))
 								++start;
 						}
 					}

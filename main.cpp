@@ -29,7 +29,7 @@ using namespace std;
 static struct SETTINGS {
 	float clk_freq		= 1.0F;
 	bool debug			= false;
-	string version		= "0.4.39";
+	string version		= "0.4.42";
 	bool parseScAM		= true;
 	bool loadScHex		= false;
 	string scamFile		= "";
@@ -51,7 +51,7 @@ void showUsage(char* _name) {
 		  << std::setw(name.size() + help_2.size()) << help_2				<< endl << endl
 		  << "  -h, -H, --help     Show this help message"					<< endl
 		  << "  -d, -D, --debug    Execute UnitTests"						<< endl
-		  << "  -c, -C  <float>	   Set the ScottyCPU clock frequency"		<< endl
+		  << "  -c, -C  <float>    Set the ScottyCPU clock frequency"		<< endl
 		  << "  -i, -I             Show InstructionSet"						<< endl
 		  << "  -l, -L  <file>     Load .ScAM file and parse"				<< endl
 		  << "  -a, -A  <file>     Load .ScAM file and compile to .ScHex"	<< endl
@@ -137,10 +137,15 @@ int main(int argc, char *argv[]) {
 
 			cpu.staticLoader(buffer);
 
-			SysUtils::deallocVar(buffer);
-		}
+			std::cout << "Loaded binary file \"" << ScottySettings.schexFile << "\" into RAM. " << std::endl;
 
-		(void) cpu;
+			SysUtils::deallocVar(buffer);
+
+			while (1) {
+				cpu.step();
+				SysUtils::callSystemCmd("PAUSE");
+			}
+		}
 
 	} catch (Exceptions::Exception const& e) {
 		std::cerr << e.getMessage() << std::endl;

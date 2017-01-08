@@ -5,6 +5,7 @@
 #include "CPUComponents/ControlUnit.hpp"
 #include "CPUComponents/Memory.hpp"
 #include "CPUComponents/Clock.hpp"
+#include "CPUComponents/MemoryCell.hpp"
 
 #include "utils.hpp"
 
@@ -32,14 +33,14 @@ namespace CPUComponents {
 			ALUnit<bit_width>					*_ALU;
 
 			/**
-			 *	\brief	The ControlUnit for the Scotty CPU.
-			 */
-			ControlUnit<bit_width, reg_size>	*_CU;
-
-			/**
 			 *	\brief	The Memory for the Scotty CPU.
 			 */
 			Memory<bit_width, mem_size>			*_RAM;
+
+			/**
+			 *	\brief	The ControlUnit for the Scotty CPU.
+			 */
+			ControlUnit<bit_width, mem_size, reg_size>	*_CU;
 
 			/**
 			 *	\brief	The Clock for the Scotty CPU.
@@ -49,12 +50,12 @@ namespace CPUComponents {
 			/**
 			 *	\brief	The common bus for the Scotty CPU.
 			 */
-			SynchrotronComponent<bit_width>		_BUS;
+			MemoryCell<bit_width>				_BUS;
 
 			/**
 			 *	\brief	A buffer register for the ALU.
 			 */
-			SynchrotronComponent<bit_width>		_ALU_BUFFER;
+			MemoryCell<bit_width>				_ALU_BUFFER;
 
 		public:
 
@@ -65,8 +66,9 @@ namespace CPUComponents {
 			 */
 			ScottyCPU(float clk_freq)
 				: _ALU(SysUtils::allocVar<ALUnit<bit_width>>()),
-				  _CU(SysUtils::allocVar<ControlUnit<bit_width, reg_size>>()),
 				  _RAM(SysUtils::allocVar<Memory<bit_width, mem_size>>()),
+				 // _CU(SysUtils::allocVar<ControlUnit<bit_width, mem_size, reg_size>(_ALU, _RAM, &_BUS, &_ALU_BUFFER)>()),
+				  _CU(new ControlUnit<bit_width, mem_size, reg_size>(_ALU, _RAM, &_BUS, &_ALU_BUFFER)),
 				  _clk(clk_freq)
 			{
 				#ifdef THROW_EXCEPTIONS
@@ -76,6 +78,7 @@ namespace CPUComponents {
 				this->_clk.addOutput(*this->_CU);
 				this->_ALU->addInput(this->_BUS);
 				this->_ALU->addInput(this->_ALU_BUFFER);
+				this->_ALU->connectInternal();
 			}
 
 			/**
@@ -95,7 +98,7 @@ namespace CPUComponents {
 
 			/**	\brief	Returns the CU of the CPU.
 			 */
-			const ControlUnit<bit_width, reg_size>& getControlUnit(void) const {
+			/* const */ ControlUnit<bit_width, mem_size, reg_size>& getControlUnit(void) const {
 				return *this->_CU;
 			}
 
@@ -155,6 +158,31 @@ namespace CPUComponents {
 				this->_clk();
 
 				//_clk.startThread();
+			}
+
+			void step(void) {
+				std::bitset<bit_width> *range = this->getRAM().getDataRange(0, this->getRAM().getMaxAddress());
+				std::stringstream ss;
+				for (size_t i = 0; i < this->getRAM().getMaxAddress().to_ulong(); ++i)
+					ss << range[i].to_string() << std::endl;
+
+				SysUtils::writeStringToFile("RAMdump.txt", ss.str());
+
+				SysUtils::deallocArray(range);
+				range = nullptr;
+
+
+				range = this->getControlUnit().getRegisters().getDataRange(0, this->getControlUnit().getRegisters().getMaxAddress());
+				std::stringstream st;
+				for (size_t i = 0; i < this->getControlUnit().getRegisterSize(); ++i)
+					st << range[i].to_string() << std::endl;
+
+				SysUtils::writeStringToFile("REGdump.txt", st.str());
+
+				SysUtils::deallocArray(range);
+
+
+				this->getControlUnit().tick();
 			}
 	};
 
