@@ -173,7 +173,7 @@ namespace CPUFactory {
 			SCAMParser(const std::string& filename)
 				: scamFile(filename), rawFileData(nullptr), instr_entries(nullptr), parse_errors(nullptr) {
 				// Possible unexpected behaviour if path contains '.' in dir name
-				std::string ext = std::strErasedTo(scamFile, ".");
+				std::string ext = std::strErasedToLast(scamFile, ".");
 				if (ext != SCAMParser::EXTENSION)
 					throw Exceptions::UnexpectedExtension(ext);
 

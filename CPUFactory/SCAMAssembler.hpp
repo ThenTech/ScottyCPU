@@ -299,7 +299,7 @@ namespace CPUFactory {
 			void exportScHex(const std::string& filename = "") {
 				//std::string hexfile = this->tohex().toString();
 
-				this->schexFile = (filename.empty() ? std::strErasedFrom(this->scamFile, ".") : filename) + SCAMAssembler::EXTENSION;
+				this->schexFile = (filename.empty() ? std::strErasedFromLast(this->scamFile, ".") : filename) + SCAMAssembler::EXTENSION;
 				size_t pos = 0;
 				const size_t length = this->getAssembledEntries().size() * 2;
 				char *buffer = SysUtils::allocArray<char>(length);
@@ -320,47 +320,54 @@ namespace CPUFactory {
 				}
 
 				std::stringstream os;
-				char *tmp = SysUtils::allocArray<char>(83);
 
 				os << SCAMParser::toString();
 
-				/**********************************************************************/
-				/* Sort InstructionLUT by re-inserting Pairs in std::set with custom sorter */
-				typedef std::pair<std::string const, CPUFactory::SymbolTableEntry const*> Pair;
-
-				struct linenr_sort {
-					inline bool operator() (const Pair& lhs, const Pair& rhs) const {
-						return lhs.second->LINENR <= rhs.second->LINENR;
-					}
-				};
-
-				std::set<Pair, linenr_sort> sortedLUT(this->getSymbolEntries().begin(), this->getSymbolEntries().end());
-				/****************************************************************************/
-
-				os << std::endl << "SCAM-file: Symboltable" << std::endl;
-				os << " Addr |    Label    | isConstant |  Value  | Decimal"  << std::endl;
-				os << "------+-------------+------------+---------+---------" << std::endl;
-
-				for (const Pair& s : sortedLUT)
-					os << SysUtils::stringFormat(tmp, 83, " %4d | %-11s |   %-5s    |  0x%04X | % 7d",
-												 s.second->LINENR, s.first.c_str(), BOOLSTR(s.second->isConstant), s.second->DATA, s.second->DATA)
+				if (this->hasErrors()) {
+					os << std::endl << "There were errors while parsing the file,"
+					   << std::endl << "please resolve them to be able to assemble it."
 					   << std::endl;
+				} else {
+					char *tmp = SysUtils::allocArray<char>(83);
 
-				os << std::endl << "SCAM-file: Assembled" << std::endl;
-				os << " Addr |  ScAM  | Instr    Operand  | hasData | isData" << std::endl;
-				os << "------+--------+-------------------+---------+--------" << std::endl;
+					/**********************************************************************/
+					/* Sort SymbolTable by re-inserting Pairs in std::set with custom sorter */
+					typedef std::pair<std::string const, CPUFactory::SymbolTableEntry const*> Pair;
 
-				for (CPUFactory::AssembledEntry* a : this->getAssembledEntries())
-					os << SysUtils::stringFormat(tmp, 83, " %4d | 0x%02X%02X | %8s %8s |  %-5s  |  %-5s",
-												 a->LINENR,
-												 a->INSTR, a->OPERANDS,
-												 std::bitset<8>(a->INSTR).to_string().c_str(),
-												 std::bitset<8>(a->OPERANDS).to_string().c_str(),
-												 a->hasData ? BOOLSTR(a->hasData) : "",
-												 a->isData  ? BOOLSTR(a->isData)  : "")
-					   << std::endl;
+					struct linenr_sort {
+							inline bool operator() (const Pair& lhs, const Pair& rhs) const {
+								return lhs.second->LINENR <= rhs.second->LINENR;
+							}
+					};
 
-				SysUtils::deallocArray(tmp);
+					std::set<Pair, linenr_sort> sortedLUT(this->getSymbolEntries().begin(), this->getSymbolEntries().end());
+					/****************************************************************************/
+
+					os << std::endl << "SCAM-file: Symboltable" << std::endl;
+					os << " Addr |    Label    | isConstant |  Value  | Decimal"  << std::endl;
+					os << "------+-------------+------------+---------+---------" << std::endl;
+
+					for (const Pair& s : sortedLUT)
+						os << SysUtils::stringFormat(tmp, 83, " %4d | %-11s |   %-5s    |  0x%04X | % 7d",
+													 s.second->LINENR, s.first.c_str(), BOOLSTR(s.second->isConstant), s.second->DATA, s.second->DATA)
+						   << std::endl;
+
+					os << std::endl << "SCAM-file: Assembled" << std::endl;
+					os << " Addr |  ScAM  | Instr    Operand  | hasData | isData" << std::endl;
+					os << "------+--------+-------------------+---------+--------" << std::endl;
+
+					for (CPUFactory::AssembledEntry* a : this->getAssembledEntries())
+						os << SysUtils::stringFormat(tmp, 83, " %4d | 0x%02X%02X | %8s %8s |  %-5s  |  %-5s",
+													 a->LINENR,
+													 a->INSTR, a->OPERANDS,
+													 std::bitset<8>(a->INSTR).to_string().c_str(),
+													 std::bitset<8>(a->OPERANDS).to_string().c_str(),
+													 a->hasData ? BOOLSTR(a->hasData) : "",
+													 a->isData  ? BOOLSTR(a->isData)  : "")
+						   << std::endl;
+
+					SysUtils::deallocArray(tmp);
+				}
 
 				return os.str();
 			}

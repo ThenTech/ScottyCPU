@@ -61,7 +61,6 @@ void showUsage(char* _name) {
 
 	//fprintf(stderr, usage.str().c_str());
 	cerr << usage.str();
-	exit(1);
 }
 
 /**
@@ -88,6 +87,8 @@ int main(int argc, char *argv[]) {
 			} else if (arg == "-h" || arg == "-H" || arg == "--help") {
 				/// Show usage
 				showUsage(argv[0]);
+				SysUtils::callSystemCmd("PAUSE");
+				exit(1);
 			} else if (arg == "-c" || arg == "-C") {
 				/// Set clk_freq
 				ScottySettings.clk_freq = SysUtils::lexical_cast<float>(argv[++i]);
@@ -108,6 +109,7 @@ int main(int argc, char *argv[]) {
 			} else {
 				/// Show usage
 				showUsage(argv[0]);
+				exit(1);
 			}
 		}
 
@@ -130,9 +132,9 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		CPUComponents::ScottyCPU<16u, 64u, 16u> cpu(ScottySettings.clk_freq);
-
 		if (ScottySettings.loadScHex) {
+			CPUComponents::ScottyCPU<16u, 64u, 16u> cpu(ScottySettings.clk_freq);
+
 			std::vector<char> *buffer = SysUtils::readBinaryFile(ScottySettings.schexFile);
 
 			cpu.staticLoader(buffer);

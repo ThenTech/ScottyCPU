@@ -64,9 +64,19 @@ namespace std {
 		str = str.substr(0, str.find(erase_from));
 	}
 
+	// erase from last occurence of erase_from until end (in place)
+	static inline void strEraseFromLast(string &str, const string& erase_from) {
+		str = str.substr(0, str.find_last_of(erase_from));
+	}
+
 	// erase from begin to erase_to (in place)
 	static inline void strEraseTo(string &str, const string& erase_to) {
 		str = str.substr(str.find(erase_to));
+	}
+
+	// erase from begin to the last occurence of erase_to (in place)
+	static inline void strEraseToLast(string &str, const string& erase_to) {
+		str = str.substr(str.find_last_of(erase_to));
 	}
 
 	// erase from erase_from until end (copying)
@@ -75,9 +85,21 @@ namespace std {
 		return str;
 	}
 
+	// erase from last occurence of erase_from until end (copying)
+	static inline std::string strErasedFromLast(string str, const string& erase_from) {
+		strEraseFromLast(str, erase_from);
+		return str;
+	}
+
 	// erase from begin to erase_to (copying)
 	static inline std::string strErasedTo(string str, const string& erase_to) {
 		strEraseTo(str, erase_to);
+		return str;
+	}
+
+	// erase from begin to the last occurence of erase_to (copying)
+	static inline std::string strErasedToLast(string str, const string& erase_to) {
+		strEraseToLast(str, erase_to);
 		return str;
 	}
 
