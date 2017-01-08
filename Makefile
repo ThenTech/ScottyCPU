@@ -28,9 +28,9 @@ debug: prepare prepare-resources
 	$(MAKE) cleanup
 	@echo Build successful!
 	
-debug-extra: prepare prepare-resources
+debug-extra: prepare
 	@echo Compiling debug with extra's...
-	$(CXX) -m32 -g -fno-inline -fno-omit-frame-pointer -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)/$(EXECUTABLE_NAME) $(RESOURCES) > $(BIN)/$(BLOG)
+	$(CXX) -m32 -g -fno-inline -fno-omit-frame-pointer -pthread -std=c++0x -Wall -Wextra main.cpp -o $(BIN)/$(EXECUTABLE_NAME) > $(BIN)/$(BLOG)
 	$(MAKE) cleanup
 	@echo Build successful!
 	
