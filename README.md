@@ -16,7 +16,7 @@ By using C++11 and eventually the Qt framework for a GUI.
 
 Documentation has been generated with [Doxygen](http://www.doxygen.org/index.html) and can be found [here](http://doc.scottycpufor.me/) or as an archive in the `release` section.
 
-This batchfile can be used to copy files from working dir to GitHub dir for committing: [gitCPTY.bat](https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d)
+This batchfile can be used to copy files from working dir to GitHub dir for committing: [gitCPY.bat](https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d)
 
 For building, the included [Makefile](https://github.com/Wosser1sProductions/ScottyCPU/blob/master/Makefile) provides common build methods.
 
@@ -94,7 +94,7 @@ For building, the included [Makefile](https://github.com/Wosser1sProductions/Sco
  4. Creating more components:
    - Added `SynchrotronComponentFixedInput`: with a fixed/minimum amount of inputs (e.g. `NOTGate` must have at most 1 input, `ANDGate` cannot take less than 2 inputs...)
    - Added `SHIFTLeft` and `SHIFTRight` to shift the connected signal by one to the left or right respectively.
-   - Added UML diagram
+   - Added [UML diagram](https://raw.githubusercontent.com/Wosser1sProductions/ScottyCPU/master/UML/ClassDiagram_0.4.42.png)
    - Added `Instruction` and `InstructionSet`
    - Added `Instruction` equivalent for every `CPUComponent`
    - Added `bitset` representations
