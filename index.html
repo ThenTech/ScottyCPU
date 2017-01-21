@@ -1,121 +1,190 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<meta name="description" content="ScottyCPU : Base for Scotty Processor">
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="ScottyCPU : Base for Scotty Processor">
+		<link rel ="shortcut icon" type="image/x-icon" href="/favicon.ico">
+		<link rel ="icon" type="image/x-icon" href="/favicon.ico">
+		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <title>ScottyCPU</title>
-  </head>
+		<title>ScottyCPU</title>
+	</head>
 
-  <body>
+	<body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/Wosser1sProductions/ScottyCPU">View on GitHub</a>
+		<!-- HEADER -->
+		<div id="header_wrap" class="outer">
+			<header class="inner">
+				<a id="forkme_banner" href="https://github.com/Wosser1sProductions/ScottyCPU">View on GitHub</a>
 
-          <h1 id="project_title">ScottyCPU</h1>
-          <h2 id="project_tagline">Base for Scotty Processor</h2>
+				<h1 id="project_title">ScottyCPU</h1>
+				<h2 id="project_tagline">Base for Scotty Processor</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/Wosser1sProductions/ScottyCPU/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/Wosser1sProductions/ScottyCPU/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+				<section id="downloads">
+					<a class="zip_download_link" href="https://github.com/Wosser1sProductions/ScottyCPU/zipball/master">Download this project as a .zip file</a>
+					<a class="tar_download_link" href="https://github.com/Wosser1sProductions/ScottyCPU/tarball/master">Download this project as a tar.gz file</a>
+				</section>
+			</header>
+		</div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-          <a id="scottycpu-----" class="anchor" href="#scottycpu-----" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="http://scottycpufor.me/">ScottyCPU</a> 
-        </h1>
-        <a href="https://ci.appveyor.com/project/Wosser1sProductions/scottycpu"><img src="https://ci.appveyor.com/api/projects/status/0exw7bal3h8n53cp?svg=true" alt="Build status"></a> <a href="https://codeclimate.com/github/Wosser1sProductions/ScottyCPU"><img src="https://codeclimate.com/github/Wosser1sProductions/ScottyCPU/badges/issue_count.svg" alt="Issue Count"></a> <a href="https://github.com/Wosser1sProductions/ScottyCPU/issues"><img src="https://img.shields.io/github/issues/Wosser1sProductions/ScottyCPU.svg" alt="GitHub issues"></a> <a href="http://www.drmemory.org/"><img src="https://img.shields.io/badge/DrMemory-0_errors-brightgreen.svg" alt="DrMemory"></a> <a href="http://doc.scottycpufor.me"><img src="https://img.shields.io/badge/total%20progress-70%25-yellowgreen.svg" alt="progress"></a>
+		<!-- MAIN CONTENT -->
+		<div id="main_content_wrap" class="outer">
+			<section id="main_content" class="inner">
+				<h1>
+					<a id="scottycpu" class="anchor" href="#scottycpu" aria-hidden="true">
+						<span aria-hidden="true" class="octicon octicon-link"></span>
+					</a>
+					<a href="http://scottycpufor.me/">ScottyCPU</a>
+				</h1>
 
-<p>The base code for a "Scotty Processor" as described by <em>J. Clark Scott</em> in his book <a href="http://www.buthowdoitknow.com/">But How Do It Know?</a>.</p>
+				<p>
+					<a href="https://ci.appveyor.com/project/Wosser1sProductions/scottycpu"><img src="https://ci.appveyor.com/api/projects/status/0exw7bal3h8n53cp?svg=true" alt="Build status"></a>
+					<a href="https://codeclimate.com/github/Wosser1sProductions/ScottyCPU"><img src="https://codeclimate.com/github/Wosser1sProductions/ScottyCPU/badges/issue_count.svg" alt="Issue Count"></a>
+					<a href="http://www.drmemory.org/"><img alt="DrMemory errors" src="https://img.shields.io/badge/DrMemory-0_errors-brightgreen.svg"/></a> 
+					<a href="https://scan.coverity.com/projects/wosser1sproductions-scottycpu"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/11522/badge.svg"/></a> 
+					<a href="https://github.com/Wosser1sProductions/ScottyCPU/issues"><img src="https://img.shields.io/github/issues/Wosser1sProductions/ScottyCPU.svg" alt="GitHub issues"></a>
+					<a href="http://doc.scottycpufor.me"><img src="https://img.shields.io/badge/total%20progress-87%25-green.svg" alt="progress"></a>
+					<a href="https://github.com/Wosser1sProductions/ScottyCPU/blob/master/License.txt"><img src="https://img.shields.io/badge/license-GNU%20GPLv3-blue.svg" alt="license"></a>
+				</p>
 
-<blockquote>
-<p>But How Do It Know? is the breakthrough book that distills Computer Science down to the simple basic principles that 
-all computers have in common, and presents the big picture step by step in plain English so that anyone can understand 
-this ingenious, yet basically simple invention called a computer.</p>
-</blockquote>
+				<p>The base code for a "Scotty Processor" as described by <em>J. Clark Scott</em> in his book <a href="http://www.buthowdoitknow.com/">But How Do It Know?</a>.</p>
+				<blockquote class="doxtable">
+					<p>But How Do It Know? is the breakthrough book that distills Computer Science down to the simple basic principles that all computers have in common, and presents the big picture step by step in plain English so that anyone can understand this ingenious, yet basically simple invention called a computer.</p>
+				</blockquote>
+				<p>For an school project, we will created this CPU model for educational purposes with:</p><ul>
+					<li>Complete functionality regarding a simple processor system e.g. parsing and assembling code and emulating its execution</li>
+					<li>Providing visual information when running assembly programs on the CPU (e.g. memory dumps, step-by-step execution...)</li>
+				</ul>
+				<p>By using C++11 and eventually the Qt framework for a GUI.</p>
+				<p>Documentation has been generated with <a href="http://www.doxygen.org/index.html">Doxygen</a> and can be found <a href="http://doc.scottycpufor.me/">here</a> or as an archive in the <code>release</code> section.</p>
+				<p>This batchfile can be used to copy files from working dir to GitHub dir for committing: <a href="https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d">gitCPY.bat</a></p>
+				<p>For building, the included <a href="https://github.com/Wosser1sProductions/ScottyCPU/blob/master/Makefile">Makefile</a> provides common build methods.</p>
+				
+				<h3>
+					<a id="usage" class="anchor" href="#usage" aria-hidden="true">
+						<span aria-hidden="true" class="octicon octicon-link"></span>
+					</a>
+					Usage
+				</h3>
+					
+				<pre class="fragment">Usage: ScottyCPU.exe [-h|-H] [-d|-D] [-c|-C &lt;float&gt;] [-i|-I]
+                     [-l|-L|-a|-A <file>] [-o <file>] [-hex <file>]
 
-<p>For an upcomig school project, we will try to create this CPU model for educational purposes with:</p>
+  -h, -H, --help     Show this help message
+  -d, -D, --debug    Execute UnitTests
+  -c, -C  &lt;float&gt;    Set the ScottyCPU clock frequency
+  -i, -I             Show InstructionSet
+  -l, -L  &lt;file&gt;     Load .ScAM file and parse
+  -a, -A  &lt;file&gt;     Load .ScAM file and compile to .ScHex
+  -o      &lt;file&gt;     Specify output file for assembly
+  -hex    &lt;file&gt;     Load .ScHex file into ScottyCPU RAM</pre>
+				<h3>					
+					<a id="instructionset" class="anchor" href="#instructionset" aria-hidden="true">
+						<span aria-hidden="true" class="octicon octicon-link"></span>
+					</a>Instruction Set</h3>
+<pre class="fragment">
+/----------------------------------------------------------------------------\
+|------------------------- ScottyCPU InstructionSet -------------------------|
+\----------------------------------------------------------------------------/
 
-<ul>
-<li>Complete functionality regarding a simple processor system</li>
-<li>Providing visual information when running assembly programs on the CPU (e.g. memory dumps, step-by-step execution...)</li>
-</ul>
+    |   Name   | OpCode | Operand code | Operand 1 type | Operand 2 type |
+    +----------+--------+--------------+----------------+----------------+
+    |  NOP     |  0x00  |  0000 0000   |        None    |        None    |
+    |  ADD     |  0x01  |  0000 0001   |    Register    |    Register    |
+    |  SUB     |  0x02  |  0000 0010   |    Register    |    Register    |
+    |  MUL     |  0x03  |  0000 0011   |    Register    |    Register    |
+    |  DIV     |  0x04  |  0000 0100   |    Register    |    Register    |
+    |  MOD     |  0x05  |  0000 0101   |    Register    |    Register    |
+    |  SHL     |  0x06  |  0000 0110   |    Register    |        None    |
+    |  SHR     |  0x07  |  0000 0111   |    Register    |        None    |
+    |  NOT     |  0x11  |  0001 0001   |    Register    |        None    |
+    |  AND     |  0x12  |  0001 0010   |    Register    |    Register    |
+    |  NAND    |  0x13  |  0001 0011   |    Register    |    Register    |
+    |  OR      |  0x14  |  0001 0100   |    Register    |    Register    |
+    |  NOR     |  0x15  |  0001 0101   |    Register    |    Register    |
+    |  XOR     |  0x16  |  0001 0110   |    Register    |    Register    |
+    |  CMP     |  0x1F  |  0001 1111   |    Register    |    Register    |
+    |  MOV     |  0x20  |  0010 0000   |    Register    |    Register    |
+    |  MOVRR   |  0x20  |  0010 0000   |    Register    |    Register    |
+    |  MOVRA   |  0x22  |  0010 0010   |    Register    |       Value    |
+    |  MOVAR   |  0x24  |  0010 0100   |       Value    |    Register    |
+    |  MOVAA   |  0x28  |  0010 1000   |       Value    |       Value    |
+    |  DATA    |  0x31  |  0011 0001   |    Register    |       Value    |
+    |  DATAC   |  0x32  |  0011 0010   |    Register    |       Label    |
+    |  JMP     |  0x40  |  0100 0000   |       Label    |        None    |
+    |  JE      |  0x41  |  0100 0001   |       Label    |        None    |
+    |  JL      |  0x42  |  0100 0010   |       Label    |        None    |
+    |  JS      |  0x43  |  0100 0011   |       Label    |        None    |
+    |  JZ      |  0x44  |  0100 0100   |       Label    |        None    |
+    |  JLE     |  0x50  |  0101 0000   |       Label    |        None    |
+    |  JSE     |  0x51  |  0101 0001   |       Label    |        None    |
+    |  JCE     |  0x52  |  0101 0010   |       Label    |        None    |
+    |  JCL     |  0x53  |  0101 0011   |       Label    |        None    |
+    |  JCS     |  0x54  |  0101 0100   |       Label    |        None    |
+    |  JCZ     |  0x55  |  0101 0101   |       Label    |        None    |
+    |  JLZ     |  0x56  |  0101 0110   |       Label    |        None    |
+    |  JSZ     |  0x57  |  0101 0111   |       Label    |        None    |
+    |  JEZ     |  0x58  |  0101 1000   |       Label    |        None    |
+    |  JCLE    |  0x60  |  0110 0000   |       Label    |        None    |
+    |  JCLZ    |  0x61  |  0110 0001   |       Label    |        None    |
+    |  JCEZ    |  0x62  |  0110 0010   |       Label    |        None    |
+    |  JLEZ    |  0x63  |  0110 0011   |       Label    |        None    |
+    |  JCLEZ   |  0x64  |  0110 0100   |       Label    |        None    |
+    |  CLF     |  0x80  |  1000 0000   |        None    |        None    |</pre>
 
-<p>By using C++ and eventually the Qt framework for a GUI.</p>
+				<h2>
+					<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Version history</h2>
 
-<p>Documentation has been generated with <a href="http://www.doxygen.org/index.html">Doxygen</a> and can be found <a href="http://doc.scottycpufor.me/">here</a> or as an archive in the <code>release</code> section.</p>
+				<h4>
+					<a id="0" class="anchor" href="#0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.</h4>
 
-<p>This batchfile can be used to copy files from working dir to GitHub dir for committing: <a href="https://gist.github.com/Wosser1sProductions/638ff2219b8786a83df863c574a8e58d">gitCPTY.bat</a></p>
+				<ol type="1">
+					<li>First release with basic Gate classes, all with their respective unittests.<ul>
+							<li>Gates have a <code>std::bitset&lt;n&gt;</code> as input and a <code>std::bitset&lt;1&gt;</code> as output.</li>
+							<li>Operations are performed on each bit in the bitset (e.g. OR all bits in the bitset).</li>
+						</ul>
+					</li>
+					<li>Start of <code>MultiGate</code> implementation.<ul>
+							<li>MultiGates have a list of <code>std::bitset&lt;n&gt;*</code> pointers so they can iterate every input a perform an operation on each input (e.g. OR entire bitset with the others).</li>
+						</ul>
+					</li>
+					<li>By using the <a href="https://github.com/Wosser1sProductions/Synchrotron">SynchrotronComponent class</a> every <code>Gate</code> is now able to connects its output to inputs of other <code>Gates</code> and vica versa (<em>Signals &amp; Slots</em> paradigm).</li>
+					<li>Creating more components:<ul>
+							<li>Added <code>SynchrotronComponentFixedInput</code>: with a fixed/minimum amount of inputs (e.g. <code>NOTGate</code> must have at most 1 input, <code>ANDGate</code> cannot take less than 2 inputs...)</li>
+							<li>Added <code>SHIFTLeft</code> and <code>SHIFTRight</code> to shift the connected signal by one to the left or right respectively.</li>
+							<li>Added <a href="https://raw.githubusercontent.com/Wosser1sProductions/ScottyCPU/master/UML/ClassDiagram_0.4.42.png">UML diagram</a></li>
+							<li>Added <code>Instruction</code> and <code>InstructionSet</code></li>
+							<li>Added <code>Instruction</code> equivalent for every <code>CPUComponent</code></li>
+							<li>Added <code>bitset</code> representations</li>
+							<li>Added <code>SCAMParser</code> and <code>SCAMAssembler</code> to parse and compile .ScAM files (Scotty Assembler Markup)</li>
+							<li>Fully implemented <code>ControlUnit</code>and <code>ScottyCPU</code>classes</li>
+						</ul>
+					</li>
+				</ol>
 
-<h2>
-<a id="version-history" class="anchor" href="#version-history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Version history</h2>
+				<h4>
+					<a id="next" class="anchor" href="#next" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next</h4>
 
-<h4>
-<a id="0" class="anchor" href="#0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.</h4>
+				<ul>
+					<li>A <code>SynchrotronComponent</code> with an extra enable input (which can only be connected once)</li>
+					<li>Other <code><a class="el" href="namespace_c_p_u_components.html">CPUComponents</a></code></li>
+					<li>GUI connection with <a href="https://github.com/llewella20/Scotty_Output_GUI">Scotty Output GUI</a></li>
+					<li>Update Doxygen comments </li>
+				</ul>
+			</section>
+		</div>
 
-<ol>
-<li>First release with basic Gate classes, all with their respective unittests. 
+		<!-- FOOTER  -->
+		<div id="footer_wrap" class="outer">
+			<footer class="inner">
+				<p class="copyright">ScottyCPU maintained by <a href="https://github.com/Wosser1sProductions">Wosser1sProductions</a></p>
+				<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+			</footer>
+		</div>
 
-<ul>
-<li>Gates have a <code>std::bitset&lt;n&gt;</code> as input and a <code>std::bitset&lt;1&gt;</code> as output.</li>
-<li>Operations are performed on each bit in the bitset (e.g. OR all bits in the bitset).</li>
-</ul>
-</li>
-<li>Start of <code>MultiGate</code> implementation.
 
-<ul>
-<li>MultiGates have a list of <code>std::bitset&lt;n&gt;*</code> pointers so they can iterate every input a perform an operation on each input (e.g. OR entire bitset with the others).</li>
-</ul>
-</li>
-<li>By using the <a href="https://github.com/Wosser1sProductions/Synchrotron">SynchrotronComponent class</a> every <code>Gate</code> is now able to connects its output to inputs of other <code>Gates</code> and vica versa (<em>Signals &amp; Slots</em> paradigm).</li>
-<li>Creating more components:
 
-<ul>
-<li>Added <code>SynchrotronComponentFixedInput</code>: with a fixed/minimum amount of inputs (e.g. <code>NOTGate</code> must have at most 1 input, <code>ANDGate</code> cannot take less than 2 inputs...)</li>
-<li>Added <code>SHIFTLeft</code> and <code>SHIFTRight</code> to shift the connected signal by one to the left or right respectively.</li>
-<li>Added UML diagram</li>
-<li>Added <code>Instruction</code> and <code>InstructionSet</code></li>
-<li>Added <code>Instruction</code> equivalent for every <code>CPUComponent</code></li>
-<li>Added <code>bitset</code> representations</li>
-<li>Added <code>SCAMParser</code> and <code>SCAMAssembler</code> to parse and compile .ScAM files (Scotty Assembler Markup)</li>
-</ul>
-</li>
-</ol>
-
-<h4>
-<a id="next" class="anchor" href="#next" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next</h4>
-
-<p>Adding additional implementations of <code>SynchrotronComponent</code> for extra functionality:</p>
-
-<ul>
-  <li>A <code>SynchrotronComponent</code> with an extra enable input (which can only be connected once)</li>
-  <li>Other <code>CPUComponents</code></li>
-  <li>Functioning <code>ControlUnit</code></li>
-  <li>GUI connection with <a href="https://github.com/llewella20/Scotty_Output_GUI">Scotty Output GUI</a></li>
-</ul>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">ScottyCPU maintained by <a href="https://github.com/Wosser1sProductions">Wosser1sProductions</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+	</body>
 </html>
