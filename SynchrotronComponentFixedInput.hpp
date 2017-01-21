@@ -10,9 +10,9 @@ namespace Synchrotron {
 
 	/** \brief	**SynchrotronComponentFixedInput** : SynchrotronComponent with limited inputs.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
-	 *	\param	max_inputs
+	 *	\tparam	max_inputs
 	 *		This template argument specifies the maximum amount of input connections.
 	 */
 	template <size_t bit_width, size_t max_inputs>

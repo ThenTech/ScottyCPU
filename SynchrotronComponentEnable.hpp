@@ -15,7 +15,7 @@ namespace Synchrotron {
 			SynchrotronComponentEnable(size_t initial_value = 0) : SynchrotronComponentFixedInput<1u, 1u>(initial_value) {}
 
 			/**	Copy constructor
-			 *	\param	Other
+			 *	\param	other
 			 *		SynchrotronComponent to copy from
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).

@@ -25,65 +25,65 @@ txt:	DIV 	R3, R0
         CMP 	R5, R3	;;;;???
 	                // commentaar
 		JL		END
-B:	12
+B:	0x5A5A
 
 // Expected output from SCAMParser:
-;	SCAM-file: "Programs/example_corrected.scam"
-;	 Line | Addr |   Label    | Instr | Operand 1  | Operand 2
-;	------+------+------------+-------+------------+------------
-;	    0 |    0 |            | JMP   |       MAIN |
-;	    3 |    1 | A          | 42    |            |
-;	    4 |    2 | C          | 0xF3  |            |
-;	    5 |    3 | D          | 4a    |            |
-;	    8 |    4 | MAIN       |       |            |
-;	    9 |    5 |            | MOV   |         R1 |         R4
-;	   10 |    6 |            | DATA  |         R1 |        213
-;	   11 |    7 |            | DATAC |         R1 |          B
-;	   12 |    8 |            | DATAC |         R0 |          A
-;	   13 |    9 |            | ADD   |         R3 |         R4
-;	   14 |   10 |            | SUB   |         R0 |         R1
-;	   15 |   11 |            | MUL   |         R9 |        R15
-;	   16 |   12 |            | JE    |      label |
-;	   17 |   13 |            | ADD   |         R3 |         R0
-;	   18 |   14 | label      |       |            |
-;	   19 |   15 |            | JMP   |        lbl |
-;	   21 |   16 | lbl        | SHL   |         R1 |
-;	   22 |   17 |            | XOR   |         R0 |         R3
-;	   23 |   18 |            | NOP   |            |
-;	   24 |   19 | txt        | DIV   |         R3 |         R0
-;	   25 |   20 |            | CMP   |         R5 |         R3
-;	   27 |   21 |            | JL    |        END |
-;	   28 |   22 | B          | 12    |            |
-;	 9999 |   23 | END        | JMP   |        END |
+;	SCAM-file: "..\Programs\example_corrected.scam"
+;	 Line | Addr |   Label    | Instr  | Operand 1  | Operand 2
+;	------+------+------------+--------+------------+------------
+;	    0 |    0 |            | JMP    |       MAIN |
+;	    3 |    1 | A          | 42     |            |
+;	    4 |    2 | C          | 0xF3   |            |
+;	    5 |    3 | D          | 4a     |            |
+;	    8 |    4 | MAIN       |        |            |
+;	    9 |    5 |            | MOV    |         R1 |         R4
+;	   10 |    6 |            | DATA   |         R1 |        213
+;	   11 |    7 |            | DATAC  |         R1 |          B
+;	   12 |    8 |            | DATAC  |         R0 |          A
+;	   13 |    9 |            | ADD    |         R3 |         R4
+;	   14 |   10 |            | SUB    |         R0 |         R1
+;	   15 |   11 |            | MUL    |         R9 |        R15
+;	   16 |   12 |            | JE     |      label |
+;	   17 |   13 |            | ADD    |         R3 |         R0
+;	   18 |   14 | label      |        |            |
+;	   19 |   15 |            | JMP    |        lbl |
+;	   21 |   16 | lbl        | SHL    |         R1 |
+;	   22 |   17 |            | XOR    |         R0 |         R3
+;	   23 |   18 |            | NOP    |            |
+;	   24 |   19 | txt        | DIV    |         R3 |         R0
+;	   25 |   20 |            | CMP    |         R5 |         R3
+;	   27 |   21 |            | JL     |        END |
+;	   28 |   22 | B          | 0x5A5A |            |
+;	 9999 |   23 | END        | JMP    |        END |
 
 // Expected output from SCAMAssembler:
-;   SCAM-file: "Programs/example_corrected.scam"
-;    Line | Addr |   Label    | Instr | Operand 1  | Operand 2
-;   ------+------+------------+-------+------------+------------
-;       0 |    0 |            | JMP   |       MAIN |
-;       3 |    2 | A          | 42    |            |
-;       4 |    3 | C          | 0xF3  |            |
-;       5 |    4 | D          | 4a    |            |
-;      28 |    5 | B          | 12    |            |
-;       8 |    6 | MAIN       |       |            |
-;       9 |    7 |            | MOV   |         R1 |         R4
-;      10 |    8 |            | DATA  |         R1 |        213
-;      11 |   10 |            | DATAC |         R1 |          B
-;      12 |   12 |            | DATAC |         R0 |          A
-;      13 |   14 |            | ADD   |         R3 |         R4
-;      14 |   15 |            | SUB   |         R0 |         R1
-;      15 |   16 |            | MUL   |         R9 |        R15
-;      16 |   17 |            | JE    |      label |
-;      17 |   19 |            | ADD   |         R3 |         R0
-;      18 |   20 | label      |       |            |
-;      19 |   21 |            | JMP   |        lbl |
-;      21 |   23 | lbl        | SHL   |         R1 |
-;      22 |   24 |            | XOR   |         R0 |         R3
-;      23 |   25 |            | NOP   |            |
-;      24 |   26 | txt        | DIV   |         R3 |         R0
-;      25 |   27 |            | CMP   |         R5 |         R3
-;      27 |   28 |            | JL    |        END |
-;    9999 |   30 | END        | JMP   |        END |
+;   SCAM-file: "..\Programs\example_corrected.scam"
+;    Line | Addr |   Label    | Instr  | Operand 1  | Operand 2
+;   ------+------+------------+--------+------------+------------
+;       0 |    0 |            | JMP    |       MAIN |
+;       3 |    2 | A          | 42     |            |
+;       4 |    3 | C          | 0xF3   |            |
+;       5 |    4 | D          | 4a     |            |
+;      28 |    5 | B          | 0x5A5A |            |
+;       8 |    6 | MAIN       |        |            |
+;       9 |    7 |            | MOV    |         R1 |         R4
+;      10 |    8 |            | DATA   |         R1 |        213
+;      11 |   10 |            | DATAC  |         R1 |          B
+;      12 |   12 |            | DATAC  |         R0 |          A
+;      13 |   14 |            | ADD    |         R3 |         R4
+;      14 |   15 |            | SUB    |         R0 |         R1
+;      15 |   16 |            | MUL    |         R9 |        R15
+;      16 |   17 |            | JE     |      label |
+;      17 |   19 |            | ADD    |         R3 |         R0
+;      18 |   20 | label      |        |            |
+;      19 |   21 |            | JMP    |        lbl |
+;      21 |   23 | lbl        | SHL    |         R1 |
+;      22 |   24 |            | XOR    |         R0 |         R3
+;      23 |   25 |            | NOP    |            |
+;      24 |   26 | txt        | DIV    |         R3 |         R0
+;      25 |   27 |            | CMP    |         R5 |         R3
+;      27 |   28 |            | JL     |        END |
+;    9999 |   30 | END        | JMP    |        END |
 ;
 ;   SCAM-file: Symboltable
 ;    Addr |    Label    | isConstant |  Value  | Decimal
@@ -91,7 +91,7 @@ B:	12
 ;       2 | A           |   true     |  0x002A |      42
 ;       3 | C           |   true     |  0x00F3 |     243
 ;       4 | D           |   true     |  0x0004 |       4
-;       5 | B           |   true     |  0x000C |      12
+;       5 | B           |   true     |  0x5A5A |   23130
 ;       6 | MAIN        |   false    |  0x0000 |       0
 ;      20 | label       |   false    |  0x0000 |       0
 ;      23 | lbl         |   false    |  0x0000 |       0
@@ -106,13 +106,13 @@ B:	12
 ;       2 | 0x002A | 00000000 00101010 |         |
 ;       3 | 0x00F3 | 00000000 11110011 |         |
 ;       4 | 0x0004 | 00000000 00000100 |         |
-;       5 | 0x000C | 00000000 00001100 |         |
+;       5 | 0x5A5A | 01011010 01011010 |         |
 ;       6 | 0x0000 | 00000000 00000000 |         |
 ;       7 | 0x2014 | 00100000 00010100 |         |
 ;       8 | 0x3110 | 00110001 00010000 |  true   |
 ;       9 | 0x00D5 | 00000000 11010101 |         |  true
 ;      10 | 0x3210 | 00110010 00010000 |  true   |
-;      11 | 0x000C | 00000000 00001100 |         |  true
+;      11 | 0x5A5A | 01011010 01011010 |         |  true
 ;      12 | 0x3200 | 00110010 00000000 |  true   |
 ;      13 | 0x002A | 00000000 00101010 |         |  true
 ;      14 | 0x0134 | 00000001 00110100 |         |

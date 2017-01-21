@@ -12,7 +12,7 @@ namespace CPUComponents {
 
 	/** \brief	**Clock** : Generate a pulse on a certain frequency.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>

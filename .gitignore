@@ -78,3 +78,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.stash
+
+# Extra
+# =========================
+
+bin/
+cov-int/

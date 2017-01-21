@@ -104,6 +104,8 @@ namespace Exceptions {
 	/**
 	 *	\brief
 	 *		File read exception.
+	 *	\param	name
+	 *		The name of the file to be read.
 	 */
 	class FileReadException : public Exception  {
 	public:
@@ -118,6 +120,8 @@ namespace Exceptions {
 	/**
 	 *	\brief
 	 *		File write exception.
+	 *	\param	name
+	 *		The name of the file to be written.
 	 */
 	class FileWriteException : public Exception  {
 	public:
@@ -131,6 +135,8 @@ namespace Exceptions {
 	/**
 	 *	\brief
 	 *		Unexpected file extension exception.
+	 *	\param	ext
+	 *		The extension of a file that was not expected.
 	 */
 	class UnexpectedExtension : public Exception  {
 	public:

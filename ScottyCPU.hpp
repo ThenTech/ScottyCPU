@@ -17,11 +17,11 @@ namespace CPUComponents {
 	 *		* Currently limited to bit_width of 16 (8, 16, 24, 32 ... should be possible).
 	 *		* Currently only support staticly loading 1 program from address 0 in RAM.
 	 *
-	 *  \param	bit_width
+	 *  \tparam	bit_width
 	 *		This template argument specifies the width of the internal bitset state.
-	 *  \param	mem_size
+	 *  \tparam	mem_size
 	 *		This template argument specifies the size of the internal memory (amount).
-	 *  \param	reg_size
+	 *  \tparam	reg_size
 	 *		This template argument specifies the size of the internal registers (amount).
 	 */
 	template <size_t bit_width, size_t mem_size, size_t reg_size>
@@ -63,6 +63,9 @@ namespace CPUComponents {
 			 *
 			 *	\param	clk_freq
 			 *		The Clock frequency for the CPU.
+			 *	\exception	Exceptions::Exception
+			 *		Throws Exception if the bit_width is not 16-bits.
+			 *		Currently the ScottyCPU is fixed to a 16-bit architecure.
 			 */
 			ScottyCPU(float clk_freq)
 				: _ALU(SysUtils::allocVar<ALUnit<bit_width>>()),
@@ -92,25 +95,25 @@ namespace CPUComponents {
 
 			/**	\brief	Returns the ALU of the CPU.
 			 */
-			const ALUnit<bit_width>& getALU(void) const {
-				return *this->_ALU;
+			const ALUnit<bit_width>* getALU(void) const {
+				return this->_ALU;
 			}
 
 			/**	\brief	Returns the CU of the CPU.
 			 */
-			/* const */ ControlUnit<bit_width, mem_size, reg_size>& getControlUnit(void) const {
-				return *this->_CU;
+			const ControlUnit<bit_width, mem_size, reg_size>* getControlUnit(void) const {
+				return this->_CU;
 			}
 
 			/**	\brief	Returns the Memory of the CPU.
 			 */
-			/* const */ Memory<bit_width, mem_size>& getRAM(void) const {
+			Memory<bit_width, mem_size>& getRAM(void) const {
 				return *this->_RAM;
 			}
 
 			/**	\brief	Returns the Clock of the CPU.
 			 */
-			const Clock<bit_width>& getClock(void) const {
+			Clock<bit_width>& getClock(void) /* const */ {
 				return this->_clk;
 			}
 
@@ -119,7 +122,7 @@ namespace CPUComponents {
 			 *	\param	*buffer
 			 *			A vector with buffer->size() bytes containing a program in raw binary.
 			 *
-			 *	\throws	Exception
+			 *	\throws	Exceptions::OutOfBoundsException
 			 *			Throws Exception if program is longer than the available Memory.
 			 */
 			void staticLoader(const std::vector<char> *buffer) {
@@ -157,9 +160,14 @@ namespace CPUComponents {
 
 				this->_clk();
 
-				//_clk.startThread();
+				//this->_clk.startThread();
 			}
 
+			/**
+			 *	\brief	Steps the execution of the ScottyCPU by one tick().
+			 *			Also dumps the contents of its RAM and Registers respectively
+			 *			to RAMdump.txt and REGdump.txt.
+			 */
 			void step(void) {
 				std::bitset<bit_width> *range = this->getRAM().getDataRange(0, this->getRAM().getMaxAddress());
 				std::stringstream ss;
@@ -172,9 +180,9 @@ namespace CPUComponents {
 				range = nullptr;
 
 
-				range = this->getControlUnit().getRegisters().getDataRange(0, this->getControlUnit().getRegisters().getMaxAddress());
+				range = this->getControlUnit()->getRegisters().getDataRange(0, this->getControlUnit()->getRegisters().getMaxAddress());
 				std::stringstream st;
-				for (size_t i = 0; i < this->getControlUnit().getRegisterSize(); ++i)
+				for (size_t i = 0; i < this->getControlUnit()->getRegisterSize(); ++i)
 					st << range[i].to_string() << std::endl;
 
 				SysUtils::writeStringToFile("REGdump.txt", st.str());
@@ -182,7 +190,7 @@ namespace CPUComponents {
 				SysUtils::deallocArray(range);
 
 
-				this->getControlUnit().tick();
+				this->getClock().tick();
 			}
 	};
 

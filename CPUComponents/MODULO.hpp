@@ -10,7 +10,7 @@ namespace CPUComponents {
 
 	/** \brief	**MODULO** : Calculate the remainder after division.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
@@ -22,7 +22,7 @@ namespace CPUComponents {
 			MODULO(size_t initial_value = 0) : SynchrotronComponentFixedInput<bit_width, 2u>(initial_value) {}
 
 			/**	Copy constructor
-			 *	\param	Other
+			 *	\param	other
 			 *		SynchrotronComponent to copy from
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).

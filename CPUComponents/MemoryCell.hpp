@@ -9,7 +9,7 @@ namespace CPUComponents {
 
 	/** \brief	**MemoryCell** : Save the state of a SynchrotronComponent.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
@@ -21,7 +21,7 @@ namespace CPUComponents {
 			MemoryCell(size_t initial_value = 0) : SynchrotronComponentFixedInput<bit_width, 1u>(initial_value) {}
 
 			/**	Copy constructor
-			 *	\param	Other
+			 *	\param	other
 			 *		SynchrotronComponent to copy from
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).
@@ -48,8 +48,17 @@ namespace CPUComponents {
 			 */
 			~MemoryCell() {}
 
+			/**	\brief	Set the current state of this MemoryCell.
+			 *
+			 *	\param	newstate
+			 *		The state to set this' state to.
+			 */
 			void setState(const std::bitset<bit_width>& newstate) {
+				std::bitset<bit_width> prevState = this->state;
+
 				this->state = newstate;
+
+				if (prevState != this->state) this->emit();
 			}
 
 			/**	\brief

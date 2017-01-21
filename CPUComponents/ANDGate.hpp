@@ -9,7 +9,7 @@ namespace CPUComponents {
 
 	/** \brief	**ANDGate** : AND all inputs together.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
@@ -21,7 +21,7 @@ namespace CPUComponents {
 			ANDGate(size_t initial_value = 0) : SynchrotronComponent<bit_width>(initial_value) {}
 
 			/**	Copy constructor
-			 *	\param	Other
+			 *	\param	other
 			 *		SynchrotronComponent to copy from
 			 *	\param	duplicateAll_IO
 			 *		Specifies whether to only copy inputs (false) or outputs as well (true).

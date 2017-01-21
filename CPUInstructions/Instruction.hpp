@@ -6,9 +6,6 @@
 #include <bitset>
 #include "../utils.hpp"
 
-//#include "../SynchrotronComponent.hpp"
-//using namespace Synchrotron;
-
 namespace CPUInstructions {
 
 	/**
@@ -24,8 +21,8 @@ namespace CPUInstructions {
 		SHL		= 0x06,  // 0000 0110
 		SHR		= 0x07,  // 0000 0111
 		// Extra? ROtateRight, ROtateLeft
-		//ROR= 0x08,  // 0000 1000
-		//ROL= 0x09,  // 0000 1001
+		//ROR		= 0x08,  // 0000 1000
+		//ROL		= 0x09,  // 0000 1001
 
 		/// Compare
 		CMP		= 0x1F,  // 0001 1111
@@ -85,19 +82,31 @@ namespace CPUInstructions {
 		LENGHT	= 0x08,  // 0000 1000
 	};
 
+	/**	\brief	The types of Operand an Instruction can have.
+	 */
 	enum class OperandType {
 		REG, VAL, LBL, NONE
 	};
 
+	/**	\brief	Return the given OperandType to string.
+	 *			The strings are stored in a static LUT inside the function.
+	 *
+	 *	\param	u
+	 *			The OperandType to retern the string for.
+	 */
 	static inline std::string OperandTypeToString(OperandType u) {
 		static std::string LUT[] = { "Register", "Value", "Label", "None" };
 		return LUT[UINT(u)];
 	}
 
+	/**	\brief	The info associated with an Instruction.
+	 *
+	 *		The Operand Types are necessary to determine the required space for each Instruction.
+	 */
 	typedef struct {
-		size_t		OpCode;
-		OperandType Op1_type;
-		OperandType Op2_type;
+		size_t		OpCode;		///< The binary code for the Instruction (from InstructionSet)
+		OperandType Op1_type;	///< The type of the first operand (from OperandType)
+		OperandType Op2_type;	///< The type of the second operand (from OperandType)
 		//size_t		extra_bit_width_size;	// MOV with values
 	} InstructionInfo;
 
@@ -107,14 +116,21 @@ namespace CPUInstructions {
 //		{ "R5" , 5 }, { "R6" , 5 }, { "R7" , 7 }, { "R8" , 8 }, { "R9" , 9 }
 //	};
 
-	/// Bitsize of one register
+	/**	\brief	The size in bits of one Instruction when assembled in binary.
+	 *			This results in Registers ranging from 0000 to 1111 or R0 to R15.
+	 */
 	static const size_t REG_BITS_SIZE = 4;
 
-	/// Register prefix
+	/**	\brief	The prefix for Registers when referred to in ScAM code ('R' or '$').
+	 */
 	static const std::string REG_PREFIX = "R$";
 
 	// bitsize of 1 instruction = UINT(InstructionSet::LENGHT) << 1 + (amount of OperandType::VALs in optype) * 16
 
+	/**
+	 *	\brief	An std::unordered_map associating the mnemonic names for Instructions
+	 *			with their corresponding InstructionInfo (Look Up Table).
+	 */
 	static const std::unordered_map<std::string, InstructionInfo> InstructionLUT =
 	{
 		{ "ADD",	{ UINT(InstructionSet::ADD),	OperandType::REG, OperandType::REG	} },
@@ -173,20 +189,29 @@ namespace CPUInstructions {
 		{ "CLF",	{ UINT(InstructionSet::CLF),	OperandType::NONE,OperandType::NONE} }
 	};
 
+	/**
+	 *	\brief	Verify that the given mnemonic instruction name exists in the InstrucionSet.
+	 */
 	static bool isValidInstruction(const std::string& str) {
 		return std::mapHasKey(CPUInstructions::InstructionLUT, str);
 	}
 
+	/**
+	 *	\brief	Return the InstructionInfo associated with an Instruction mnemonic name from the InstructionLUT.
+	 */
 	static const CPUInstructions::InstructionInfo& getInstructionInfo(const std::string& str) {
 		return std::mapGetMapped(CPUInstructions::InstructionLUT, str);
 	}
 
-	/** TO-DO
+	/**
+	 *	\brief	Print the InstructionSet to console output, sorted by OpCode.
 	 *
-		std::ostream& operator<<(std::ostream &os, const std::unordered_map<std::string, InstructionInfo>& lut) {
-			// os << printInstructionSet()
-			return os;
-		}
+	 *	TO-DO
+	 *
+	 *	    std::ostream& operator<<(std::ostream &os, const std::unordered_map<std::string, InstructionInfo>& lut) {
+	 *	    	// os << printInstructionSet()
+	 *	    	return os;
+	 *	    }
 	 */
 	static void printInstructionSet(void) {
 		char *tmp = SysUtils::allocArray<char>(83);
@@ -339,7 +364,7 @@ namespace CPUInstructions {
 			/**
 			 *	\brief	Returns the flag register.
 			 */
-			const std::bitset<(size_t) FLAGS::FLAGS_COUNT>& getFlags(void) const {
+			const std::bitset<UINT(FLAGS::FLAGS_COUNT)>& getFlags(void) const {
 				return this->REG_FLAGS;
 			}
 	};

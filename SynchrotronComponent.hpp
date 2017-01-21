@@ -39,14 +39,13 @@ namespace Synchrotron {
 			};
 	};
 
-	/**
-	 *	\brief	Default `Mutex::mutex_id`to 0.
+	/**	\brief	Default `Mutex::mutex_id` to 0.
 	 */
 	size_t Mutex::mutex_id = 0;
 
 	/**	\brief
-	 *	Creating a new LockBlock(this) locks the current thread,
-	 *	while leaving the scope conveniently unlocks the thread.
+	 *		Creating a new LockBlock(this) locks the current thread,
+	 *		while leaving the scope conveniently unlocks the thread.
 	 */
 	class LockBlock {
 		public:
@@ -60,14 +59,14 @@ namespace Synchrotron {
 	 *	SynchrotronComponent is the base for all components,
 	 *	offering in and output connections to other SynchrotronComponent.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the internal bitset state.
      */
 	template <size_t bit_width>
 	class SynchrotronComponent : public Mutex {
 		protected:
 			/**	\brief
-			 *	The current internal state of bits in this component (default output).
+			 *		The current internal state of bits in this component (default output).
 			 */
 			std::bitset<bit_width> state;
 
@@ -119,8 +118,6 @@ namespace Synchrotron {
              *
              *	\param	initial_value
 			 *		The initial state of the internal bitset.
-			 *	\param	bit_width
-			 *		The size of the internal width of the bitset.
              */
 			SynchrotronComponent(size_t initial_value = 0) : state(initial_value) {}
 

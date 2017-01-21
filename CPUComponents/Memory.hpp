@@ -27,9 +27,9 @@ namespace CPUComponents {
 
 	/** \brief	**Memory** : Save the state of a SynchrotronComponent on an adress.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the internal bitsets.
-	 *	\param	mem_size
+	 *	\tparam	mem_size
 	 *		This template argument specifies the amount of internal bitsets.
 	 */
 	template <size_t bit_width, size_t mem_size>

@@ -1,8 +1,8 @@
 IDI_ICON1               ICON    DISCARDABLE     "Resources/icoBeamMeUp.ico"
 
 1 VERSIONINFO
-FILEVERSION     0,4,43,0
-PRODUCTVERSION  0,4,43,0
+FILEVERSION     0,4,44,0
+PRODUCTVERSION  0,4,44,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
@@ -10,12 +10,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "Wosser1's Productions"
       VALUE "FileDescription", "ScottyCPU - Base for Scotty Processor"
-	  VALUE "FileVersion", "0.4.43.0"
+	  VALUE "FileVersion", "0.4.44.0"
       VALUE "InternalName", "ScottyCPU"
       VALUE "LegalCopyright", "©2017 Wosser1's Productions"
       VALUE "OriginalFilename", "ScottyCPU.exe"
       VALUE "ProductName", "ScottyCPU"
-	  VALUE "ProductVersion", "0.4.43.0"
+	  VALUE "ProductVersion", "0.4.44.0"
     END
   END
 

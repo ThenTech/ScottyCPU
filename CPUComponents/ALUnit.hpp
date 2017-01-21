@@ -27,9 +27,9 @@ namespace CPUComponents {
 	 *
 	 *			Contains the other CPUComponents linked to its inputs to execute instructions.
 	 *
-	 *			Can only have 2 inputs: 2 registers to perform calcuations.
+	 *			Can only have 2 inputs: 2 registers to perform calcuations (BUS and ALU_BUFFER).
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
@@ -109,6 +109,10 @@ namespace CPUComponents {
 			 *		Connect the internal instructions with the ALU's inputs.
 			 *
 			 *		ALU should have 2 inputs connected.
+			 *
+			 *		This will also remove the inputs from the ALU itself
+			 *		(completely transferred to tha ALU's internal components).
+			 *		Therefore this function can only be called once.
 			 */
 			void connectInternal(void) {
 				if (this->getInputs().size() < 2)
@@ -146,15 +150,25 @@ namespace CPUComponents {
 				this->operation = _instr;
 			}
 
+			/**	\brief	Clear the ALU's flag register.
+			 */
 			void clearFlagsReg(void) {
 				this->clearFlags();
 			}
 
-			/**	\brief	The tick() method will be called when one of this SynchrotronComponent's inputs issues an emit().
-			 *			Get the state and flags from the expected Instruction.
+			/**	\brief
+			 *		The tick() method should be called when an ALU operation is performed.
+			 *		Due to the sorting of in- and outputs of SynchrotronComponents,
+			 *		the ALU has to be ticked separately, otherwise, tick() would be called BEFORE
+			 *		the internal operations could perform any calculations,
+			 *		rendering the ALU essentially useless.
 			 *
-			 *	\return	virtual void
-			 *		This method should be implemented by a derived class.
+			 *
+			 *		The current state of this->operation will be selected as the output for
+			 *		the ALU after tick(). The flags are also copied.
+			 *
+			 *	\exception	Exceptions::Exception
+			 *		Throws generic Exception when the requested operation is not an ALU operation.
 			 */
 			void tick(void) {
 				std::bitset<bit_width> prevState = this->state;

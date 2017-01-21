@@ -14,27 +14,27 @@ MAIN:	DATAC	R0, X	; R0 == 00000000 01100101
 		MOD		R3, R0	; R3 == 00000000 00000000
 
 // Expected output from SCAMAssembler:
-;	SCAM-file: "Programs\square.scam"
-;	 Line | Addr |   Label    | Instr | Operand 1  | Operand 2
-;	------+------+------------+-------+------------+------------
-;	    0 |    0 |            | JMP   |       MAIN |
-;	    3 |    2 | X          | 101   |            |
-;	    7 |    3 | MAIN       | DATAC |         R0 |          X
-;	    8 |    5 |            | MOV   |         R1 |         R0
-;	    9 |    6 |            | MUL   |         R1 |         R1
-;	   11 |    7 |            | MOV   |         R2 |         R1
-;	   12 |    8 |            | DIV   |         R2 |         R0
-;	   13 |    9 |            | MOV   |         R3 |         R1
-;	   14 |   10 |            | MOD   |         R3 |         R0
-;	 9999 |   11 | END        | JMP   |        END |
-;	
+;	SCAM-file: "..\Programs\square.scam"
+;	 Line | Addr |   Label    | Instr  | Operand 1  | Operand 2
+;	------+------+------------+--------+------------+------------
+;	    0 |    0 |            | JMP    |       MAIN |
+;	    3 |    2 | X          | 101    |            |
+;	    7 |    3 | MAIN       | DATAC  |         R0 |          X
+;	    8 |    5 |            | MOV    |         R1 |         R0
+;	    9 |    6 |            | MUL    |         R1 |         R1
+;	   11 |    7 |            | MOV    |         R2 |         R1
+;	   12 |    8 |            | DIV    |         R2 |         R0
+;	   13 |    9 |            | MOV    |         R3 |         R1
+;	   14 |   10 |            | MOD    |         R3 |         R0
+;	 9999 |   11 | END        | JMP    |        END |
+;
 ;	SCAM-file: Symboltable
 ;	 Addr |    Label    | isConstant |  Value  | Decimal
 ;	------+-------------+------------+---------+---------
 ;	    2 | X           |   true     |  0x0065 |     101
 ;	    3 | MAIN        |   false    |  0x0000 |       0
 ;	   11 | END         |   false    |  0x0000 |       0
-;	
+;
 ;	SCAM-file: Assembled
 ;	 Addr |  ScAM  | Instr    Operand  | hasData | isData
 ;	------+--------+-------------------+---------+--------
@@ -51,3 +51,4 @@ MAIN:	DATAC	R0, X	; R0 == 00000000 01100101
 ;	   10 | 0x0530 | 00000101 00110000 |         |
 ;	   11 | 0x4000 | 01000000 00000000 |  true   |
 ;	   12 | 0x000B | 00000000 00001011 |         |  true
+

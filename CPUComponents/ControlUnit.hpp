@@ -9,7 +9,11 @@
 
 using namespace Synchrotron;
 
-/** \brief	Extra registers for the CU.
+/** \brief	Extra registers for the CU:
+ *
+ *			- Instruction Register:	The current instruction to execute;
+ *			- Program Counter Register: Address of the next instruction to execute;
+ *			- Flags Register: Register containing flags (after ALU operations)
  */
 #define	EXTRA_CPU_REGISTERS	3
 
@@ -22,13 +26,19 @@ namespace CPUComponents {
 	 *
 	 *			Can only have 1 input: the Clock.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the internal bitset state.
+	 *	\tparam	mem_size
+	 *		This template argument specifies the amount of internal bitsets.
+	 *	\tparam	reg_size
+	 *		This template argument specifies the amount of internal registers.
 	 */
 	template <size_t bit_width, size_t mem_size, size_t reg_size>
 	class ControlUnit : public SynchrotronComponentFixedInput<bit_width, 1u> {
 		private:
-			/**	\brief	Temporary registers for calculations.
+			/**	\brief
+			 *		Temporary registers for calculations.
+			 *		Uses the same base for storage as the RAM (Memory class).
 			 */
 			Memory<bit_width, reg_size + EXTRA_CPU_REGISTERS>	*_REG;
 
@@ -44,11 +54,29 @@ namespace CPUComponents {
 			 */
 			const std::bitset<bit_width> REG_INTRUCTION_REGISTER_ADDR;
 
+			/**	\brief	Reference to the CPU's ALU.
+			 */
 			ALUnit<bit_width>			*_ALU;
+
+			/**	\brief	Reference to the CPU's RAM.
+			 */
 			Memory<bit_width, mem_size>	*_RAM;
+
+			/**	\brief	Reference to the CPU's databus.
+			 */
 			MemoryCell<bit_width>		*_BUS;
+
+			/**	\brief	Reference to the CPU's ALU_BUFFER register.
+			 */
 			MemoryCell<bit_width>		*_ALU_BUFFER;
 
+			/**	\brief
+			 *		Fetches the next instruction on address in Program Counter register.
+			 *		Then, set-up the ALU for addition of the Program Counter register and '1u',
+			 *		perform the addition and output the result back in the Program Counter register.
+			 *
+			 *		Print the state of the PC and IR registers afterwards.
+			 */
 			void fetchNextInstruction(void) {
 				// Fetch instruction from _RAM[ _REG[REG_PROGRAM_COUNTER_ADDR] ] and increment ProgramCounter
 				this->_REG->setData(REG_INTRUCTION_REGISTER_ADDR,
@@ -57,7 +85,7 @@ namespace CPUComponents {
 				this->_ALU->setOperation(InstructionSet::ADD);
 				this->_BUS->setState(this->_REG->getData(REG_PROGRAM_COUNTER_ADDR));
 				this->_ALU_BUFFER->setState(std::bitset<bit_width>(1u));
-				this->_BUS->tick();
+				//this->_BUS->tick();
 				this->_ALU->tick();
 
 				this->_REG->setData(REG_PROGRAM_COUNTER_ADDR, this->_ALU->getState());
@@ -67,6 +95,10 @@ namespace CPUComponents {
 				std::cout << "REG_INTRUCTION_REG : " << this->_REG->getData(REG_INTRUCTION_REGISTER_ADDR).to_string() << std::endl;
 			}
 
+			/**	\brief
+			 *		Fetches the next instruction and set its data as the next address to execute from
+			 *		(for JUMP instructions).
+			 */
 			void setNextInstrAsPC(void) {
 				this->fetchNextInstruction();
 				this->_REG->setData(REG_PROGRAM_COUNTER_ADDR,
@@ -76,6 +108,10 @@ namespace CPUComponents {
 		public:
 
 			/** \brief	Default constructor
+			 *		Connect references to other CPU components and set-up internal Registers.
+			 *
+			 *	\throw	Exceptions::Exception
+			 *		Throws Exception if a CPU component reference was nullptr.
 			 */
 			ControlUnit(ALUnit<bit_width>			*ALU,
 						Memory<bit_width, mem_size>	*RAM,
@@ -106,23 +142,29 @@ namespace CPUComponents {
 			}
 
 			/**
-			 *	\brief	Gets the CU's registers
-			 *
-			 *	\return	Memory<bit_width, reg_size + EXTRA_CPU_REGISTERS>
-			 *      Returns the CU's registers.
+			 *	\brief	Gets the CU's registers.
 			 */
 			/* const */ Memory<bit_width, reg_size + EXTRA_CPU_REGISTERS>& getRegisters(void) const {
 				return *this->_REG;
 			}
 
+			/**
+			 *	\brief	Gets the CU's Flag register.
+			 */
 			const std::bitset<bit_width>& getFlagReg(void) const {
 				return this->_REG->getData(this->REG_FLAGS_ADDR);
 			}
 
+			/**
+			 *	\brief	Gets the CU's Program Counter register.
+			 */
 			const std::bitset<bit_width>& getProgramCouterReg(void) const {
 				return this->_REG->getData(this->REG_PROGRAM_COUNTER_ADDR);
 			}
 
+			/**
+			 *	\brief	Gets the CU's Instruction register.
+			 */
 			const std::bitset<bit_width>& getInstructionReg(void) const {
 				return this->_REG->getData(this->REG_INTRUCTION_REGISTER_ADDR);
 			}
@@ -137,7 +179,16 @@ namespace CPUComponents {
 				return this->_REG->getMaxAddress().to_ulong();
 			}
 
-			/**	\brief	The tick() method will be called when the connected clock ticks.
+			/**	\brief
+			 *		The tick() method will be called when the connected clock ticks.
+			 *
+			 *		First fetch the next instruction with this->fetchNextInstruction();
+			 *		Then parse the data and split its contents in the Operand code and data.
+			 *
+			 *		If the OpCode is an ALU instruction, set-up the ALU to perform the operation
+			 *		and put the result in the first register specified in data, also set Flags.
+			 *
+			 *		Else, disable ALU and perform move, data or jump instructions.
 			 */
 			void tick(void) {
 				std::cout << "CU ticked with clk = " << this->getInput().getState() << std::endl;

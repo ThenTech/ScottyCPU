@@ -3,6 +3,7 @@
 
 #ifndef NDEBUG		// ifndef NDEBUG
 
+/// Uncomment to enable Exception checking and throwing.
 #define THROW_EXCEPTIONS
 
 #include <iostream>
@@ -11,6 +12,7 @@
 #include "SignedBitset.hpp"
 #include "FloatingBitset.hpp"
 #include "Exceptions.hpp"
+#include "utils.hpp"
 
 #include "SynchrotronComponent.hpp"
 
@@ -53,7 +55,26 @@
 #include "CPUFactory/SCAMParser.hpp"
 #include "CPUFactory/SCAMAssembler.hpp"
 
+
+/**	\brief	Boolean used to check if statement threw an exception.
+ */
 static bool _Error_Assertion_Failed;
+
+/**	\brief
+ *		Addition to the assert() MACRO.
+ *
+ *		Execute F and try to catch error E. If caught, asserts to true.
+ *
+ *	\param	F
+ *		The expression to try executing. This is expected to be a function.
+ *
+ *		However, a constructor can be called by typedeffing it and calling:
+ *
+ *		    typedef Class<template_args> ctor;
+ *		    assert_error(ctor class_instance_name, Exceptions::Exception);
+ *	\param	E
+ *		The expected error thrown by executing F.
+ */
 #define assert_error(F, E) {\
 	_Error_Assertion_Failed = false; \
 	try { \
@@ -127,7 +148,7 @@ static SynchrotronComponent<2>	signalProvider2_0_0( {&signal2_0, &signal2_0_} ),
 								signalProvider2_0_3( {&signal2_0, &signal2_3} ),	// 00 11
 								signalProvider2_1_3( {&signal2_1, &signal2_3} );	// 01 11
 
-/*
+/**	\brief
  *	Bitset : Test basic bitset methods to show how they work.
  */
 void testBitset(void) {
@@ -194,6 +215,8 @@ void testBitset(void) {
 //	SignedBitset<4> x(-1);
 //}
 
+/**	\brief	Test FloatingBitset class
+ */
 void testFloatingBitset(void) {
 	FloatingBitset<4>	b_8(for_bit_8.to_ullong()),
 						b0_50(0.50f),
@@ -218,7 +241,7 @@ void testFloatingBitset(void) {
 }
 
 
-/*
+/**	\brief
  *	SynchrotronComponent : Test SynchrotronComponent class.
  */
 void testSynchrotronComponent(void) {
@@ -318,7 +341,7 @@ void testSynchrotronComponent(void) {
 	delete s_pointed;
 }
 
-/*
+/**	\brief
  *	AND Gate : Test basic logic.
  */
 void testLogic_AND_const(void) {
@@ -390,7 +413,7 @@ void testLogic_AND_const(void) {
 	assert(g2_1_3.getState()			== two_bit_1);	// Output changed to 1 after tick()
 }
 
-/*
+/**	\brief
  *	AND Gate : Test dynamic logic.
  */
 void testLogic_AND_dynamic(void) {
@@ -420,7 +443,7 @@ void testLogic_AND_dynamic(void) {
 	assert(g2.getInputs().size()		== 0);
 }
 
-/*
+/**	\brief
  *	NAND Gate : Test basic logic.
  */
 void testLogic_NAND_const(void) {
@@ -492,7 +515,7 @@ void testLogic_NAND_const(void) {
 	assert(g2_1_3.getState()			== two_bit_2);	// Output stayed 0 after tick()
 }
 
-/*
+/**	\brief
  *	NAND Gate : Test dynamic logic.
  */
 void testLogic_NAND_dynamic(void) {
@@ -522,7 +545,7 @@ void testLogic_NAND_dynamic(void) {
 	assert(g2.getInputs().size()		== 0);
 }
 
-/*
+/**	\brief
  *	OR Gate : Test basic logic.
  */
 void testLogic_OR_const(void) {
@@ -594,7 +617,7 @@ void testLogic_OR_const(void) {
 	assert(g2_1_3.getState()			== two_bit_3);	// Output changed to 1 after tick()
 }
 
-/*
+/**	\brief
  *	OR Gate : Test dynamic logic.
  */
 void testLogic_OR_dynamic(void) {
@@ -624,7 +647,7 @@ void testLogic_OR_dynamic(void) {
 	assert(g2.getInputs().size()		== 0);
 }
 
-/*
+/**	\brief
  *	NOR Gate : Test basic logic.
  */
 void testLogic_NOR_const(void) {
@@ -696,7 +719,7 @@ void testLogic_NOR_const(void) {
 	assert(g2_1_3.getState()			== two_bit_0);	// Output changed to 1 after tick()
 }
 
-/*
+/**	\brief
  *	NOR Gate : Test dynamic logic.
  */
 void testLogic_NOR_dynamic(void) {
@@ -726,7 +749,7 @@ void testLogic_NOR_dynamic(void) {
 	assert(g2.getInputs().size()		== 0);
 }
 
-/*
+/**	\brief
  *	XOR Gate : Test basic logic.
  */
 void testLogic_XOR_const(void) {
@@ -803,7 +826,7 @@ void testLogic_XOR_const(void) {
 	assert(g2_1_3.getState()			== two_bit_3);	// 01^11^01 = 11
 }
 
-/*
+/**	\brief
  *	XOR Gate : Test dynamic logic.
  */
 void testLogic_XOR_dynamic(void) {
@@ -833,7 +856,7 @@ void testLogic_XOR_dynamic(void) {
 	assert(g2.getInputs().size()		== 0);
 }
 
-/*
+/**	\brief
  *	NOT Gate : Test basic logic.
  */
 void testLogic_NOT_const(void) {
@@ -877,7 +900,7 @@ void testLogic_NOT_const(void) {
 	assert(g2_3.getState()				== two_bit_0);
 }
 
-/*
+/**	\brief
  *	NOT Gate : Test dynamic logic.
  */
 void testLogic_NOT_dynamic(void) {
@@ -905,7 +928,7 @@ void testLogic_NOT_dynamic(void) {
 	assert(g2.getInputs().size()		== 0);
 }
 
-/*
+/**	\brief
  *	All gates : Test logic combinations.
  */
 void testLogic_Combinations(void) {
@@ -944,6 +967,9 @@ void testLogic_Combinations(void) {
 	assert(not_or_1.getState()			== nor_2.getState());
 }
 
+/**	\brief
+ *	MemoryCell : Test gates combined to a memory bit.
+ */
 void testLogic_MemoryCell(void) {
 	SynchrotronComponent<1> signal_i(one_bit_0.to_ulong()),
 							signal_s(one_bit_1.to_ulong());
@@ -972,6 +998,9 @@ void testLogic_MemoryCell(void) {
 	std::cout << "Memory: " << m.getInput().getState() << " :: " << &m.getInput() << std::endl;
 }
 
+/**	\brief
+ *	ShiftRight : Test basic logic.
+ */
 void testLogic_ShiftRight_const(void) {
 	SHIFTRight<1>	g1,
 					g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
@@ -1028,6 +1057,9 @@ void testLogic_ShiftRight_const(void) {
 	assert(g4_A.getState()				== for_bit_5);	// No change : input is still 0xA
 }
 
+/**	\brief
+ *	ShiftRight : Test dynamic logic.
+ */
 void testLogic_ShiftRight_dynamic(void) {
 	SHIFTRight<4>	gCycle( signal4_A.getState().to_ulong() );
 
@@ -1039,6 +1071,9 @@ void testLogic_ShiftRight_dynamic(void) {
 	assert(gCycle.getState()			== for_bit_0);
 }
 
+/**	\brief
+ *	ShiftLeft : Test basic logic.
+ */
 void testLogic_ShiftLeft_const(void) {
 	SHIFTLeft<1>	g1,
 					g1_0( { &signal1_0 } ),	// equivalent to g1_0; g1_0.addInput(signal1_0);
@@ -1095,6 +1130,9 @@ void testLogic_ShiftLeft_const(void) {
 	assert(g4_A.getState()				== for_bit_4);	// No change : input is still 0xA
 }
 
+/**	\brief
+ *	ShiftLeft : Test dynamic logic.
+ */
 void testLogic_ShiftLeft_dynamic(void) {
 	SHIFTLeft<4>	gCycle( signal4_A.getState().to_ulong() );
 
@@ -1106,6 +1144,9 @@ void testLogic_ShiftLeft_dynamic(void) {
 	assert(gCycle.getState()			== for_bit_0);
 }
 
+/**	\brief
+ *	Memory : Test basic logic.
+ */
 void testLogic_Memory(void) {
 	int i;
 	Memory<2, 1>	m_2_1(MemoryUnits::BITS);
@@ -1130,9 +1171,9 @@ void testLogic_Memory(void) {
 	assert(m_2_1.getData(two_bit_0)		== two_bit_3);
 	m_2_1.resetData(two_bit_0);
 	assert(m_2_1.getData(two_bit_0)		== two_bit_0);
-	assert_error( m_2_1.getData(two_bit_1), Exceptions::Exception);
-	assert_error( m_2_1.setData(two_bit_1, two_bit_0), Exceptions::Exception);
-	assert_error( m_2_1.resetData(two_bit_1), Exceptions::Exception);
+	assert_error( m_2_1.getData(two_bit_1),					Exceptions::OutOfBoundsException);
+	assert_error( m_2_1.setData(two_bit_1, two_bit_0),		Exceptions::OutOfBoundsException);
+	assert_error( m_2_1.resetData(two_bit_1),				Exceptions::OutOfBoundsException);
 
 
 	assert(m_4_8.getSize()				== 4);
@@ -1148,10 +1189,10 @@ void testLogic_Memory(void) {
 	assert(m_4_8.getData(for_bit_7)		== for_bit_0);
 	m_4_8.setData(for_bit_7, for_bit_7);
 	assert(m_4_8.getData(for_bit_7)		== for_bit_7);
-	assert_error( m_4_8.getData(for_bit_8), Exceptions::Exception);
+	assert_error( m_4_8.getData(for_bit_8),					Exceptions::OutOfBoundsException);
 
-	assert_error( m_4_8.getDataRange(for_bit_0, for_bit_8), Exceptions::Exception);
-	assert_error( m_4_8.getDataRange(for_bit_7, for_bit_0), Exceptions::Exception);
+	assert_error( m_4_8.getDataRange(for_bit_0, for_bit_8), Exceptions::OutOfBoundsException);
+	assert_error( m_4_8.getDataRange(for_bit_7, for_bit_0), Exceptions::OutOfBoundsException);
 	range = m_4_8.getDataRange(for_bit_0, for_bit_7);
 	for (i = 0; i < 8; ++i)
 		assert(range[i]					== (!i ? for_bit_1 : i == 7 ? for_bit_7 : for_bit_0));
@@ -1164,11 +1205,14 @@ void testLogic_Memory(void) {
 	range = nullptr;
 }
 
+/**	\brief
+ *	Clock : Test basic logic.
+ */
 void testClock(void) {
 	Clock<1u> c(1.0F);
 
-	assert_error( c.setFrequency(0.0), Exceptions::Exception);
-	assert_error( c.setPeriod(0.0), Exceptions::Exception);
+	assert_error( c.setFrequency(0.0),	Exceptions::Exception);
+	assert_error( c.setPeriod(0.0),		Exceptions::Exception);
 
 	assert(c.getBitWidth()				== 1);
 	assert(c.getFrequency()				== 1.0F);
@@ -1188,6 +1232,9 @@ void testClock(void) {
 }
 
 // TO-DO
+/**	\brief
+ *	ADD : Test basic logic.
+ */
 void testADD(void) {
 	ADD<2> g2;
 
@@ -1205,9 +1252,13 @@ void testADD(void) {
 	assert(g2.getState()				== two_bit_1); // Overflow
 }
 
+/**	\brief
+ *	SUBTRACT : Test basic logic.
+ */
 void testSUBTRACT(void) {
 	// Inputs are added in sequence sorted by address.
 	// To ensure proper working, the element to subtract from has to be created first.
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
 
 	SUBTRACT<4> g4;
 	assert_error(g4.tick(), Exceptions::Exception);
@@ -1260,6 +1311,9 @@ void testSUBTRACT(void) {
 	}
 }
 
+/**	\brief
+ *	MULTIPLY : Test basic logic.
+ */
 void testMULTIPLY(void) {
 	MULTIPLY<2> g2;
 
@@ -1288,9 +1342,13 @@ void testMULTIPLY(void) {
 	assert(g2.getState()				== two_bit_1);	// 9: Overflow
 }
 
+/**	\brief
+ *	DIVIDE : Test basic logic.
+ */
 void testDIVIDE(void) {
 	// Inputs are added in sequence sorted by address.
 	// To ensure proper working, the element to subtract from has to be created first.
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
 
 	DIVIDE<4> g4;
 	assert_error(g4.tick(), Exceptions::Exception);
@@ -1340,9 +1398,13 @@ void testDIVIDE(void) {
 	}
 }
 
+/**	\brief
+ *	MODULO : Test basic logic.
+ */
 void testMODULO(void) {
 	// Inputs are added in sequence sorted by address.
 	// To ensure proper working, the element to subtract from has to be created first.
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
 
 	MODULO<4> g4;
 	assert_error(g4.tick(), Exceptions::Exception);
@@ -1384,9 +1446,13 @@ void testMODULO(void) {
 	}
 }
 
+/**	\brief
+ *	COMPERATOR : Test basic logic.
+ */
 void testCOMPERATOR(void) {
 	// Inputs are added in sequence sorted by address.
 	// To ensure proper working, the element to subtract from has to be created first.
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
 
 	COMPERATOR<4> g4;
 	assert_error(g4.tick(), Exceptions::Exception);
@@ -1425,6 +1491,9 @@ void testCOMPERATOR(void) {
 	}
 }
 
+/**	\brief
+ *	ANDInstruction : Test basic logic.
+ */
 void testANDInstruction(void) {
 	ANDInstruction<2> g2;
 
@@ -1460,6 +1529,9 @@ void testANDInstruction(void) {
 
 // ... TO-DO ...
 
+/**	\brief
+ *	SHLInstruction : Test basic logic.
+ */
 void testSHLInstruction(void) {
 	SHLInstruction<2> g2;
 	SHLInstruction<4> g4;
@@ -1502,6 +1574,9 @@ void testSHLInstruction(void) {
 	assert(g4.flagIsSet(FLAGS::CarryOut));
 }
 
+/**	\brief
+ *	SHRInstruction : Test basic logic.
+ */
 void testSHRInstruction(void) {
 	SHRInstruction<2> g2;
 
@@ -1527,6 +1602,9 @@ void testSHRInstruction(void) {
 	assert(g2.getFlags().none());
 }
 
+/**	\brief
+ *	ADDInstruction : Test basic logic.
+ */
 void testADDInstruction(void) {
 	ADDInstruction<2> g2;
 
@@ -1556,7 +1634,12 @@ void testADDInstruction(void) {
 	assert(g2.flagIsSet(FLAGS::CarryOut));
 }
 
+/**	\brief
+ *	SUBInstruction : Test basic logic.
+ */
 void testSUBInstruction(void) {
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
+
 	{
 		SynchrotronComponent<2> signal1({ &signal2_0 }), signal2({ &signal2_3});
 		signal1.tick(); signal2.tick();
@@ -1616,6 +1699,9 @@ void testSUBInstruction(void) {
 	}
 }
 
+/**	\brief
+ *	MULInstruction : Test basic logic.
+ */
 void testMULInstruction(void) {
 	MULInstruction<2> g2;
 
@@ -1652,7 +1738,12 @@ void testMULInstruction(void) {
 	assert(g2.flagIsSet(FLAGS::CarryOut));
 }
 
+/**	\brief
+ *	DIVInstruction : Test basic logic.
+ */
 void testDIVInstruction(void) {
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
+
 	{
 		SynchrotronComponent<2> signal1({ &signal2_1 }), signal2({ &signal2_2});
 		signal1.tick(); signal2.tick();
@@ -1707,7 +1798,12 @@ void testDIVInstruction(void) {
 	}
 }
 
+/**	\brief
+ *	MODInstruction : Test basic logic.
+ */
 void testMODInstruction(void) {
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
+
 	{
 		SynchrotronComponent<2> signal1({ &signal2_1 }), signal2({ &signal2_2});
 		signal1.tick(); signal2.tick();
@@ -1761,9 +1857,13 @@ void testMODInstruction(void) {
 	}
 }
 
+/**	\brief
+ *	CMPInstruction : Test basic logic.
+ */
 void testCMPInstruction(void) {
 	// Inputs are added in sequence sorted by address.
 	// To ensure proper working, the element to subtract from has to be created first.
+	// TO-DO: The sorting issue should be fixed in a previous build, so this testing in blocks should be unnecessary.
 
 	CMPInstruction<4> g4;
 	assert_error(g4.tick(), Exceptions::Exception);
@@ -1816,6 +1916,9 @@ void testCMPInstruction(void) {
 	}
 }
 
+/**	\brief
+ *	TO-DO
+ */
 void testInstructionLUT(void) {
 
 //	std::cout << "LUT size: " << CPUInstructions::InstructionLUT.size() << std::endl;
@@ -1834,8 +1937,10 @@ void testInstructionLUT(void) {
 //	scamfile.exportScHex();
 }
 
-/*
- *	Run all tests.
+/**	\brief
+ *		Run all tests.
+ *
+ *		Quit testing on error.
  */
 void runTests(void) {
 	int errorlevel = 0;

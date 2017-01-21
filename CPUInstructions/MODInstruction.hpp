@@ -10,10 +10,11 @@ namespace CPUInstructions {
 	/**
 	 *	\brief	**MODInstruction** : MOD inputs and set flags.
 	 *
-	 *	Changeable FLAGS:
-	 *		Zero, Negative, CarryOut
+	 *	Changeable `FLAGS`:
 	 *
-	 *	\param	bit_width
+	 *	    Zero, Negative, CarryOut
+	 *
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>

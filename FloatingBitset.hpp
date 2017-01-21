@@ -10,7 +10,7 @@ namespace std {
 	/**
 	 *	\brief	**FloatingBitset** : Encapsulate bitset to provide extended functionallity with signs and operators and floating point math.
 	 *
-	 *	\param	bit_width
+	 *	\tparam	bit_width
 	 *		This template argument specifies the width of the in and output connections.
 	 */
 	template <size_t bit_width>
