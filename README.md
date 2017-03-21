@@ -23,7 +23,7 @@ This batchfile can be used to copy files from working dir to GitHub dir for comm
 
 For building, the included [Makefile](https://github.com/Wosser1sProductions/ScottyCPU/blob/master/Makefile) provides common build methods.
 
-###Usage
+### Usage
     Usage: ScottyCPU.exe [-h|-H] [-d|-D] [-c|-C <float>] [-i|-I]
                          [-l|-L|-a|-A <file>] [-o <file>] [-hex <file>]
       -h, -H, --help     Show this help message
@@ -35,7 +35,7 @@ For building, the included [Makefile](https://github.com/Wosser1sProductions/Sco
       -o      <file>     Specify output file for assembly
       -hex    <file>     Load .ScHex file into ScottyCPU RAM
 
-###Instruction Set
+### Instruction Set
     /----------------------------------------------------------------------------\
     |------------------------- ScottyCPU InstructionSet -------------------------|
     \----------------------------------------------------------------------------/
